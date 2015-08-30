@@ -17,7 +17,6 @@
 #include <util/delay.h>
 //#include <stdinit.h>
 
-
 //IO manipulering
 #define set_bit( reg, bit ) (reg |= (1<<bit))
 #define clear_bit( reg, bit) (reg &= ~(1<<bit))

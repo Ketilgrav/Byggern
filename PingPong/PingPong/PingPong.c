@@ -7,16 +7,12 @@
 
 
 #include "MainInclude/MainInclude.h"
+#include "Drivers/UsartDriver.h"
 
-int main(void)
-{
-	set_bit(DDRB,PB0);
-    while(1)
-    {
-		set_bit(PORTB,PB0);
-		_delay_ms(300);
-		clear_bit(PORTB,PB0);
-		_delay_ms(700);
-        //TODO:: Please write your application code 
+int main(void){
+	USART_Init();
+	
+    while(1){
+		putchar(getchar());
     }
 }
