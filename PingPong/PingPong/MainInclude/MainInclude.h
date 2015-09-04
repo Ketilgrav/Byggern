@@ -15,11 +15,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-//#include <stdinit.h>
+#include <stdlib.h>
 
 //IO manipulering
 #define set_bit( reg, bit ) (reg |= (1<<bit))
 #define clear_bit( reg, bit) (reg &= ~(1<<bit))
+#define toggle_bit( reg, bit) (reg ^= (1<<bit))
 #define read_bit( reg, bit ) (reg & (1<<bit))
 #define wait_until_bit_is_set( reg, bit) while( !read_bit(reg, bit))
 #define wait_until_bit_is_cleared(reg, bit) while( test_bit(reg, bit))
