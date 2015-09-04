@@ -15,11 +15,13 @@ int main(void){
 	SRAM_INIT();
 	set_bit(DDRB, PB0);
 	
-	unsigned short mainLoopCounter;
+	unsigned short mainLoopCounter = 0;
     while(1){
-		if(!mainLoopCounter){
+		if(!(mainLoopCounter%10)){
 			toggle_bit(PORTB, PB0);
 		}
+		puts("ER NI REDÅ?");
+		getchar();
 		//putchar(getchar());
 		SRAM_test();
 		mainLoopCounter++;

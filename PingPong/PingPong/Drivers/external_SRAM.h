@@ -11,7 +11,7 @@
 #define EXTERNAL_SRAM_H_
 
 void SRAM_INIT(void);
-void SRAM_test(void)
+void SRAM_test(void);
 
 
 #endif /* EXTERNAL_SRAM_H_ */

@@ -109,6 +109,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Drivers\external_SRAM.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Drivers\external_SRAM.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Drivers\UsartDriver.c">
       <SubType>compile</SubType>
     </Compile>
