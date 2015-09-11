@@ -16,7 +16,8 @@
 #define ADC_memory_adress 0x1400 //Sjekk om rett
 #define ADC_single_ended 0b0100
 
-
-
+int ADC_read_convertion(volatile int* ADC_memory);
+int ADC_convert(int channel);
+int ADC_init();
 
 #endif /* ADC_DRIVER_H_ */

@@ -9,6 +9,7 @@
 #include "MainInclude/MainInclude.h"
 #include "Drivers/UsartDriver.h"
 #include "Drivers/external_SRAM.h"
+#include "Drivers/ADC_Driver.h"
 
 int main(void){
 	USART_Init();
