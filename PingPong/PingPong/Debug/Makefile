@@ -34,7 +34,8 @@ LINKER_SCRIPT_DEP:=
 # Every subdirectory with source files must be described here
 SUBDIRS :=  \
 ../MainInclude \
-../Drivers
+../Drivers \
+../HW_Controll
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
@@ -42,6 +43,7 @@ C_SRCS +=  \
 ../Drivers/ADC_Driver.c \
 ../Drivers/external_SRAM.c \
 ../Drivers/UsartDriver.c \
+../HW_Controll/JoyStick.c \
 ../PingPong.c
 
 
@@ -55,24 +57,28 @@ OBJS +=  \
 Drivers/ADC_Driver.o \
 Drivers/external_SRAM.o \
 Drivers/UsartDriver.o \
+HW_Controll/JoyStick.o \
 PingPong.o
 
 OBJS_AS_ARGS +=  \
 Drivers/ADC_Driver.o \
 Drivers/external_SRAM.o \
 Drivers/UsartDriver.o \
+HW_Controll/JoyStick.o \
 PingPong.o
 
 C_DEPS +=  \
 Drivers/ADC_Driver.d \
 Drivers/external_SRAM.d \
 Drivers/UsartDriver.d \
+HW_Controll/JoyStick.d \
 PingPong.d
 
 C_DEPS_AS_ARGS +=  \
 Drivers/ADC_Driver.d \
 Drivers/external_SRAM.d \
 Drivers/UsartDriver.d \
+HW_Controll/JoyStick.d \
 PingPong.d
 
 OUTPUT_FILE_PATH +=PingPong.elf
@@ -98,7 +104,16 @@ LINKER_SCRIPT_DEP+=
 
 
 
+
+
 Drivers/%.o: ../Drivers/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+HW_Controll/%.o: ../HW_Controll/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.8.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

@@ -9,15 +9,16 @@
 #ifndef ADC_DRIVER_H_
 #define ADC_DRIVER_H_
 
+#include "../MainInclude/MainInclude.h"
+
 #define INTR_DDR DDRB
 #define INTR_PORT PORTB
 #define INTR_PIN PINB
 #define INTR_bit PB1
-#define ADC_memory_adress 0x1400 //Sjekk om rett
+#define ADC_memory ((volatile char*)0x1400)
 #define ADC_single_ended 0b0100
 
-int ADC_read_convertion(volatile int* ADC_memory);
-int ADC_convert(int channel);
-int ADC_init();
+uint8_t ADC_convert(char channel);
+void ADC_init();
 
 #endif /* ADC_DRIVER_H_ */

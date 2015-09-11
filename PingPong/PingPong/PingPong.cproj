@@ -127,6 +127,12 @@
     <Compile Include="Drivers\UsartDriver.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="HW_Controll\JoyStick.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HW_Controll\JoyStick.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="MainInclude\MainInclude.h">
       <SubType>compile</SubType>
     </Compile>
@@ -137,6 +143,7 @@
   <ItemGroup>
     <Folder Include="MainInclude" />
     <Folder Include="Drivers" />
+    <Folder Include="HW_Controll" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

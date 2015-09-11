@@ -10,18 +10,31 @@
 #include "Drivers/UsartDriver.h"
 #include "Drivers/external_SRAM.h"
 #include "Drivers/ADC_Driver.h"
+#include "HW_Controll/JoyStick.h"
 
 int main(void){
 	USART_Init();
 	SRAM_INIT();
+	ADC_init();
 	set_bit(DDRB, PB0);
+	
+	
+	JoyStick js;
+	joystick_calibrate(&js);
+	
+	
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	
 	unsigned short mainLoopCounter = 0;
     while(1){
+		mainLoopCounter++;
 		if(!(mainLoopCounter%10)){
 			toggle_bit(PORTB, PB0);
 		}
-		mainLoopCounter++;
-		exit(0);
+		joystick_update(&js);
+		printf("X: %i      \t", js.x_voltage);
+		printf("Y: %i      \t", js.y_voltage);
+		printf("fdfdf: %u           \r", (js.x_voltage - js.x_rest));
+		
     }
 }
