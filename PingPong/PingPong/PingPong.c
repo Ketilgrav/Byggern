@@ -20,10 +20,7 @@ int main(void){
 		if(!(mainLoopCounter%10)){
 			toggle_bit(PORTB, PB0);
 		}
-		puts("ER NI REDÅ?");
-		getchar();
-		//putchar(getchar());
-		SRAM_test();
 		mainLoopCounter++;
+		exit(0);
     }
 }

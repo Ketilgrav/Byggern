@@ -10,7 +10,7 @@
 void SRAM_INIT(void){
 	set_bit(MCUCR, SRE);	//External ram endable
 	set_bit(SFIOR, XMM2);	//100 -> releaser pc7-pc4 fra minne opperasjoner, til å bli brukt i jtag.
-	
+	SRAM_test();
 }
 
 
@@ -30,7 +30,7 @@ void SRAM_test(void){
 		ext_ram[i] = some_value;					//Setter inn en tilfeldig verdi
 		uint8_t retreived_value = ext_ram[i];		//Måler den tilbake
 		if (retreived_value != some_value) {		//Registrerer om den ble rett.
-			//printf("Write phase error: ext_ram[%4d] = %02X (should be %02X)\n\r", i,retreived_value, some_value);
+			printf("Write phase error: ext_ram[%4d] = %02X (should be %02X)\n\r", i,retreived_value, some_value);
 			write_errors++;
 		}
 	}
@@ -41,9 +41,9 @@ void SRAM_test(void){
 		uint8_t some_value = rand();
 		uint8_t retreived_value = ext_ram[i];
 		if (retreived_value != some_value) {
-			//printf("Retrieval phase error: ext_ram[%4d] = %02X (should be %02X)\n\r", i, retreived_value, some_value);
+			printf("Retrieval phase error: ext_ram[%4d] = %02X (should be %02X)\n\r", i, retreived_value, some_value);
 			retrieval_errors++;
 		}
 	}
-	printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase \n \n\r", write_errors, retrieval_errors);
+	printf("SRAM test completed with \n\r%4d errors in write phase and \n\r%4d errors in retrieval phase \n \n\r", write_errors, retrieval_errors);
 }

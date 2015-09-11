@@ -109,6 +109,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Drivers\ADC_Driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Drivers\ADC_Driver.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Drivers\external_SRAM.c">
       <SubType>compile</SubType>
     </Compile>

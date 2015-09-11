@@ -39,6 +39,7 @@ SUBDIRS :=  \
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../Drivers/ADC_Driver.c \
 ../Drivers/external_SRAM.c \
 ../Drivers/UsartDriver.c \
 ../PingPong.c
@@ -51,21 +52,25 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+Drivers/ADC_Driver.o \
 Drivers/external_SRAM.o \
 Drivers/UsartDriver.o \
 PingPong.o
 
 OBJS_AS_ARGS +=  \
+Drivers/ADC_Driver.o \
 Drivers/external_SRAM.o \
 Drivers/UsartDriver.o \
 PingPong.o
 
 C_DEPS +=  \
+Drivers/ADC_Driver.d \
 Drivers/external_SRAM.d \
 Drivers/UsartDriver.d \
 PingPong.d
 
 C_DEPS_AS_ARGS +=  \
+Drivers/ADC_Driver.d \
 Drivers/external_SRAM.d \
 Drivers/UsartDriver.d \
 PingPong.d
@@ -84,6 +89,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 
