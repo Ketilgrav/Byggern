@@ -44,6 +44,7 @@ C_SRCS +=  \
 ../Drivers/ADC_Driver.c \
 ../Drivers/external_SRAM.c \
 ../Drivers/UsartDriver.c \
+../Etc/font.c \
 ../HW_Controll/Controllers.c \
 ../HW_Controll/OLED.c \
 ../PingPong.c
@@ -59,6 +60,7 @@ OBJS +=  \
 Drivers/ADC_Driver.o \
 Drivers/external_SRAM.o \
 Drivers/UsartDriver.o \
+Etc/font.o \
 HW_Controll/Controllers.o \
 HW_Controll/OLED.o \
 PingPong.o
@@ -67,6 +69,7 @@ OBJS_AS_ARGS +=  \
 Drivers/ADC_Driver.o \
 Drivers/external_SRAM.o \
 Drivers/UsartDriver.o \
+Etc/font.o \
 HW_Controll/Controllers.o \
 HW_Controll/OLED.o \
 PingPong.o
@@ -75,6 +78,7 @@ C_DEPS +=  \
 Drivers/ADC_Driver.d \
 Drivers/external_SRAM.d \
 Drivers/UsartDriver.d \
+Etc/font.d \
 HW_Controll/Controllers.d \
 HW_Controll/OLED.d \
 PingPong.d
@@ -83,6 +87,7 @@ C_DEPS_AS_ARGS +=  \
 Drivers/ADC_Driver.d \
 Drivers/external_SRAM.d \
 Drivers/UsartDriver.d \
+Etc/font.d \
 HW_Controll/Controllers.d \
 HW_Controll/OLED.d \
 PingPong.d
@@ -114,7 +119,16 @@ LINKER_SCRIPT_DEP+=
 
 
 
+
+
 Drivers/%.o: ../Drivers/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Etc/%.o: ../Etc/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.8.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

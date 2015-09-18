@@ -127,6 +127,9 @@
     <Compile Include="Drivers\UsartDriver.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Etc\font.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Etc\Font.h">
       <SubType>compile</SubType>
     </Compile>

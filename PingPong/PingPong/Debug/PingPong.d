@@ -21,7 +21,7 @@ PingPong.d PingPong.o: .././PingPong.c .././MainInclude/MainInclude.h \
  .././HW_Controll/Controllers.h \
  .././HW_Controll/../MainInclude/MainInclude.h \
  .././HW_Controll/../Drivers/ADC_Driver.h .././HW_Controll/OLED.h \
- .././Etc/Font.h \
+ .././HW_Controll/../Etc/Font.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h
 
 .././MainInclude/MainInclude.h:
@@ -76,6 +76,6 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 .././HW_Controll/OLED.h:
 
-.././Etc/Font.h:
+.././HW_Controll/../Etc/Font.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:

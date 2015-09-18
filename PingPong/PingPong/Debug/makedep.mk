@@ -8,6 +8,8 @@ Drivers\external_SRAM.c
 
 Drivers\UsartDriver.c
 
+Etc\font.c
+
 HW_Controll\Controllers.c
 
 HW_Controll\OLED.c
