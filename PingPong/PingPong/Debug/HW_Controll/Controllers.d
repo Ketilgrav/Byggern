@@ -1,4 +1,6 @@
-PingPong.d PingPong.o: .././PingPong.c .././MainInclude/MainInclude.h \
+HW_Controll/Controllers.d HW_Controll/Controllers.o: \
+ ../HW_Controll/Controllers.c ../HW_Controll/Controllers.h \
+ ../HW_Controll/../MainInclude/MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -16,13 +18,12 @@ PingPong.d PingPong.o: .././PingPong.c .././MainInclude/MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h \
- .././Drivers/UsartDriver.h .././Drivers/../MainInclude/MainInclude.h \
- .././Drivers/external_SRAM.h .././Drivers/ADC_Driver.h \
- .././HW_Controll/Controllers.h \
- .././HW_Controll/../MainInclude/MainInclude.h \
- .././HW_Controll/../Drivers/ADC_Driver.h
+ ../HW_Controll/../Drivers/ADC_Driver.h \
+ ../HW_Controll/../Drivers/../MainInclude/MainInclude.h
 
-.././MainInclude/MainInclude.h:
+../HW_Controll/Controllers.h:
+
+../HW_Controll/../MainInclude/MainInclude.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -58,16 +59,6 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h:
 
-.././Drivers/UsartDriver.h:
+../HW_Controll/../Drivers/ADC_Driver.h:
 
-.././Drivers/../MainInclude/MainInclude.h:
-
-.././Drivers/external_SRAM.h:
-
-.././Drivers/ADC_Driver.h:
-
-.././HW_Controll/Controllers.h:
-
-.././HW_Controll/../MainInclude/MainInclude.h:
-
-.././HW_Controll/../Drivers/ADC_Driver.h:
+../HW_Controll/../Drivers/../MainInclude/MainInclude.h:

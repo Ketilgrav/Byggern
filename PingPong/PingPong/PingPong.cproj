@@ -127,10 +127,10 @@
     <Compile Include="Drivers\UsartDriver.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="HW_Controll\JoyStick.c">
+    <Compile Include="HW_Controll\Controllers.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="HW_Controll\JoyStick.h">
+    <Compile Include="HW_Controll\Controllers.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="MainInclude\MainInclude.h">

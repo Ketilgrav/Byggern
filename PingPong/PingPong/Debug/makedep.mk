@@ -8,7 +8,7 @@ Drivers\external_SRAM.c
 
 Drivers\UsartDriver.c
 
-HW_Controll\JoyStick.c
+HW_Controll\Controllers.c
 
 PingPong.c
 

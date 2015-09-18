@@ -43,7 +43,7 @@ C_SRCS +=  \
 ../Drivers/ADC_Driver.c \
 ../Drivers/external_SRAM.c \
 ../Drivers/UsartDriver.c \
-../HW_Controll/JoyStick.c \
+../HW_Controll/Controllers.c \
 ../PingPong.c
 
 
@@ -57,28 +57,28 @@ OBJS +=  \
 Drivers/ADC_Driver.o \
 Drivers/external_SRAM.o \
 Drivers/UsartDriver.o \
-HW_Controll/JoyStick.o \
+HW_Controll/Controllers.o \
 PingPong.o
 
 OBJS_AS_ARGS +=  \
 Drivers/ADC_Driver.o \
 Drivers/external_SRAM.o \
 Drivers/UsartDriver.o \
-HW_Controll/JoyStick.o \
+HW_Controll/Controllers.o \
 PingPong.o
 
 C_DEPS +=  \
 Drivers/ADC_Driver.d \
 Drivers/external_SRAM.d \
 Drivers/UsartDriver.d \
-HW_Controll/JoyStick.d \
+HW_Controll/Controllers.d \
 PingPong.d
 
 C_DEPS_AS_ARGS +=  \
 Drivers/ADC_Driver.d \
 Drivers/external_SRAM.d \
 Drivers/UsartDriver.d \
-HW_Controll/JoyStick.d \
+HW_Controll/Controllers.d \
 PingPong.d
 
 OUTPUT_FILE_PATH +=PingPong.elf
