@@ -127,10 +127,19 @@
     <Compile Include="Drivers\UsartDriver.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Etc\Font.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="HW_Controll\Controllers.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="HW_Controll\Controllers.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HW_Controll\OLED.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HW_Controll\OLED.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="MainInclude\MainInclude.h">
@@ -144,6 +153,7 @@
     <Folder Include="MainInclude" />
     <Folder Include="Drivers" />
     <Folder Include="HW_Controll" />
+    <Folder Include="Etc" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

@@ -35,7 +35,8 @@ LINKER_SCRIPT_DEP:=
 SUBDIRS :=  \
 ../MainInclude \
 ../Drivers \
-../HW_Controll
+../HW_Controll \
+../Etc
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
@@ -44,6 +45,7 @@ C_SRCS +=  \
 ../Drivers/external_SRAM.c \
 ../Drivers/UsartDriver.c \
 ../HW_Controll/Controllers.c \
+../HW_Controll/OLED.c \
 ../PingPong.c
 
 
@@ -58,6 +60,7 @@ Drivers/ADC_Driver.o \
 Drivers/external_SRAM.o \
 Drivers/UsartDriver.o \
 HW_Controll/Controllers.o \
+HW_Controll/OLED.o \
 PingPong.o
 
 OBJS_AS_ARGS +=  \
@@ -65,6 +68,7 @@ Drivers/ADC_Driver.o \
 Drivers/external_SRAM.o \
 Drivers/UsartDriver.o \
 HW_Controll/Controllers.o \
+HW_Controll/OLED.o \
 PingPong.o
 
 C_DEPS +=  \
@@ -72,6 +76,7 @@ Drivers/ADC_Driver.d \
 Drivers/external_SRAM.d \
 Drivers/UsartDriver.d \
 HW_Controll/Controllers.d \
+HW_Controll/OLED.d \
 PingPong.d
 
 C_DEPS_AS_ARGS +=  \
@@ -79,6 +84,7 @@ Drivers/ADC_Driver.d \
 Drivers/external_SRAM.d \
 Drivers/UsartDriver.d \
 HW_Controll/Controllers.d \
+HW_Controll/OLED.d \
 PingPong.d
 
 OUTPUT_FILE_PATH +=PingPong.elf
@@ -95,6 +101,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

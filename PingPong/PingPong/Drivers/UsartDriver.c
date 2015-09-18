@@ -7,9 +7,9 @@
 #include "../MainInclude/MainInclude.h"
 #include "UsartDriver.h"
 
-void USART_Init(){
+void USART_INIT(){
 	//ubbr = F_CPU
-	int baudRate = 19200;  //Burde vi bruke BAUD fra h fila her? og burde BAUD være 19200?
+	int baudRate = BAUD;  //Burde vi bruke BAUD fra h fila her? og burde BAUD være 19200?
 	unsigned int ubrr = F_CPU/(16*baudRate) -1;
 	//Set baud rate
 	UBRR0H = (unsigned char)(ubrr>>8);
