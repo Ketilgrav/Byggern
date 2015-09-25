@@ -115,10 +115,22 @@
     <Compile Include="Drivers\ADC_Driver.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Drivers\Controllers.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Drivers\Controllers.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Drivers\external_SRAM.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Drivers\external_SRAM.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Drivers\OLED.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Drivers\OLED.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Drivers\UsartDriver.c">
@@ -133,30 +145,24 @@
     <Compile Include="Etc\Font.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="HW_Controll\Controllers.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="HW_Controll\Controllers.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="HW_Controll\OLED.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="HW_Controll\OLED.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="MainInclude\MainInclude.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="PingPong.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="UI\Menu.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="UI\Menu.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MainInclude" />
     <Folder Include="Drivers" />
-    <Folder Include="HW_Controll" />
     <Folder Include="Etc" />
+    <Folder Include="UI" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

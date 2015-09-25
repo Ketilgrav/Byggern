@@ -1,4 +1,5 @@
-PingPong.d PingPong.o: .././PingPong.c .././MainInclude/MainInclude.h \
+UI/Menu.d UI/Menu.o: ../UI/Menu.c ../UI/../Drivers/Controllers.h \
+ ../UI/../Drivers/../MainInclude/MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -16,14 +17,15 @@ PingPong.d PingPong.o: .././PingPong.c .././MainInclude/MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h \
- .././Drivers/UsartDriver.h .././Drivers/../MainInclude/MainInclude.h \
- .././Drivers/external_SRAM.h .././Drivers/ADC_Driver.h \
- .././Drivers/Controllers.h .././Drivers/../Drivers/ADC_Driver.h \
- .././Drivers/OLED.h .././Drivers/../Etc/Font.h \
+ ../UI/../Drivers/../Drivers/ADC_Driver.h \
+ ../UI/../Drivers/../Drivers/../MainInclude/MainInclude.h \
+ ../UI/../Drivers/OLED.h ../UI/../Drivers/../Etc/Font.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
- .././UI/Menu.h
+ ../UI/Menu.h
 
-.././MainInclude/MainInclude.h:
+../UI/../Drivers/Controllers.h:
+
+../UI/../Drivers/../MainInclude/MainInclude.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -59,22 +61,14 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h:
 
-.././Drivers/UsartDriver.h:
+../UI/../Drivers/../Drivers/ADC_Driver.h:
 
-.././Drivers/../MainInclude/MainInclude.h:
+../UI/../Drivers/../Drivers/../MainInclude/MainInclude.h:
 
-.././Drivers/external_SRAM.h:
+../UI/../Drivers/OLED.h:
 
-.././Drivers/ADC_Driver.h:
-
-.././Drivers/Controllers.h:
-
-.././Drivers/../Drivers/ADC_Driver.h:
-
-.././Drivers/OLED.h:
-
-.././Drivers/../Etc/Font.h:
+../UI/../Drivers/../Etc/Font.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
 
-.././UI/Menu.h:
+../UI/Menu.h:

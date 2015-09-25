@@ -10,8 +10,9 @@
 #include "Drivers/UsartDriver.h"
 #include "Drivers/external_SRAM.h"
 #include "Drivers/ADC_Driver.h"
-#include "HW_Controll/Controllers.h"
-#include "HW_Controll/OLED.h"
+#include "Drivers/Controllers.h"
+#include "Drivers/OLED.h"
+#include "UI/Menu.h"
 
 int main(void){
 	USART_INIT();
@@ -32,32 +33,21 @@ int main(void){
 	
 	printf("\n\n\n");
 	
-	unsigned short mainLoopCounter = 0;
+	menyNode* menu = menu_init();
+	
+	
+	unsigned short mainLoopCounter = 0;	
     while(1){
 		mainLoopCounter++;
 		if(!(mainLoopCounter%10)){
 			toggle_bit(PORTB, PB0);
 		}
-		/*joystick_update(&js);
-		slider_update(&s_l);
-		slider_update(&s_r);
-		printf("X: %i    \t", js.x_percent);
-		printf("Y: %i    \t", js.y_percent);
-		printf("L: %i    \t", s_l.percent);
-		printf("R: %i    \t", s_r.percent);
-		printf("BR: %i    \t", read_bit(PINB,PB2));
-		printf("BL: %i    \t", read_bit(PINB,PB3));
-		printf("BJS: %i    \t\r", read_bit(PINB,PB4));*/
+		joystick_update(& js);
+		printf("%u  \t%i  \t%i  \t%i \r", menu->pilNivaa, btn_A,btn_B, js.y_descreet);
+		menu_print(menu, &js, btn_A, btn_B);
+		_delay_ms(10);
+		//oled_print("-s")
 		
-		
-		oled_goto_line(2);
-		oled_print("Oystein er ");
-		_delay_ms(1000);
-		oled_clear_line(2);
-		oled_goto_line(4);
-		oled_print("ultradust");
-		_delay_ms(1000);
-		oled_clear_line(4);
 		//printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		
     }
