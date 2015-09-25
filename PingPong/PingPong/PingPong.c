@@ -24,6 +24,8 @@ int main(void){
 	OLED_init();
 	set_bit(DDRB, PB0);
 	
+	
+	
 	controllers_init();
 	JoyStick js;
 	Slider s_l;
@@ -33,17 +35,61 @@ int main(void){
 	s_r.channel = 2;
 	
 	printf("\n\n\n");
-	
-	menyNode* menu = menu_init();
-	
+
+		menyNode* menu = menu_init();
+	menyNode* mainMenu = menu;
 	
 	unsigned short mainLoopCounter = 0;	
+	
     while(1){
-		mainLoopCounter++;
-		if(!(mainLoopCounter%10)){
+		//mainLoopCounter++;
+		//if(!(mainLoopCounter%10)){
 			toggle_bit(PORTB, PB0);
-		}
+		//}
 		joystick_update(& js);
-		menu_go(&menu, &js);		
+		
+		if(btn_B){ //Butt til en annen knapp som alltid returnerer til main
+			menu = mainMenu;
+			oled_clear_screen();
+		}
+		switch (menu->tilstand){
+			case MENU:
+				menu_go(&menu, &js);
+				break;
+			case RUN_GAME:
+				//skal bare kjøre run game funksjon her
+				oled_goto_line(3);
+				oled_print("SPILLET KJORER");
+				break;
+			case HIGH_SCORE:
+				//BARE HVIS HIGHSCORE FUNKSNONEN
+				oled_goto_line(0);
+				oled_print("Highscore");
+				oled_goto_line(1);
+				oled_print("  Per: 1024");
+				
+				if(js.x_descreet < 0 && js.x_descreet != js.x_prev_descreet){
+					menu = mainMenu;
+					oled_clear_screen();
+				}
+				
+				break;
+			case CALIBRATE_JS:
+			
+				oled_goto_line(0);
+				oled_print("Calibrating JS");
+				oled_clear_line(2);
+				oled_print("Press A to");
+				oled_clear_line(3);
+				oled_print("calibrate");
+				
+				while(!btn_A)
+				
+				menu = mainMenu;
+				oled_clear_screen();
+				
+				break;
+			
+		}
     }
 }

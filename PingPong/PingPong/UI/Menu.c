@@ -10,14 +10,15 @@
 #include "Menu.h"
 
 menyNode* menu_init(){
+	puts("a");
 	menyNode* mainMenu = (menyNode*) malloc(sizeof(menyNode));
-	
+	puts("b");
 	menyNode* options = (menyNode*) malloc(sizeof(menyNode));
+	puts("c");
 	menyNode* reCalibrateJs = (menyNode*) malloc(sizeof(menyNode));
-	
-	
+	puts("d");
 	menyNode* newGame = (menyNode*) malloc(sizeof(menyNode));
-	
+	puts("e");
 	menyNode* highScore = (menyNode*) malloc(sizeof(menyNode));
 	
 	
@@ -49,7 +50,7 @@ menyNode* menu_init(){
 	newGame->forelder = mainMenu;
 	newGame->nBarn = 0;
 	newGame->pilNivaa = 1;
-	newGame->tilstand = GAME;
+	newGame->tilstand = RUN_GAME;
 	
 	highScore->forelder = mainMenu;
 	highScore->nBarn = 0;
@@ -63,41 +64,18 @@ menyNode* menu_init(){
 void menu_go(menyNode** meny, JoyStick* js){
 	flyttPil(&((*meny)->pilNivaa), js, (*meny)->nBarn);
 	
-	switch((**meny)->tilstand){
-		case MENU:
-			oled_goto_line(0);
-			oled_print((*meny)->tekst);
-			for(int i=1; i<=(*meny)->nBarn; ++i){
-				oled_goto_line(i);
-				if((*meny)->pilNivaa == i){
-					oled_print("-s");
-				}
-				else{
-					oled_print("  ");
-				}
-				oled_print((*meny)->barn[i-1]->tekst);
-			}			
-		case RUN_GAME:
-			oled_goto_line(4);
-			oled_print("THIS IS THE GAME");
-			break;
-		case CALIBRATE_JS:
-			oled_goto_line(0);
-			oled_print("Settings:")
-			oled_goto_line(1);
-			oled_print(" Her er settings");
-			break; 	
-		case HIGH_SCORE:
-			oled_goto_line(0);
-			oled_print("Highscores:");
-			oled_goto_line(1);
-			oled_print("Per Sienne: 1400");
-			break;
-		
-		
+	oled_goto_line(0);
+	oled_print((*meny)->tekst);
+	for(int i=1; i<=(*meny)->nBarn; ++i){
+		oled_goto_line(i);
+		if((*meny)->pilNivaa == i){
+			oled_print("-s");
+		}
+		else{
+			oled_print("  ");
+		}
+		oled_print((*meny)->barn[i-1]->tekst);
 	}
-	
-	
 	
 	if(js->x_descreet != js->x_prev_descreet){
 		if(js->x_descreet > 0){

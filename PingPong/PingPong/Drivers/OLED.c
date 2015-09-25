@@ -58,7 +58,7 @@ void OLED_init(){
 	oled_control = 0x40;	//Siste hextegn bestemmer hvor mye teksten flyttes opp, en verdi per bit opp. Funker ikke å endre underveis i koden?
 	
 	//Tømmer skjermen
-	for(uint8_t i = 0; i < 1024; ++i){
+	for(unsigned int i = 0; i < 1024; ++i){
 		oled_data = 0b00000000;
 	}
 	
@@ -110,7 +110,7 @@ void oled_pos(uint8_t row,uint8_t column){
 
 void oled_print(char tekst[]){
 	//Må trekke fra 32 for å slå opp i font.
-	for(uint8_t i = 0; tekst[i] != '\0'; ++i){
+	for(uint8_t i = 0; tekst[i] != '\0' && i<16; ++i){
 		if(tekst[i] == '-'){
 			switch(tekst[i+1]){
 				case '^':

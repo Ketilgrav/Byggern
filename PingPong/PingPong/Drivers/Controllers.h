@@ -14,7 +14,7 @@
 
 #define channelX 1
 #define channelY 0
-#define slack_js 30
+#define slack_js 50
 #define slack_slider 15
 
 #define btn_A read_bit(PINB,PB2)

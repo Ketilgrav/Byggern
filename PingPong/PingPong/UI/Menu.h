@@ -9,10 +9,10 @@
 #ifndef MENU_H_
 #define MENU_H_
 
-typedef enum Tilstand {MENU, RUN_GAME, HIGH_SCORE, CALIBRATE_JS};
+enum Tilstand {MENU, RUN_GAME, HIGH_SCORE, CALIBRATE_JS};
 
 typedef struct menyNode{
-	Tilstand tilstand;
+	enum Tilstand tilstand;
 	uint8_t nBarn;
 	uint8_t pilNivaa;
 	char tekst[16];
