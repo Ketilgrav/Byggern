@@ -44,6 +44,7 @@ typedef struct Slider{
 } Slider;
 
 void joystick_calibrate(JoyStick* js);
+uint8_t joystick_user_calibrate(JoyStick* js);
 void joystick_update(JoyStick* js);
 int8_t joystick_descreet(int8_t val);
 void slider_update(Slider* sl);

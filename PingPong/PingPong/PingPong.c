@@ -14,6 +14,8 @@
 #include "Drivers/Controllers.h"
 #include "Drivers/OLED.h"
 #include "UI/Menu.h"
+#include "Game/Game.h"
+#include "UI/HighScore.h"
 
 int main(void){
 	USART_INIT();
@@ -23,8 +25,6 @@ int main(void){
 	ADC_init();
 	OLED_init();
 	set_bit(DDRB, PB0);
-	
-	
 	
 	controllers_init();
 	JoyStick js;
@@ -36,18 +36,27 @@ int main(void){
 	
 	printf("\n\n\n");
 
-		menyNode* menu = menu_init();
+	menyNode* menu = menu_init();
 	menyNode* mainMenu = menu;
 	
 	unsigned short mainLoopCounter = 0;	
 	
     while(1){
-		//mainLoopCounter++;
-		//if(!(mainLoopCounter%10)){
+		//Main loop counter and blinker
+		mainLoopCounter++;
+		if(!(mainLoopCounter%10)){
 			toggle_bit(PORTB, PB0);
-		//}
-		joystick_update(& js);
+		}
 		
+		//Oppdater tillstandene ut ifra input
+		joystick_update(&js);
+		slider_update(&s_l);
+		slider_update(&s_r);
+		
+		
+		//Meny og program kjøring:
+		
+		//Ved trykk av start går man uansett til main menu.
 		if(btn_B){ //Butt til en annen knapp som alltid returnerer til main
 			menu = mainMenu;
 			oled_clear_screen();
@@ -57,39 +66,30 @@ int main(void){
 				menu_go(&menu, &js);
 				break;
 			case RUN_GAME:
-				//skal bare kjøre run game funksjon her
-				oled_goto_line(3);
-				oled_print("SPILLET KJORER");
-				break;
-			case HIGH_SCORE:
-				//BARE HVIS HIGHSCORE FUNKSNONEN
-				oled_goto_line(0);
-				oled_print("Highscore");
-				oled_goto_line(1);
-				oled_print("  Per: 1024");
-				
-				if(js.x_descreet < 0 && js.x_descreet != js.x_prev_descreet){
+				if(runGame(&js,&s_l,&s_r)){
 					menu = mainMenu;
 					oled_clear_screen();
 				}
-				
+				break;
+			case HIGH_SCORE:
+				if(displayHighScore(&js)){
+					menu = mainMenu;
+					oled_clear_screen();
+				}
 				break;
 			case CALIBRATE_JS:
-			
-				oled_goto_line(0);
-				oled_print("Calibrating JS");
-				oled_clear_line(2);
-				oled_print("Press A to");
-				oled_clear_line(3);
-				oled_print("calibrate");
-				
-				while(!btn_A)
-				
-				menu = mainMenu;
-				oled_clear_screen();
-				
+				if(joystick_user_calibrate(&js)){
+					menu = mainMenu;
+					oled_clear_screen();
+				}
 				break;
-			
+			/*case TILSTAND:
+				if(funksjonen til tillstanden som returnerer true om vi skal tilbake til menyen){
+					menu = mainMenu;
+					oled_clear_screen();
+				}*/
 		}
+		
+		
     }
 }

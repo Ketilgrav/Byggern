@@ -36,6 +36,7 @@ SUBDIRS :=  \
 ../MainInclude \
 ../Drivers \
 ../Etc \
+../Game \
 ../UI
 
 
@@ -47,7 +48,9 @@ C_SRCS +=  \
 ../Drivers/OLED.c \
 ../Drivers/UsartDriver.c \
 ../Etc/font.c \
+../Game/Game.c \
 ../PingPong.c \
+../UI/HighScore.c \
 ../UI/Menu.c
 
 
@@ -64,7 +67,9 @@ Drivers/external_SRAM.o \
 Drivers/OLED.o \
 Drivers/UsartDriver.o \
 Etc/font.o \
+Game/Game.o \
 PingPong.o \
+UI/HighScore.o \
 UI/Menu.o
 
 OBJS_AS_ARGS +=  \
@@ -74,7 +79,9 @@ Drivers/external_SRAM.o \
 Drivers/OLED.o \
 Drivers/UsartDriver.o \
 Etc/font.o \
+Game/Game.o \
 PingPong.o \
+UI/HighScore.o \
 UI/Menu.o
 
 C_DEPS +=  \
@@ -84,7 +91,9 @@ Drivers/external_SRAM.d \
 Drivers/OLED.d \
 Drivers/UsartDriver.d \
 Etc/font.d \
+Game/Game.d \
 PingPong.d \
+UI/HighScore.d \
 UI/Menu.d
 
 C_DEPS_AS_ARGS +=  \
@@ -94,7 +103,9 @@ Drivers/external_SRAM.d \
 Drivers/OLED.d \
 Drivers/UsartDriver.d \
 Etc/font.d \
+Game/Game.d \
 PingPong.d \
+UI/HighScore.d \
 UI/Menu.d
 
 OUTPUT_FILE_PATH +=PingPong.elf
@@ -128,6 +139,10 @@ LINKER_SCRIPT_DEP+=
 
 
 
+
+
+
+
 Drivers/%.o: ../Drivers/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.8.1
@@ -136,6 +151,13 @@ Drivers/%.o: ../Drivers/%.c
 	
 
 Etc/%.o: ../Etc/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Game/%.o: ../Game/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.8.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

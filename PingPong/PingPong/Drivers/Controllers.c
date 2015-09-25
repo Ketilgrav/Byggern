@@ -19,6 +19,22 @@ void joystick_calibrate(JoyStick* js){
 	js->y_rest = ADC_convert(channelY);
 }
 
+uint8_t joystick_user_calibrate(JoyStick* js){
+	oled_goto_line(0);
+	oled_print("Calibrating JS: ");
+	oled_goto_line(2);
+	oled_print("Press A to      ");
+	oled_goto_line(3);
+	oled_print("calibrate       ");
+	
+	if(btn_A){
+		joystick_calibrate(js);
+		return 1;
+	}
+	return 0;
+	
+}
+
 void joystick_update(JoyStick* js){
 	js->x_voltage = ADC_convert(channelX);
 	js->y_voltage = ADC_convert(channelY);

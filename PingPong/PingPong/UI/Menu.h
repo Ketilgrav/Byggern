@@ -9,6 +9,8 @@
 #ifndef MENU_H_
 #define MENU_H_
 
+#include "../Drivers/Controllers.h";
+
 enum Tilstand {MENU, RUN_GAME, HIGH_SCORE, CALIBRATE_JS};
 
 typedef struct menyNode{

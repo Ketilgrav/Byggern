@@ -145,10 +145,22 @@
     <Compile Include="Etc\Font.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Game\Game.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Game\Game.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="MainInclude\MainInclude.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="PingPong.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="UI\HighScore.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="UI\HighScore.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="UI\Menu.c">
@@ -162,6 +174,7 @@
     <Folder Include="MainInclude" />
     <Folder Include="Drivers" />
     <Folder Include="Etc" />
+    <Folder Include="Game" />
     <Folder Include="UI" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />

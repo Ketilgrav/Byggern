@@ -64,7 +64,7 @@ void OLED_init(){
 	
 	
 	oled_control = 0x20;	//Set Memory Addressing Mode
-	oled_control = 0x02;	//0x00: Horizontal adressing mode, 0x01 Vertical, 0x02 Page, 0x03 Invalid
+	oled_control = 0x00;	//0x00: Horizontal adressing mode, 0x01 Vertical, 0x02 Page, 0x03 Invalid
 	
 	
 	oled_control = 0xB0;	//Begynner på første linje

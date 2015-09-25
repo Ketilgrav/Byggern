@@ -16,7 +16,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <stdlib.h>
-
+#include <avr/interrupt.h>
 
 //IO manipulering
 #define set_bit( reg, bit ) (reg |= (1<<bit))

@@ -14,7 +14,11 @@ Drivers\UsartDriver.c
 
 Etc\font.c
 
+Game\Game.c
+
 PingPong.c
+
+UI\HighScore.c
 
 UI\Menu.c
 
