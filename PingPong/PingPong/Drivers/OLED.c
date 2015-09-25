@@ -58,13 +58,13 @@ void OLED_init(){
 	oled_control = 0x40;	//Siste hextegn bestemmer hvor mye teksten flyttes opp, en verdi per bit opp. Funker ikke å endre underveis i koden?
 	
 	//Tømmer skjermen
-	for(int i = 0; i < 1024; ++i){
+	for(uint8_t i = 0; i < 1024; ++i){
 		oled_data = 0b00000000;
 	}
 	
 	
 	oled_control = 0x20;	//Set Memory Addressing Mode
-	oled_control = 0x00;	//0x00: Horizontal adressing mode, 0x01 Vertical, 0x02 Page, 0x03 Invalid
+	oled_control = 0x02;	//0x00: Horizontal adressing mode, 0x01 Vertical, 0x02 Page, 0x03 Invalid
 	
 	
 	oled_control = 0xB0;	//Begynner på første linje
@@ -150,5 +150,11 @@ void oled_print_char(char ch){
 	//Må trekke fra 32 for å slå opp i font.
 	for(int j = 0; j<8; ++j){
 		oled_data = pgm_read_byte(&font[ch-asciiOffset][j]);
+	}
+}
+
+void oled_clear_screen(){
+	for(int i=0; i< 8; ++i){
+		oled_clear_line(i);
 	}
 }

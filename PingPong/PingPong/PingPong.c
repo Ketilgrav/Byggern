@@ -5,6 +5,7 @@
  *  Author: ketilgs
  */ 
 
+//Bytt til den fancy screen moden, gir bonus.
 
 #include "MainInclude/MainInclude.h"
 #include "Drivers/UsartDriver.h"
@@ -43,12 +44,6 @@ int main(void){
 			toggle_bit(PORTB, PB0);
 		}
 		joystick_update(& js);
-		printf("%u  \t%i  \t%i  \t%i \r", menu->pilNivaa, btn_A,btn_B, js.y_descreet);
-		menu_print(menu, &js, btn_A, btn_B);
-		_delay_ms(10);
-		//oled_print("-s")
-		
-		//printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		
+		menu_go(&menu, &js);		
     }
 }

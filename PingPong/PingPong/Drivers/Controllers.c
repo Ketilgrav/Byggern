@@ -35,6 +35,9 @@ void joystick_update(JoyStick* js){
 		js->y_percent = (js->y_voltage - js->y_rest)*100/(255-js->y_rest);
 	}
 	
+	js->x_prev_descreet = js->x_descreet;
+	js->y_prev_descreet = js->y_descreet;
+	
 	js->x_descreet = joystick_descreet(js->x_percent);
 	js->y_descreet = joystick_descreet(js->y_percent);
 	

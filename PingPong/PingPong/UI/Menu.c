@@ -1,9 +1,9 @@
 /*
- * Menu.c
- *
- * Created: 25.09.2015 09:29:08
- *  Author: sverrevr
- */ 
+* Menu.c
+*
+* Created: 25.09.2015 09:29:08
+*  Author: sverrevr
+*/
 
 #include "../Drivers/Controllers.h"
 #include "../Drivers/OLED.h"
@@ -11,68 +11,117 @@
 
 menyNode* menu_init(){
 	menyNode* mainMenu = (menyNode*) malloc(sizeof(menyNode));
+	
 	menyNode* options = (menyNode*) malloc(sizeof(menyNode));
+	menyNode* reCalibrateJs = (menyNode*) malloc(sizeof(menyNode));
+	
+	
 	menyNode* newGame = (menyNode*) malloc(sizeof(menyNode));
+	
 	menyNode* highScore = (menyNode*) malloc(sizeof(menyNode));
 	
 	
-	strcpy(options->tekst[0],   "Options       ");
-	strcpy(newGame->tekst[0],   "New Game      ");
-	strcpy(highScore->tekst[0], "High scores   ");
-	strcpy(mainMenu->tekst[0],  "Main menu!    ");
+	strcpy(options->tekst,		  "Options       ");
+	strcpy(newGame->tekst,        "New Game      ");
+	strcpy(highScore->tekst,      "High scores   ");
+	strcpy(mainMenu->tekst,       "Main menu!    ");
+	strcpy(reCalibrateJs->tekst,  "Re calib. js. ");
 	
-	strcpy(mainMenu->tekst[1], options->tekst[0]);
-	strcpy(mainMenu->tekst[2], newGame->tekst[0]);
-	strcpy(mainMenu->tekst[3], highScore->tekst[0]);
-	mainMenu->nBarn = 3;
 	mainMenu->forelder = NULL;
+	mainMenu->nBarn = 3;
 	mainMenu->barn[0] = options;
 	mainMenu->barn[1] = newGame;
 	mainMenu->barn[2] = highScore;
+	mainMenu->pilNivaa = 1;
+	mainMenu->tilstand = MENU;
 	
 	options->forelder = mainMenu;
-	options->nBarn = 0;
+	options->nBarn = 1;
+	options->barn[0] = reCalibrateJs;
+	options->pilNivaa = 1;
+	options->tilstand = MENU;
+	
+	reCalibrateJs->forelder = options;
+	reCalibrateJs->nBarn = 0;
+	reCalibrateJs->pilNivaa = 1;
+	reCalibrateJs->tilstand = CALIBRATE_JS;
+	
 	newGame->forelder = mainMenu;
 	newGame->nBarn = 0;
+	newGame->pilNivaa = 1;
+	newGame->tilstand = GAME;
+	
 	highScore->forelder = mainMenu;
 	highScore->nBarn = 0;
+	highScore->pilNivaa = 1;
+	highScore->tilstand = HIGH_SCORE;
 	
 	return mainMenu;
 	
 }
 
-void menu_print(menyNode* meny, JoyStick* js, uint8_t btnA, uint8_t btnB){
-	flyttPil(&(meny->pilNivaa), js, meny->nBarn);
+void menu_go(menyNode** meny, JoyStick* js){
+	flyttPil(&((*meny)->pilNivaa), js, (*meny)->nBarn);
 	
-	oled_goto_line(0);
-	oled_print(meny->tekst[0]);
-	for(int i=1; i<=meny->nBarn; ++i){
-		oled_goto_line(i);
-		if(meny->pilNivaa == i){
-			oled_print("-s");	
-		}
-		else{
-			oled_print("  ");
-		}
-		oled_print(meny->tekst[i]);
+	switch((**meny)->tilstand){
+		case MENU:
+			oled_goto_line(0);
+			oled_print((*meny)->tekst);
+			for(int i=1; i<=(*meny)->nBarn; ++i){
+				oled_goto_line(i);
+				if((*meny)->pilNivaa == i){
+					oled_print("-s");
+				}
+				else{
+					oled_print("  ");
+				}
+				oled_print((*meny)->barn[i-1]->tekst);
+			}			
+		case RUN_GAME:
+			oled_goto_line(4);
+			oled_print("THIS IS THE GAME");
+			break;
+		case CALIBRATE_JS:
+			oled_goto_line(0);
+			oled_print("Settings:")
+			oled_goto_line(1);
+			oled_print(" Her er settings");
+			break; 	
+		case HIGH_SCORE:
+			oled_goto_line(0);
+			oled_print("Highscores:");
+			oled_goto_line(1);
+			oled_print("Per Sienne: 1400");
+			break;
+		
+		
 	}
 	
-	if(btnA){
-		if(meny->pilNivaa <= meny->nBarn){
-			meny = meny->barn[(meny->pilNivaa)-1];
-			printf("%s", meny->tekst[0]);
+	
+	
+	if(js->x_descreet != js->x_prev_descreet){
+		if(js->x_descreet > 0){
+			if((*meny)->pilNivaa !=0  &&((*meny)->pilNivaa <= (*meny)->nBarn)){
+				*meny = (*meny)->barn[((*meny)->pilNivaa)-1];
+				oled_clear_screen();
+			}
+		}
+		else if(js->x_descreet < 0){
+			if((*meny)->forelder != NULL){
+				*meny = (*meny)->forelder;
+				oled_clear_screen();
+			}
 		}
 	}
-	else if(btnB){
-		if(meny->forelder != NULL){
-			meny = meny->forelder;	
-		}
-	}
+	
 }
 
 void flyttPil(uint8_t* nivaa, JoyStick* js, uint8_t nBarn){
+	if(js->y_prev_descreet == js->y_descreet){
+		return;
+	}
 	(*nivaa) -= js->y_descreet;
-	if((*nivaa) <1) *nivaa = 1;
-	else if((*nivaa) > nBarn) *nivaa = nBarn;
+	if((*nivaa) <1) *nivaa = nBarn;
+	else if((*nivaa) > nBarn) *nivaa = 1;
 	
 }

@@ -18,6 +18,7 @@ void oled_clear_line(uint8_t line);
 void oled_pos(uint8_t row,uint8_t column);
 void oled_print(char tekst[]);
 void oled_print_char(char ch);
+void oled_clear_screen();
 
 
 #define oled_data *((volatile char*)0x1200)

@@ -25,6 +25,9 @@ typedef struct JoyStick{
 	uint8_t y_voltage;
 	int8_t x_percent;
 	int8_t y_percent;
+	
+	int8_t x_prev_descreet;
+	int8_t y_prev_descreet;
 	int8_t x_descreet;
 	int8_t y_descreet;
 	

@@ -9,16 +9,19 @@
 #ifndef MENU_H_
 #define MENU_H_
 
+typedef enum Tilstand {MENU, RUN_GAME, HIGH_SCORE, CALIBRATE_JS};
+
 typedef struct menyNode{
+	Tilstand tilstand;
 	uint8_t nBarn;
 	uint8_t pilNivaa;
-	char tekst[8][16];
+	char tekst[16];
 	struct menyNode* forelder;
 	struct menyNode* barn[7];
 }menyNode;
 
 menyNode* menu_init();
-void menu_print(menyNode* meny, JoyStick* js, uint8_t btnA, uint8_t btnB);
+void menu_go(menyNode** meny, JoyStick* js);
 void flyttPil(uint8_t* nivaa, JoyStick* js, uint8_t nBarn);
 
 #endif /* MENU_H_ */
