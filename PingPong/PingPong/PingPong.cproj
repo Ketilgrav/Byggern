@@ -109,6 +109,33 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Communication drivers\can.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Communication drivers\can.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Communication drivers\mcp2515.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Communication drivers\mcp2515.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Communication drivers\MCP2515_register.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Communication drivers\spi.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Communication drivers\spi.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Communication drivers\UsartDriver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Communication drivers\UsartDriver.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Drivers\ADC_Driver.c">
       <SubType>compile</SubType>
     </Compile>
@@ -131,12 +158,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Drivers\OLED.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Drivers\UsartDriver.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Drivers\UsartDriver.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Etc\font.c">
@@ -175,6 +196,7 @@
     <Folder Include="Drivers" />
     <Folder Include="Etc" />
     <Folder Include="Game" />
+    <Folder Include="Communication drivers" />
     <Folder Include="UI" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />

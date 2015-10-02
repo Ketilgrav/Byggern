@@ -37,16 +37,20 @@ SUBDIRS :=  \
 ../Drivers \
 ../Etc \
 ../Game \
+../Communication\ drivers \
 ../UI
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../Communication\ drivers/can.c \
+../Communication\ drivers/mcp2515.c \
+../Communication\ drivers/spi.c \
+../Communication\ drivers/UsartDriver.c \
 ../Drivers/ADC_Driver.c \
 ../Drivers/Controllers.c \
 ../Drivers/external_SRAM.c \
 ../Drivers/OLED.c \
-../Drivers/UsartDriver.c \
 ../Etc/font.c \
 ../Game/Game.c \
 ../PingPong.c \
@@ -61,11 +65,14 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+Communication\ drivers/can.o \
+Communication\ drivers/mcp2515.o \
+Communication\ drivers/spi.o \
+Communication\ drivers/UsartDriver.o \
 Drivers/ADC_Driver.o \
 Drivers/Controllers.o \
 Drivers/external_SRAM.o \
 Drivers/OLED.o \
-Drivers/UsartDriver.o \
 Etc/font.o \
 Game/Game.o \
 PingPong.o \
@@ -73,11 +80,14 @@ UI/HighScore.o \
 UI/Menu.o
 
 OBJS_AS_ARGS +=  \
+"Communication drivers/can.o" \
+"Communication drivers/mcp2515.o" \
+"Communication drivers/spi.o" \
+"Communication drivers/UsartDriver.o" \
 Drivers/ADC_Driver.o \
 Drivers/Controllers.o \
 Drivers/external_SRAM.o \
 Drivers/OLED.o \
-Drivers/UsartDriver.o \
 Etc/font.o \
 Game/Game.o \
 PingPong.o \
@@ -85,11 +95,14 @@ UI/HighScore.o \
 UI/Menu.o
 
 C_DEPS +=  \
+Communication\ drivers/can.d \
+Communication\ drivers/mcp2515.d \
+Communication\ drivers/spi.d \
+Communication\ drivers/UsartDriver.d \
 Drivers/ADC_Driver.d \
 Drivers/Controllers.d \
 Drivers/external_SRAM.d \
 Drivers/OLED.d \
-Drivers/UsartDriver.d \
 Etc/font.d \
 Game/Game.d \
 PingPong.d \
@@ -97,11 +110,14 @@ UI/HighScore.d \
 UI/Menu.d
 
 C_DEPS_AS_ARGS +=  \
+"Communication drivers/can.d" \
+"Communication drivers/mcp2515.d" \
+"Communication drivers/spi.d" \
+"Communication drivers/UsartDriver.d" \
 Drivers/ADC_Driver.d \
 Drivers/Controllers.d \
 Drivers/external_SRAM.d \
 Drivers/OLED.d \
-Drivers/UsartDriver.d \
 Etc/font.d \
 Game/Game.d \
 PingPong.d \
@@ -122,6 +138,33 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+Communication\ drivers/can.o: ../Communication\ drivers/can.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Communication\ drivers/mcp2515.o: ../Communication\ drivers/mcp2515.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Communication\ drivers/spi.o: ../Communication\ drivers/spi.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Communication\ drivers/UsartDriver.o: ../Communication\ drivers/UsartDriver.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
 
 
 
@@ -142,6 +185,12 @@ LINKER_SCRIPT_DEP+=
 
 
 
+Communication\ drivers/%.o: ../Communication\ drivers/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
 
 Drivers/%.o: ../Drivers/%.c
 	@echo Building file: $<
