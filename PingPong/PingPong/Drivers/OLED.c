@@ -7,6 +7,8 @@
 #include "OLED.h"
 
 
+//Fra minnet 1C00 til 1FFF
+
 void OLED_init(){	
 	oled_control = 0xae;	 //Display off (0xaf == on)
 	
@@ -41,9 +43,6 @@ void OLED_init(){
 	oled_control = 0xa4;    //out follows RAM content (a5 = alle led lyser)
 	
 	oled_control = 0xa6;    //set normal display (a7 = invert)
-		
-	
-	oled_control = 0xaf;    // display on
 	
 	
 	oled_control = 0x21;	//Hvor man begynner og slutter på en linje
@@ -62,7 +61,6 @@ void OLED_init(){
 		oled_data = 0b00000000;
 	}
 	
-	
 	oled_control = 0x20;	//Set Memory Addressing Mode
 	oled_control = 0x00;	//0x00: Horizontal adressing mode, 0x01 Vertical, 0x02 Page, 0x03 Invalid
 	
@@ -72,9 +70,11 @@ void OLED_init(){
 	oled_control = 0x10;	//MSB til startbit (bortover) (så hvilken kolonne) (Kan endre siste hex tegnet fra 0 til F)
 	
 	
-	//oled_data = 0b11000111;
 	
-	//printf("OLED initd\n\r");
+	oled_control = 0xaf;    // display on
+	
+	
+	oled_mem_clear();
 }
 
 void oled_home(){
@@ -156,5 +156,69 @@ void oled_print_char(char ch){
 void oled_clear_screen(){
 	for(int i=0; i< 8; ++i){
 		oled_clear_line(i);
+	}
+}
+
+void oled_mem_print(char tekst[], uint8_t lineNr){
+	if(lineNr > 7){
+		lineNr = 7;
+	}
+	
+	//Må trekke fra 32 for å slå opp i font.
+	for(uint8_t i = 0; tekst[i] != '\0' && i<16; ++i){
+		if(tekst[i] == '-'){
+			switch(tekst[i+1]){
+				case '^':
+				oled_mem_print_char(127, lineNr, i);
+				i++;
+				break;
+				case 'v':
+				oled_mem_print_char(128, lineNr, i);
+				i++;
+				break;
+				case '<':
+				oled_mem_print_char(129, lineNr, i);
+				i++;
+				break;
+				case '>':
+				oled_mem_print_char(130, lineNr, i);
+				i++;
+				break;
+				case 's':
+				oled_mem_print_char(131, lineNr, i);
+				i++;
+				oled_mem_print_char(132, lineNr, i);
+				break;
+				default:
+				oled_mem_print_char('-', lineNr, i);
+				break;
+				
+			}
+		}
+		else{
+			oled_mem_print_char(tekst[i], lineNr, i);
+		}
+	}
+}
+
+void oled_mem_print_char(char ch, uint8_t line,uint8_t loc){
+	//Må trekke fra 32 for å slå opp i font.
+	for(int j = 0; j<8; ++j){
+		oled_mem_line_loc(line, loc, j) = pgm_read_byte(&font[ch-asciiOffset][j]);
+	}
+}
+
+void oled_mem_update_screen(){
+	oled_goto_line(0);
+	volatile char* memBegin = oled_mem_begin;
+	for(unsigned int i = 0; i < 1024; ++i){
+		oled_data = *(memBegin+i);
+	}
+}
+
+void oled_mem_clear(){
+	volatile char* memBegin = oled_mem_begin;
+	for(unsigned int i = 0; i < 1024; ++i){
+		*(memBegin+i) = 0x00;
 	}
 }

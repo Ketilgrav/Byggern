@@ -20,12 +20,9 @@ void joystick_calibrate(JoyStick* js){
 }
 
 uint8_t joystick_user_calibrate(JoyStick* js){
-	oled_goto_line(0);
-	oled_print("Calibrating JS: ");
-	oled_goto_line(2);
-	oled_print("Press A to      ");
-	oled_goto_line(3);
-	oled_print("calibrate       ");
+	oled_mem_print("Calibrating JS: ",0);
+	oled_mem_print("Press A to      ",2);
+	oled_mem_print("calibrate       ",3);
 	
 	if(btn_A){
 		joystick_calibrate(js);

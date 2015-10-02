@@ -19,7 +19,7 @@
 
 int main(void){
 	USART_INIT();
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	
 	SRAM_INIT();
 	ADC_init();
@@ -44,22 +44,20 @@ int main(void){
     while(1){
 		//Main loop counter and blinker
 		mainLoopCounter++;
-		if(!(mainLoopCounter%10)){
+		if(!(mainLoopCounter%100)){
 			toggle_bit(PORTB, PB0);
 		}
 		
 		//Oppdater tillstandene ut ifra input
 		joystick_update(&js);
 		slider_update(&s_l);
-		slider_update(&s_r);
-		
+		slider_update(&s_r);		
 		
 		//Meny og program kjøring:
 		
 		//Ved trykk av start går man uansett til main menu.
 		if(btn_B){ //Butt til en annen knapp som alltid returnerer til main
 			menu = mainMenu;
-			oled_clear_screen();
 		}
 		switch (menu->tilstand){
 			case MENU:
@@ -68,28 +66,22 @@ int main(void){
 			case RUN_GAME:
 				if(runGame(&js,&s_l,&s_r)){
 					menu = mainMenu;
-					oled_clear_screen();
 				}
 				break;
 			case HIGH_SCORE:
 				if(displayHighScore(&js)){
 					menu = mainMenu;
-					oled_clear_screen();
 				}
 				break;
 			case CALIBRATE_JS:
 				if(joystick_user_calibrate(&js)){
 					menu = mainMenu;
-					oled_clear_screen();
 				}
 				break;
-			/*case TILSTAND:
-				if(funksjonen til tillstanden som returnerer true om vi skal tilbake til menyen){
-					menu = mainMenu;
-					oled_clear_screen();
-				}*/
 		}
-		
-		
+		char a[4] = "-s";
+		oled_mem_print(strcat(a,menu->barn[0]->tekst),4);
+		printf("%s\n\n\n\r",a);
+		oled_mem_update_screen();
     }
 }

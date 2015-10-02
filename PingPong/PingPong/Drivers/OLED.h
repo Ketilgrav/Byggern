@@ -24,7 +24,17 @@ void oled_clear_screen();
 #define oled_data *((volatile char*)0x1200)
 #define oled_control *((volatile char*)0x1000)
 
+#define oled_mem_begin 0x1c00
+#define oled_next_line 128
+#define oled_mem_end 0x1FFF
 
+#define font_width 8
+#define oled_mem_line(linenr) *((volatile char*)(oled_mem_begin+linenr*oled_next_line))
+#define oled_mem_line_loc(line, byte, bit) *((volatile char*)(oled_mem_begin+line*oled_next_line+byte*font_width+bit))
 
+void oled_mem_print(char tekst[], uint8_t lineNr);
+void oled_mem_print_char(char ch, uint8_t line,uint8_t loc);
+void oled_mem_update_screen();
+void oled_mem_clear();
 
 #endif /* OLED_H_ */

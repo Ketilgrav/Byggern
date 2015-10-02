@@ -10,15 +10,10 @@
 #include "Menu.h"
 
 menyNode* menu_init(){
-	puts("a");
 	menyNode* mainMenu = (menyNode*) malloc(sizeof(menyNode));
-	puts("b");
 	menyNode* options = (menyNode*) malloc(sizeof(menyNode));
-	puts("c");
 	menyNode* reCalibrateJs = (menyNode*) malloc(sizeof(menyNode));
-	puts("d");
 	menyNode* newGame = (menyNode*) malloc(sizeof(menyNode));
-	puts("e");
 	menyNode* highScore = (menyNode*) malloc(sizeof(menyNode));
 	
 	
@@ -64,34 +59,30 @@ menyNode* menu_init(){
 void menu_go(menyNode** meny, JoyStick* js){
 	flyttPil(&((*meny)->pilNivaa), js, (*meny)->nBarn);
 	
-	oled_goto_line(0);
-	oled_print((*meny)->tekst);
-	for(int i=1; i<=(*meny)->nBarn; ++i){
-		oled_goto_line(i);
-		if((*meny)->pilNivaa == i){
-			oled_print("-s");
-		}
-		else{
-			oled_print("  ");
-		}
-		oled_print((*meny)->barn[i-1]->tekst);
-	}
+	char startTekst[3] = {' ',' ',0};
 	
+	oled_mem_clear();
+	oled_mem_print((*meny)->tekst,0);
+
+	for(int i=1; i<=(*meny)->nBarn; ++i){
+		if((*meny)->pilNivaa == i){
+			startTekst[0] = '-';
+			startTekst[1] = 's';
+		}
+		//oled_mem_print(str,i);
+	}
 	if(js->x_descreet != js->x_prev_descreet){
 		if(js->x_descreet > 0){
 			if((*meny)->pilNivaa !=0  &&((*meny)->pilNivaa <= (*meny)->nBarn)){
 				*meny = (*meny)->barn[((*meny)->pilNivaa)-1];
-				oled_clear_screen();
 			}
 		}
 		else if(js->x_descreet < 0){
 			if((*meny)->forelder != NULL){
 				*meny = (*meny)->forelder;
-				oled_clear_screen();
 			}
 		}
 	}
-	
 }
 
 void flyttPil(uint8_t* nivaa, JoyStick* js, uint8_t nBarn){

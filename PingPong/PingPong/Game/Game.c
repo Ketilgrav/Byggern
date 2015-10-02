@@ -8,7 +8,6 @@
 #include "../Drivers/Controllers.h"
 
 uint8_t runGame(JoyStick* js, Slider* s_l, Slider* s_r){
-	oled_goto_line(3);
-	oled_print("SPILLET KJORER");
+	oled_mem_print("SPILLET KJORER",3);
 	return 0;
 }
