@@ -36,8 +36,8 @@ int main(void){
 	
 	printf("\n\n\n");
 
-	menyNode* menu = menu_init();
-	menyNode* mainMenu = menu;
+	volatile menyNode* menu = menu_init();
+	volatile menyNode* mainMenu = menu;
 	
 	unsigned short mainLoopCounter = 0;	
 	
@@ -79,9 +79,10 @@ int main(void){
 				}
 				break;
 		}
-		char a[4] = "-s";
-		oled_mem_print(strcat(a,menu->barn[0]->tekst),4);
-		printf("%s\n\n\n\r",a);
+		//char a[4] = "-s";
+		//oled_mem_print(strcat(a,"skdjahsjh"),4);
+		//printf("%s\n\n\n\r",a);
+		printf("%i     \r", menu->tilstand);
 		oled_mem_update_screen();
     }
 }

@@ -159,44 +159,44 @@ void oled_clear_screen(){
 	}
 }
 
-void oled_mem_print(char tekst[], uint8_t lineNr){
+void oled_mem_print(char tekst[], uint8_t lineNr, uint8_t charStartPoint){
 	if(lineNr > 7){
 		lineNr = 7;
 	}
 	
 	//Må trekke fra 32 for å slå opp i font.
-	for(uint8_t i = 0; tekst[i] != '\0' && i<16; ++i){
+	for(uint8_t i = 0; tekst[i] != '\0' && i < 16-charStartPoint; ++i){
 		if(tekst[i] == '-'){
 			switch(tekst[i+1]){
 				case '^':
-				oled_mem_print_char(127, lineNr, i);
+				oled_mem_print_char(127, lineNr, i+charStartPoint);
 				i++;
 				break;
 				case 'v':
-				oled_mem_print_char(128, lineNr, i);
+				oled_mem_print_char(128, lineNr, i+charStartPoint);
 				i++;
 				break;
 				case '<':
-				oled_mem_print_char(129, lineNr, i);
+				oled_mem_print_char(129, lineNr, i+charStartPoint);
 				i++;
 				break;
 				case '>':
-				oled_mem_print_char(130, lineNr, i);
+				oled_mem_print_char(130, lineNr, i+charStartPoint);
 				i++;
 				break;
 				case 's':
-				oled_mem_print_char(131, lineNr, i);
+				oled_mem_print_char(131, lineNr, i+charStartPoint);
 				i++;
-				oled_mem_print_char(132, lineNr, i);
+				oled_mem_print_char(132, lineNr, i+charStartPoint);
 				break;
 				default:
-				oled_mem_print_char('-', lineNr, i);
+				oled_mem_print_char('-', lineNr, i+charStartPoint);
 				break;
 				
 			}
 		}
 		else{
-			oled_mem_print_char(tekst[i], lineNr, i);
+			oled_mem_print_char(tekst[i], lineNr, i+charStartPoint);
 		}
 	}
 }

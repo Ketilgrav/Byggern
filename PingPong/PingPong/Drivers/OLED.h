@@ -32,9 +32,12 @@ void oled_clear_screen();
 #define oled_mem_line(linenr) *((volatile char*)(oled_mem_begin+linenr*oled_next_line))
 #define oled_mem_line_loc(line, byte, bit) *((volatile char*)(oled_mem_begin+line*oled_next_line+byte*font_width+bit))
 
-void oled_mem_print(char tekst[], uint8_t lineNr);
+
 void oled_mem_print_char(char ch, uint8_t line,uint8_t loc);
+void oled_mem_print(char tekst[], uint8_t lineNr, uint8_t charStartPoint);
 void oled_mem_update_screen();
 void oled_mem_clear();
+
+
 
 #endif /* OLED_H_ */

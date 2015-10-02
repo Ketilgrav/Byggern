@@ -8,8 +8,9 @@
 #include "HighScore.h"
 
 uint8_t displayHighScore(JoyStick* js){
-	oled_mem_print("Highscore",0);
-	oled_mem_print("  Per: 1024",2);
+	oled_mem_clear();
+	oled_mem_print("Highscore",0,0);
+	oled_mem_print("  Per: 1024",2,0);
 	
 	if(js->x_descreet < 0 && js->x_descreet != js->x_prev_descreet){
 		return 1;

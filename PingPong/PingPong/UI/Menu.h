@@ -11,7 +11,7 @@
 
 #include "../Drivers/Controllers.h";
 
-enum Tilstand {MENU, RUN_GAME, HIGH_SCORE, CALIBRATE_JS};
+enum Tilstand {MENU = 0, RUN_GAME = 1, HIGH_SCORE = 2, CALIBRATE_JS=3};
 
 typedef struct menyNode{
 	enum Tilstand tilstand;
