@@ -12,7 +12,6 @@
 #define can_cs_bit
 #define can_cs_reg 
 
-#define usart_transmit_adress 0b00110000
 #define usart_
 
 uint8_t mcp2515_read(uint8_t addr);	

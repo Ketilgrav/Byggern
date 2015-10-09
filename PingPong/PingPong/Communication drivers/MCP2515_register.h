@@ -154,6 +154,14 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_WAKIF		0x40
 #define MCP_MERRF		0x80
 
+//Andre masker
+#define TXP_MASK 0x03
+#define MCP_RXB0RXM_MASK 0x60
+#define MCP_RXB1RXM_MASK 0x60
+#define MCP_RXB0BUKT_MASK 0x04
+#define MCP_CANSTAT_ICOD_MASK 0x0E
+
+
 
 
 #endif
