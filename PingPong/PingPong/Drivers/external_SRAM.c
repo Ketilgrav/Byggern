@@ -7,7 +7,7 @@
 
 #include "external_SRAM.h"
 
-void SRAM_INIT(void){
+void SRAM_init(void){
 	set_bit(MCUCR, SRE);	//External ram endable
 	set_bit(SFIOR, XMM2);	//100 -> releaser pc7-pc4 fra minne opperasjoner, til å bli brukt i jtag.
 	SRAM_test();

@@ -1,6 +1,7 @@
-Drivers/external_SRAM.d Drivers/external_SRAM.o: \
- ../Drivers/external_SRAM.c ../Drivers/external_SRAM.h \
- ../Drivers/../MainInclude/MainInclude.h \
+Communication drivers/can.d Communication drivers/can.o: \
+ ../Communication\ drivers/can.c ../Communication\ drivers/can.h \
+ ../Communication\ drivers/mcp2515.h \
+ ../Communication\ drivers/..\MainInclude\MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -18,17 +19,15 @@ Drivers/external_SRAM.d Drivers/external_SRAM.o: \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h \
- ../Drivers/../MainInclude/../Drivers/OLED.h \
- ../Drivers/../MainInclude/../Drivers/../MainInclude/MainInclude.h \
- ../Drivers/../MainInclude/../Drivers/../Etc/Font.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h
+ ../Communication\ drivers/spi.h \
+ ../Communication\ drivers/MCP2515_register.h \
+ ../Communication\ drivers/canID.h
 
-../Drivers/external_SRAM.h:
+../Communication\ drivers/can.h:
 
-../Drivers/../MainInclude/MainInclude.h:
+../Communication\ drivers/mcp2515.h:
+
+../Communication\ drivers/..\MainInclude\MainInclude.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -64,16 +63,8 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h:
 
-../Drivers/../MainInclude/../Drivers/OLED.h:
+../Communication\ drivers/spi.h:
 
-../Drivers/../MainInclude/../Drivers/../MainInclude/MainInclude.h:
+../Communication\ drivers/MCP2515_register.h:
 
-../Drivers/../MainInclude/../Drivers/../Etc/Font.h:
-
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
-
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h:
-
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h:
-
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h:
+../Communication\ drivers/canID.h:

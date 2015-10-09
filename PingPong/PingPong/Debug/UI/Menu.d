@@ -17,11 +17,16 @@ UI/Menu.d UI/Menu.o: ../UI/Menu.c ../UI/../Drivers/Controllers.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h \
+ ../UI/../Drivers/../MainInclude/../Drivers/OLED.h \
+ ../UI/../Drivers/../MainInclude/../Drivers/../MainInclude/MainInclude.h \
+ ../UI/../Drivers/../MainInclude/../Drivers/../Etc/Font.h \
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h \
  ../UI/../Drivers/../Drivers/ADC_Driver.h \
  ../UI/../Drivers/../Drivers/../MainInclude/MainInclude.h \
- ../UI/../Drivers/OLED.h ../UI/../Drivers/../Etc/Font.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
- ../UI/Menu.h
+ ../UI/../Drivers/OLED.h ../UI/Menu.h ../UI/../MainInclude/MainInclude.h
 
 ../UI/../Drivers/Controllers.h:
 
@@ -61,14 +66,26 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h:
 
+../UI/../Drivers/../MainInclude/../Drivers/OLED.h:
+
+../UI/../Drivers/../MainInclude/../Drivers/../MainInclude/MainInclude.h:
+
+../UI/../Drivers/../MainInclude/../Drivers/../Etc/Font.h:
+
+c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
+
+c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h:
+
+c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h:
+
+c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h:
+
 ../UI/../Drivers/../Drivers/ADC_Driver.h:
 
 ../UI/../Drivers/../Drivers/../MainInclude/MainInclude.h:
 
 ../UI/../Drivers/OLED.h:
 
-../UI/../Drivers/../Etc/Font.h:
-
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
-
 ../UI/Menu.h:
+
+../UI/../MainInclude/MainInclude.h:

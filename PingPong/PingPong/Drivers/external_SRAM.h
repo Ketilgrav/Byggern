@@ -10,7 +10,7 @@
 #ifndef EXTERNAL_SRAM_H_
 #define EXTERNAL_SRAM_H_
 
-void SRAM_INIT(void);
+void SRAM_init(void);
 void SRAM_test(void);
 
 

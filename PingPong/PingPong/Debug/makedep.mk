@@ -2,13 +2,13 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
-Communication drivers\can.c
+Communication_drivers\can.c
 
-Communication drivers\mcp2515.c
+Communication_drivers\mcp2515.c
 
-Communication drivers\spi.c
+Communication_drivers\spi.c
 
-Communication drivers\UsartDriver.c
+Communication_drivers\UsartDriver.c
 
 Drivers\ADC_Driver.c
 

@@ -14,7 +14,7 @@ menyNode options;
 menyNode reCalibrateJs;
 menyNode newGame;
 menyNode highScore;
-
+menyNode canMsg;
 
 menyNode* menu_init(){
 // 	menyNode* mainMenu = (menyNode*) malloc(sizeof(menyNode));
@@ -24,17 +24,19 @@ menyNode* menu_init(){
 // 	menyNode* highScore = (menyNode*) malloc(sizeof(menyNode));
 	
 	
-	strcpy(options.tekst,		  "Options       ");
-	strcpy(newGame.tekst,        "New Game      ");
-	strcpy(highScore.tekst,      "High scores   ");
-	strcpy(mainMenu.tekst,       "Main menu!    ");
-	strcpy(reCalibrateJs.tekst,  "Re calib. js. ");
+	strcpy(options.tekst,			"Options       ");
+	strcpy(newGame.tekst,			"New Game      ");
+	strcpy(highScore.tekst,			"High scores   ");
+	strcpy(mainMenu.tekst,			"Main menu!    ");
+	strcpy(reCalibrateJs.tekst,		"Re calib. js. ");
+	strcpy(canMsg.tekst,			"Disp. CAN msg.");
 	
 	mainMenu.forelder = NULL;
-	mainMenu.nBarn = 3;
+	mainMenu.nBarn = 4;
 	mainMenu.barn[0] = &options;
 	mainMenu.barn[1] = &newGame;
 	mainMenu.barn[2] = &highScore;
+	mainMenu.barn[3] = &canMsg;
 	mainMenu.pilNivaa = 1;
 	mainMenu.tilstand = MENU;
 	
@@ -58,6 +60,11 @@ menyNode* menu_init(){
 	highScore.nBarn = 0;
 	highScore.pilNivaa = 1;
 	highScore.tilstand = HIGH_SCORE;
+	
+	canMsg.forelder = &mainMenu;
+	canMsg.nBarn = 0;
+	canMsg.pilNivaa = 1;
+	canMsg.tilstand = SHOW_CAN_MSG;
 	
 	return &mainMenu;
 	

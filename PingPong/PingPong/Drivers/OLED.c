@@ -201,7 +201,7 @@ void oled_mem_print(char tekst[], uint8_t lineNr, uint8_t charStartPoint){
 	}
 }
 
-void oled_mem_print_char(char ch, uint8_t line,uint8_t loc){
+void oled_mem_print_char(char ch, uint8_t line, uint8_t loc){
 	//Må trekke fra 32 for å slå opp i font.
 	for(int j = 0; j<8; ++j){
 		oled_mem_line_loc(line, loc, j) = pgm_read_byte(&font[ch-asciiOffset][j]);

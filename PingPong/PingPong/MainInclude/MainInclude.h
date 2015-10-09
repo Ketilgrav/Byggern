@@ -26,6 +26,10 @@
 #define wait_until_bit_is_set( reg, bit) while( !read_bit(reg, bit))
 #define wait_until_bit_is_cleared(reg, bit) while( test_bit(reg, bit))
 
+#include "../Drivers/OLED.h"
+#include <stdio.h>
+#include <string.h>
+
 typedef enum { false, true} bool;
 
 #endif /* MAININCLUDE_H_ */

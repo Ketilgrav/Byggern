@@ -37,16 +37,16 @@ SUBDIRS :=  \
 ../Drivers \
 ../Etc \
 ../Game \
-../Communication\ drivers \
+../Communication_drivers \
 ../UI
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../Communication\ drivers/can.c \
-../Communication\ drivers/mcp2515.c \
-../Communication\ drivers/spi.c \
-../Communication\ drivers/UsartDriver.c \
+../Communication_drivers/can.c \
+../Communication_drivers/mcp2515.c \
+../Communication_drivers/spi.c \
+../Communication_drivers/UsartDriver.c \
 ../Drivers/ADC_Driver.c \
 ../Drivers/Controllers.c \
 ../Drivers/external_SRAM.c \
@@ -65,10 +65,10 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-Communication\ drivers/can.o \
-Communication\ drivers/mcp2515.o \
-Communication\ drivers/spi.o \
-Communication\ drivers/UsartDriver.o \
+Communication_drivers/can.o \
+Communication_drivers/mcp2515.o \
+Communication_drivers/spi.o \
+Communication_drivers/UsartDriver.o \
 Drivers/ADC_Driver.o \
 Drivers/Controllers.o \
 Drivers/external_SRAM.o \
@@ -80,10 +80,10 @@ UI/HighScore.o \
 UI/Menu.o
 
 OBJS_AS_ARGS +=  \
-"Communication drivers/can.o" \
-"Communication drivers/mcp2515.o" \
-"Communication drivers/spi.o" \
-"Communication drivers/UsartDriver.o" \
+Communication_drivers/can.o \
+Communication_drivers/mcp2515.o \
+Communication_drivers/spi.o \
+Communication_drivers/UsartDriver.o \
 Drivers/ADC_Driver.o \
 Drivers/Controllers.o \
 Drivers/external_SRAM.o \
@@ -95,10 +95,10 @@ UI/HighScore.o \
 UI/Menu.o
 
 C_DEPS +=  \
-Communication\ drivers/can.d \
-Communication\ drivers/mcp2515.d \
-Communication\ drivers/spi.d \
-Communication\ drivers/UsartDriver.d \
+Communication_drivers/can.d \
+Communication_drivers/mcp2515.d \
+Communication_drivers/spi.d \
+Communication_drivers/UsartDriver.d \
 Drivers/ADC_Driver.d \
 Drivers/Controllers.d \
 Drivers/external_SRAM.d \
@@ -110,10 +110,10 @@ UI/HighScore.d \
 UI/Menu.d
 
 C_DEPS_AS_ARGS +=  \
-"Communication drivers/can.d" \
-"Communication drivers/mcp2515.d" \
-"Communication drivers/spi.d" \
-"Communication drivers/UsartDriver.d" \
+Communication_drivers/can.d \
+Communication_drivers/mcp2515.d \
+Communication_drivers/spi.d \
+Communication_drivers/UsartDriver.d \
 Drivers/ADC_Driver.d \
 Drivers/Controllers.d \
 Drivers/external_SRAM.d \
@@ -138,33 +138,6 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
-Communication\ drivers/can.o: ../Communication\ drivers/can.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 4.8.1
-	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-Communication\ drivers/mcp2515.o: ../Communication\ drivers/mcp2515.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 4.8.1
-	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-Communication\ drivers/spi.o: ../Communication\ drivers/spi.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 4.8.1
-	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-Communication\ drivers/UsartDriver.o: ../Communication\ drivers/UsartDriver.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 4.8.1
-	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
 
 
 
@@ -185,7 +158,14 @@ Communication\ drivers/UsartDriver.o: ../Communication\ drivers/UsartDriver.c
 
 
 
-Communication\ drivers/%.o: ../Communication\ drivers/%.c
+
+
+
+
+
+
+
+Communication_drivers/%.o: ../Communication_drivers/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.8.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

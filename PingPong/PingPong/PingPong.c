@@ -16,15 +16,20 @@
 #include "UI/Menu.h"
 #include "Game/Game.h"
 #include "UI/HighScore.h"
+#include "Communication_drivers/can.h"
 
-int main(void){
-	USART_INIT();
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+#include <stdio.h>
+
+int main(void){	
 	
-	SRAM_INIT();
+	USART_init();
+	SRAM_init();
 	ADC_init();
 	OLED_init();
-	set_bit(DDRB, PB0);
+	CAN_init();
+	set_bit(DDRB, PB0); //led, blink
+	
+	
 	
 	controllers_init();
 	JoyStick js;
@@ -36,10 +41,56 @@ int main(void){
 	
 	printf("\n\n\n");
 
-	volatile menyNode* menu = menu_init();
-	volatile menyNode* mainMenu = menu;
+	//Tillstandsvariabler
+	menyNode* menu = menu_init();
+	menyNode* mainMenu = menu;	
+	interrupt CAN_interrupt = NOINT;
 	
-	unsigned short mainLoopCounter = 0;	
+	unsigned short mainLoopCounter = 0;
+	
+	//Testing variabler	
+	interrupt test;
+
+	CAN_message msgInn0;
+	CAN_message msgInn1;
+
+	CAN_message msgOut0;
+	msgOut0.data[0] = 'h';
+	msgOut0.data[1] = 'e';
+	msgOut0.data[2] = 'i';
+	msgOut0.data[3] = '\0';
+	msgOut0.length = 4;
+	msgOut0.id = 0b11000000001;
+	msgOut0.priority = 1;
+	
+	CAN_message msgOut1;
+	msgOut1.data[0] = 'd';
+	msgOut1.data[1] = 'u';
+	msgOut1.data[2] = 's';
+	msgOut1.data[3] = 't';
+	msgOut0.data[4] = '\0';
+	msgOut1.length = 5;
+	msgOut1.id = 0b11000000001;
+	msgOut1.priority = 2;	
+
+
+	bool btn_A_prev = 0;
+	
+	void printCanMsg(CAN_message m){		
+		printf("CANmsg(id:%d, len:%d, data:%s)\n", m.id, m.length, m.data);
+	}
+	
+	while(0){
+		printf("send: ");
+		printCanMsg(msgOut0);
+		CAN_message_send(&msgOut0);
+		printCanMsg(msgOut0);
+		//memset(&msgInn0, 0, sizeof(CAN_message));
+		while(!CAN_data_receive(&msgInn0, MCP_RXB0CTRL));
+		printf("recv: ");
+		printCanMsg(msgInn0);
+		_delay_ms(500);		
+	}
 	
     while(1){
 		//Main loop counter and blinker
@@ -51,12 +102,13 @@ int main(void){
 		//Oppdater tillstandene ut ifra input
 		joystick_update(&js);
 		slider_update(&s_l);
-		slider_update(&s_r);		
+		slider_update(&s_r);
+		CAN_interrupt = CAN_int();
 		
-		//Meny og program kjøring:
 		
+		//Meny og program kjøring
 		//Ved trykk av start går man uansett til main menu.
-		if(btn_B){ //Butt til en annen knapp som alltid returnerer til main
+		if(btn_B){ //Bytt til en annen knapp som alltid returnerer til main
 			menu = mainMenu;
 		}
 		switch (menu->tilstand){
@@ -64,7 +116,7 @@ int main(void){
 				menu_go(&menu, &js);
 				break;
 			case RUN_GAME:
-				if(runGame(&js,&s_l,&s_r)){
+				if(runGame(&js, &s_l, &s_r)){
 					menu = mainMenu;
 				}
 				break;
@@ -78,11 +130,46 @@ int main(void){
 					menu = mainMenu;
 				}
 				break;
+			case SHOW_CAN_MSG:
+				oled_mem_clear();
+				oled_mem_print(menu->tekst,0,0);
+				oled_mem_print("MSG0:",2,0);
+				oled_mem_print(msgInn0.data,3,0);
+				oled_mem_print("MSG1:",5,0);
+				oled_mem_print(msgInn1.data,6,0);
+				break;
+				
 		}
-		//char a[4] = "-s";
-		//oled_mem_print(strcat(a,"skdjahsjh"),4);
-		//printf("%s\n\n\n\r",a);
-		printf("%i     \r", menu->tilstand);
+		
+		//Interupts
+		switch(CAN_interrupt){
+			case NOINT:
+				break;
+			case ERR:
+				printf("roFL eRRoR LOLz\n\r");
+				break;
+			case RX0:
+				printf("RECEIVED ON RX0\n\r");
+				CAN_data_receive(&msgInn0, MCP_RXB0CTRL);
+				break;
+			case RX1:
+				printf("RECEIVED ON RX1\n\r");
+				CAN_data_receive(&msgInn1, MCP_RXB1CTRL);
+				break;
+			default:
+				break;
+		}
+		CAN_int_clear(CAN_interrupt);
+
+		test = (interrupt)((mcp2515_read(MCP_CANSTAT)&MCP_CANSTAT_ICOD_MASK) >> 1);
+		printf("%u\n",test);
+		
+		if(btn_A != btn_A_prev && btn_A){
+			CAN_message_send(&msgOut0);
+			CAN_message_send(&msgOut1);	
+		}
+		btn_A_prev = btn_A;
+		
 		oled_mem_update_screen();
     }
 }

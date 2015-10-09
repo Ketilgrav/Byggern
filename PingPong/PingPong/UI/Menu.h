@@ -9,9 +9,10 @@
 #ifndef MENU_H_
 #define MENU_H_
 
-#include "../Drivers/Controllers.h";
+#include "../Drivers/Controllers.h"
+#include "../MainInclude/MainInclude.h"
 
-enum Tilstand {MENU = 0, RUN_GAME = 1, HIGH_SCORE = 2, CALIBRATE_JS=3};
+enum Tilstand {MENU = 0, RUN_GAME = 1, HIGH_SCORE = 2, CALIBRATE_JS=3, SHOW_CAN_MSG=4};
 
 typedef struct menyNode{
 	enum Tilstand tilstand;
