@@ -24,20 +24,14 @@ void CAN_init(){
 		puts("MCP2515 is NOT in configuration mode after reset!\n");
 	}
 		
-	mcp2515_bit_modify(MCP_CANCTRL, MODE_MASK, MODE_LOOPBACK);	
-	
-	/*
 	//Setter opp RXBOCTRL
-		//RXM = 01, bare valide meldigner med kort id. 
+		//RXM = 01, aktiv filter, kun kort id. 
 	mcp2515_bit_modify(MCP_RXB0CTRL, MCP_RXB0RXM_MASK, 1 << 5);
 		//BUKT: 1 -> ting går til RXB1 når denne er full
 	mcp2515_bit_modify(MCP_RXB0CTRL, MCP_RXB0BUKT_MASK, 1 << 2);
 	//RXB1CTRL
-		//RXM = 01
+		//RXM = 01, aktiv filter, kun kort id. 
 	mcp2515_bit_modify(MCP_RXB1CTRL, MCP_RXB1RXM_MASK, 1 << 5);
-	*/
-	mcp2515_bit_modify(MCP_RXB0CTRL, 0x04, 0x00);	// rollover off
-	mcp2515_bit_modify(MCP_RXB0CTRL, 0x60, 0x60);	// filters off
 	
 	//Setter interrupt enable
 	//MERRE = 0 Message error interrupt
@@ -48,12 +42,9 @@ void CAN_init(){
 	//TX0IE = 0 Transmit 0 empty interrupt
 	//RX1IE = 1 Interrupt når data på RX1
 	//RX0IE = 1 -||- RX2
-	mcp2515_write(MCP_CANINTE, 0b10100011);
+	mcp2515_write(MCP_CANINTE, 0b00100011);
 	
 	//Filtere:
-	
-	
-	/*
 	//Masken til RX0
 	mcp2515_write(MCP_RXM0SIDH, CANID_MCUH_mask >> 3);
 	mcp2515_bit_modify(MCP_RXM0SIDL, 0b11100000U, CANID_MCUH_mask << 5);
@@ -85,7 +76,9 @@ void CAN_init(){
 	//Filter 5 (RX1)
 	mcp2515_write(MCP_RXF5SIDH, CANID_MCU_3 >> 3);
 	mcp2515_bit_modify(MCP_RXF5SIDL, 0b11100000U, CANID_MCU_3 << 5);
-	*/
+	
+	CAN_all_int_clear();
+	mcp2515_bit_modify(MCP_CANCTRL, MODE_MASK, MODE_LOOPBACK);
 }
 
 
@@ -95,7 +88,8 @@ uint8_t CAN_message_send(CAN_message const * const msg){
 	
 	//reg0, 0x30: status bit nr 2 
 	//reg1, 0x40: status bit nr 4 
-	//reg2, 0x50: status bit nr 6 
+	//reg2, 0x50: status bit nr 6
+	
 	
 	uint8_t status = mcp2515_read_status();
 	if(status | (1 << 2)){
@@ -130,7 +124,7 @@ void CAN_message_send_to_reg(CAN_message const * const msg, uint8_t reg){
 	}
 	else if(reg == MCP_TXB2CTRL){
 		mcp2515_request_to_send(MCP_RTS_TX2);
-	}	
+	}
 }
 
 /*
@@ -167,17 +161,23 @@ bool CAN_data_receive(CAN_message* msg, uint8_t reg){
 }
 
 interrupt CAN_int(){
-	if(1||!read_bit(interrupt_PIN, interrupt_bit)){
+	if(!read_bit(interrupt_PIN, interrupt_bit)){
 		//printf("Interupt active");
 		interrupt retval = (interrupt)((mcp2515_read(MCP_CANSTAT)&MCP_CANSTAT_ICOD_MASK) >> 1);
-		printf("%u",retval);
+		//printf("%u",retval);
 		return retval;
 	}
 	return NOINT;
 }
 
 void CAN_int_clear(interrupt CAN_interrupt){
-	mcp2515_bit_modify(MCP_CANINTF, interruptToMask(CAN_interrupt), 0x00);
+	if(CAN_interrupt != NOINT){
+		mcp2515_bit_modify(MCP_CANINTF, interruptToMask(CAN_interrupt), 0x00);	
+	}
+}
+
+void CAN_all_int_clear(){
+	mcp2515_write(MCP_CANINTF, 0x00);
 }
 
 uint8_t interruptToMask(interrupt CAN_interrrupt){

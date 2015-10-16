@@ -55,43 +55,26 @@ int main(void){
 	CAN_message msgInn1;
 
 	CAN_message msgOut0;
-	msgOut0.data[0] = 'h';
-	msgOut0.data[1] = 'e';
-	msgOut0.data[2] = 'i';
+	msgOut0.data[0] = 'u';
+	msgOut0.data[1] = 'l';
+	msgOut0.data[2] = 's';
 	msgOut0.data[3] = '\0';
 	msgOut0.length = 4;
-	msgOut0.id = 0b11000000001;
+	msgOut0.id = 0b01000000001;
 	msgOut0.priority = 1;
 	
 	CAN_message msgOut1;
-	msgOut1.data[0] = 'd';
-	msgOut1.data[1] = 'u';
-	msgOut1.data[2] = 's';
+	msgOut1.data[0] = 'r';
+	msgOut1.data[1] = 'e';
+	msgOut1.data[2] = 'c';
 	msgOut1.data[3] = 't';
 	msgOut0.data[4] = '\0';
 	msgOut1.length = 5;
-	msgOut1.id = 0b11000000001;
+	msgOut1.id = 0b11000000000;
 	msgOut1.priority = 2;	
 
 
 	bool btn_A_prev = 0;
-	
-	void printCanMsg(CAN_message m){		
-		printf("CANmsg(id:%d, len:%d, data:%s)\n", m.id, m.length, m.data);
-	}
-	
-	while(0){
-		printf("send: ");
-		printCanMsg(msgOut0);
-		CAN_message_send(&msgOut0);
-		printCanMsg(msgOut0);
-		//memset(&msgInn0, 0, sizeof(CAN_message));
-		while(!CAN_data_receive(&msgInn0, MCP_RXB0CTRL));
-		printf("recv: ");
-		printCanMsg(msgInn0);
-		_delay_ms(500);		
-	}
-	
     while(1){
 		//Main loop counter and blinker
 		mainLoopCounter++;
@@ -157,12 +140,11 @@ int main(void){
 				CAN_data_receive(&msgInn1, MCP_RXB1CTRL);
 				break;
 			default:
+
 				break;
 		}
 		CAN_int_clear(CAN_interrupt);
-
-		test = (interrupt)((mcp2515_read(MCP_CANSTAT)&MCP_CANSTAT_ICOD_MASK) >> 1);
-		printf("%u\n",test);
+		//CAN_all_int_clear();
 		
 		if(btn_A != btn_A_prev && btn_A){
 			CAN_message_send(&msgOut0);

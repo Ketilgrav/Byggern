@@ -36,6 +36,7 @@ interrupt CAN_int();
 
 void CAN_int_clear(interrupt CAN_interrupt);
 uint8_t interruptToMask(interrupt CAN_interrrupt);
+void CAN_all_int_clear();
 
 
 

@@ -10,7 +10,6 @@
 void controllers_init(){
 		clear_bit(DDRB, PB2);
 		clear_bit(DDRB, PB3);
-		clear_bit(DDRB, PB4);
 }
 
 
