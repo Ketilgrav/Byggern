@@ -16,15 +16,15 @@
 typedef struct CAN_message{
 	uint16_t id;
 	uint8_t length;
-	char data[8];
+	int8_t data[8];
 	uint8_t priority; //0b00 - 0b11
 } CAN_message;
 
 typedef enum {NOINT = 0b000, ERR = 0b001, RX0 = 0b110, RX1 = 0b111 } interrupt;
 
-#define interrupt_DDR DDRD
-#define interrupt_PIN PIND
-#define interrupt_bit PD3
+#define interrupt_DDR DDRF
+#define interrupt_PIN PINF
+#define interrupt_bit PD7
 
 void CAN_init();
 //void CAN_error();

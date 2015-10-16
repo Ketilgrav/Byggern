@@ -16,7 +16,7 @@
 typedef struct CAN_message{
 	uint16_t id;
 	uint8_t length;
-	char data[8];
+	int8_t data[8];
 	uint8_t priority; //0b00 - 0b11
 } CAN_message;
 

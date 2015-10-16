@@ -9,7 +9,7 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-uint8_t runGame(JoyStick* js, Slider* s_l, Slider* s_r);
+uint8_t runGame(JoyStick* js, JoyStick* js_old , Slider* s_l, Slider* s_r);
 
 
 

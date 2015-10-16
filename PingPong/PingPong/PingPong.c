@@ -32,6 +32,7 @@ int main(void){
 	
 	
 	controllers_init();
+	JoyStick js_old;
 	JoyStick js;
 	Slider s_l;
 	Slider s_r;
@@ -53,27 +54,14 @@ int main(void){
 
 	CAN_message msgInn0;
 	CAN_message msgInn1;
-
+	
 	CAN_message msgOut0;
-	msgOut0.data[0] = 'u';
-	msgOut0.data[1] = 'l';
-	msgOut0.data[2] = 's';
-	msgOut0.data[3] = '\0';
-	msgOut0.length = 4;
-	msgOut0.id = 0b01000000001;
+	msgOut0.data[0] = 'a';
+	msgOut0.data[1] = '\0';
+	msgOut0.length = 2;
+	msgOut0.id = 0b00100000001;
 	msgOut0.priority = 1;
 	
-	CAN_message msgOut1;
-	msgOut1.data[0] = 'r';
-	msgOut1.data[1] = 'e';
-	msgOut1.data[2] = 'c';
-	msgOut1.data[3] = 't';
-	msgOut0.data[4] = '\0';
-	msgOut1.length = 5;
-	msgOut1.id = 0b11000000000;
-	msgOut1.priority = 2;	
-
-
 	bool btn_A_prev = 0;
     while(1){
 		//Main loop counter and blinker
@@ -99,7 +87,7 @@ int main(void){
 				menu_go(&menu, &js);
 				break;
 			case RUN_GAME:
-				if(runGame(&js, &s_l, &s_r)){
+				if(runGame(&js, &js_old ,&s_l, &s_r)){
 					menu = mainMenu;
 				}
 				break;
@@ -144,14 +132,6 @@ int main(void){
 				break;
 		}
 		CAN_int_clear(CAN_interrupt);
-		//CAN_all_int_clear();
-		
-		if(btn_A != btn_A_prev && btn_A){
-			CAN_message_send(&msgOut0);
-			CAN_message_send(&msgOut1);	
-		}
-		btn_A_prev = btn_A;
-		
 		oled_mem_update_screen();
     }
 }

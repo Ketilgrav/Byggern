@@ -18,6 +18,7 @@ void CAN_init(){
 	SPI_init(); // Initialize SPI
 	mcp2515_reset(); // Send reset-command
 	
+	mcp2515_bit_modify(MCP_CANCTRL, MODE_MASK, MODE_CONFIG);
 	// Self-test
 	value = mcp2515_read(MCP_CANSTAT);
 	if ((value & MODE_MASK) != MODE_CONFIG) {
@@ -42,7 +43,7 @@ void CAN_init(){
 	//TX0IE = 0 Transmit 0 empty interrupt
 	//RX1IE = 1 Interrupt når data på RX1
 	//RX0IE = 1 -||- RX2
-	mcp2515_write(MCP_CANINTE, 0b00100011);
+	mcp2515_write(MCP_CANINTE, 0b00000011);
 	
 	//Filtere:
 	//Masken til RX0

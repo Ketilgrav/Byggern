@@ -32,11 +32,17 @@ LIB_DEP:=
 LINKER_SCRIPT_DEP:=
 
 # Every subdirectory with source files must be described here
-SUBDIRS := 
+SUBDIRS :=  \
+../CommunicationDrivers \
+../MainInclude
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../CommunicationDrivers/can.c \
+../CommunicationDrivers/mcp2515.c \
+../CommunicationDrivers/spi.c \
+../CommunicationDrivers/UsartDriver.c \
 ../Node2.c
 
 
@@ -47,15 +53,31 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+CommunicationDrivers/can.o \
+CommunicationDrivers/mcp2515.o \
+CommunicationDrivers/spi.o \
+CommunicationDrivers/UsartDriver.o \
 Node2.o
 
 OBJS_AS_ARGS +=  \
+CommunicationDrivers/can.o \
+CommunicationDrivers/mcp2515.o \
+CommunicationDrivers/spi.o \
+CommunicationDrivers/UsartDriver.o \
 Node2.o
 
 C_DEPS +=  \
+CommunicationDrivers/can.d \
+CommunicationDrivers/mcp2515.d \
+CommunicationDrivers/spi.d \
+CommunicationDrivers/UsartDriver.d \
 Node2.d
 
 C_DEPS_AS_ARGS +=  \
+CommunicationDrivers/can.d \
+CommunicationDrivers/mcp2515.d \
+CommunicationDrivers/spi.d \
+CommunicationDrivers/UsartDriver.d \
 Node2.d
 
 OUTPUT_FILE_PATH +=Node2.elf
@@ -74,6 +96,21 @@ LINKER_SCRIPT_DEP+=
 # AVR32/GNU C Compiler
 
 
+
+
+
+
+
+
+
+
+
+CommunicationDrivers/%.o: ../CommunicationDrivers/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
 
 ./%.o: .././%.c
 	@echo Building file: $<
