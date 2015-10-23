@@ -1,6 +1,5 @@
-Node2.d Node2.o: .././Node2.c .././CommunicationDrivers/can.h \
- .././CommunicationDrivers/mcp2515.h \
- .././CommunicationDrivers/../MainInclude/MainInclude.h \
+MotorDrivers/servo.d MotorDrivers/servo.o: ../MotorDrivers/servo.c \
+ ../MotorDrivers/servo.h ../MotorDrivers/../MainInclude/MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -21,17 +20,11 @@ Node2.d Node2.o: .././Node2.c .././CommunicationDrivers/can.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h \
- .././CommunicationDrivers/spi.h \
- .././CommunicationDrivers/MCP2515_register.h \
- .././MainInclude/MainInclude.h .././CommunicationDrivers/UsartDriver.h \
- .././MotorDrivers/servo.h
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h
 
-.././CommunicationDrivers/can.h:
+../MotorDrivers/servo.h:
 
-.././CommunicationDrivers/mcp2515.h:
-
-.././CommunicationDrivers/../MainInclude/MainInclude.h:
+../MotorDrivers/../MainInclude/MainInclude.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -74,13 +67,3 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h:
-
-.././CommunicationDrivers/spi.h:
-
-.././CommunicationDrivers/MCP2515_register.h:
-
-.././MainInclude/MainInclude.h:
-
-.././CommunicationDrivers/UsartDriver.h:
-
-.././MotorDrivers/servo.h:

@@ -16,6 +16,7 @@
 #define channelY 0
 #define slack_js 50
 #define slack_slider 15
+#define slack_update_slider 11
 
 #define btn_A read_bit(PINB,PB2)
 #define btn_B read_bit(PINB,PB3)
@@ -34,7 +35,6 @@ typedef struct JoyStick{
 	uint8_t x_rest;
 	uint8_t y_rest;
 } JoyStick;
-
 
 typedef struct Slider{
 	uint8_t channel;

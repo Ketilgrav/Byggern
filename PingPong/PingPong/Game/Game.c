@@ -23,8 +23,8 @@ uint8_t runGame(JoyStick* js, JoyStick* js_old, Slider* s_l, Slider* s_r){
 	//}
 	
 	CAN_message msgOut0;
-	msgOut0.data[0] = js->x_percent;
-	msgOut0.data[1] = js->y_percent;
+	msgOut0.data[0] = s_r->percent;
+	msgOut0.data[1] = s_r->voltage;
 	msgOut0.length = 2;
 	msgOut0.id = 0b00100000001;
 	msgOut0.priority = 2;

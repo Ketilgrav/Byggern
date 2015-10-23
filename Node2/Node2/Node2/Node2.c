@@ -1,10 +1,12 @@
 #include "CommunicationDrivers/can.h"
 #include "MainInclude/MainInclude.h"
 #include "CommunicationDrivers/UsartDriver.h"
+#include "MotorDrivers/servo.h"
 
 int main(){
 	USART_init();
 	CAN_init();
+	servo_init();
 	interrupt CAN_interrupt;
 	
 	CAN_message msgInn0;
@@ -33,7 +35,9 @@ int main(){
 			default:
 				break;
 		}
-		CAN_int_clear(CAN_interrupt);					
+		CAN_int_clear(CAN_interrupt);
+		
+		servo_set(msgInn0.data[0]);
 	}
 	return 0;
 }

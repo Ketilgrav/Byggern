@@ -10,5 +10,7 @@ CommunicationDrivers\spi.c
 
 CommunicationDrivers\UsartDriver.c
 
+MotorDrivers\servo.c
+
 Node2.c
 

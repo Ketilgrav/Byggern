@@ -131,6 +131,12 @@
     <Compile Include="MainInclude\MainInclude.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="MotorDrivers\servo.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MotorDrivers\servo.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Node2.c">
       <SubType>compile</SubType>
     </Compile>
@@ -138,6 +144,7 @@
   <ItemGroup>
     <Folder Include="CommunicationDrivers" />
     <Folder Include="MainInclude" />
+    <Folder Include="MotorDrivers" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

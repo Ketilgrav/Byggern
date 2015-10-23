@@ -37,8 +37,8 @@ int main(void){
 	Slider s_l;
 	Slider s_r;
 	joystick_calibrate(&js);
-	s_l.channel = 3;
-	s_r.channel = 2;
+	s_l.channel = 2;
+	s_r.channel = 3;
 	
 	printf("\n\n\n");
 

@@ -70,8 +70,12 @@ int8_t joystick_descreet(int8_t val){
 
 
 void slider_update(Slider* sl){
-	sl->voltage = ADC_convert(sl->channel);
-	sl->percent = sl->voltage/2.55;
+	uint8_t voltage = ADC_convert(sl->channel);
+	if(voltage > sl->voltage - slack_update_slider  && voltage < sl->voltage + slack_update_slider){
+		return;
+	}
+	sl->voltage = voltage;
+	sl->percent = (2*sl->voltage/2.55) - 100;
 	if(sl->percent < 50-slack_slider){
 		sl->descreet =	-1;
 	}
