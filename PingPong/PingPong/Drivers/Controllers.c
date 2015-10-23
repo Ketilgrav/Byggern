@@ -48,11 +48,25 @@ void joystick_update(JoyStick* js){
 		js->y_percent = (js->y_voltage - js->y_rest)*100/(255-js->y_rest);
 	}
 	
-	js->x_prev_descreet = js->x_descreet;
-	js->y_prev_descreet = js->y_descreet;
+	int8_t xDescTemp = joystick_descreet(js->x_percent);
+	int8_t yDescTemp = joystick_descreet(js->y_percent);
 	
-	js->x_descreet = joystick_descreet(js->x_percent);
-	js->y_descreet = joystick_descreet(js->y_percent);
+	if(xDescTemp != js->x_descreet){
+		js->x_descreet_edge = xDescTemp;
+	}
+	else{
+		js->x_descreet_edge = 0;
+	}
+	
+	if(yDescTemp != js->y_descreet){
+		js->y_descreet_edge = yDescTemp;
+	}
+	else{
+		js->y_descreet_edge = 0;
+	}
+	
+	js->x_descreet = xDescTemp;
+	js->y_descreet = yDescTemp;
 	
 }
 
@@ -70,19 +84,57 @@ int8_t joystick_descreet(int8_t val){
 
 
 void slider_update(Slider* sl){
-	uint8_t voltage = ADC_convert(sl->channel);
-	if(voltage > sl->voltage - slack_update_slider  && voltage < sl->voltage + slack_update_slider){
-		return;
+	uint8_t r_voltage = ADC_convert(channel_R_slider);
+	uint8_t l_voltage = ADC_convert(channel_L_slider);
+	
+	if(l_voltage < sl->l_voltage - slack_update_slider  || l_voltage > sl->l_voltage + slack_update_slider){
+		sl->l_voltage = l_voltage;
+		sl->l_percent = (2*sl->l_voltage/2.55) - 100;
+		if(sl->l_percent < 50-slack_slider){
+			sl->l_descreet = -1;
+		}
+		else if(sl->l_percent > 50 + slack_slider){
+			sl->l_descreet = + 1;
+		}
+		else{
+			sl->l_descreet = 0;
+		};
 	}
-	sl->voltage = voltage;
-	sl->percent = (2*sl->voltage/2.55) - 100;
-	if(sl->percent < 50-slack_slider){
-		sl->descreet =	-1;
+	if(r_voltage < sl->r_voltage - slack_update_slider  || r_voltage > sl->r_voltage + slack_update_slider){
+		sl->r_voltage = r_voltage;
+		sl->r_percent = (2*sl->r_voltage/2.55) - 100;
+		if(sl->r_percent < 50 - slack_slider){
+			sl->r_descreet =	-1;
+		}
+		else if(sl->r_percent > 50 + slack_slider){
+			sl->r_descreet = + 1;
+		}
+		else{
+			sl->r_descreet = 0;
+		};
 	}
-	else if(sl->percent > 50+slack_slider){
-		sl->descreet =	+1;
+
+	
+}
+
+void read_button(Buttons* btns){
+	btns->A = 0;
+	btns->B = 0;
+	if (btn_A != btns->A_prev && btns->A_prev == 0){
+		btns->A = 1;
+		btns->A_count++;
 	}
-	else{
-		sl->descreet =	0;
+	if (btn_B != btns->B_prev && btns->B_prev == 0){
+		btns->B = 1;
+		btns->B_count++;
 	}
+	btns->A_prev = btn_A;
+	btns->B_prev = btn_B;
+	
+}
+
+void controllers_update(Controls* controls){
+		joystick_update(&controls->js);
+		slider_update(&controls->sliders);
+		read_button(&controls->btns);
 }

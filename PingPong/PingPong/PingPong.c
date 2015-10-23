@@ -27,18 +27,12 @@ int main(void){
 	ADC_init();
 	OLED_init();
 	CAN_init();
+	controllers_init();
 	set_bit(DDRB, PB0); //led, blink
 	
-	
-	
-	controllers_init();
-	JoyStick js_old;
-	JoyStick js;
-	Slider s_l;
-	Slider s_r;
-	joystick_calibrate(&js);
-	s_l.channel = 2;
-	s_r.channel = 3;
+	Controls controls;
+	joystick_calibrate(&controls.js);
+
 	
 	printf("\n\n\n");
 
@@ -61,8 +55,7 @@ int main(void){
 	msgOut0.length = 2;
 	msgOut0.id = 0b00100000001;
 	msgOut0.priority = 1;
-	
-	bool btn_A_prev = 0;
+
     while(1){
 		//Main loop counter and blinker
 		mainLoopCounter++;
@@ -70,34 +63,32 @@ int main(void){
 			toggle_bit(PORTB, PB0);
 		}
 		
-		//Oppdater tillstandene ut ifra input
-		joystick_update(&js);
-		slider_update(&s_l);
-		slider_update(&s_r);
+		//Oppdater tilstandene ut ifra input
+		controllers_update(&controls);
 		CAN_interrupt = CAN_int();
 		
 		
 		//Meny og program kjøring
 		//Ved trykk av start går man uansett til main menu.
-		if(btn_B){ //Bytt til en annen knapp som alltid returnerer til main
+		if(controls.btns.B){ //Bytt til en annen knapp som alltid returnerer til main
 			menu = mainMenu;
 		}
 		switch (menu->tilstand){
 			case MENU:
-				menu_go(&menu, &js);
+				menu_go(&menu, &controls.js);
 				break;
 			case RUN_GAME:
-				if(runGame(&js, &js_old ,&s_l, &s_r)){
+				if(runGame(&controls)){
 					menu = mainMenu;
 				}
 				break;
 			case HIGH_SCORE:
-				if(displayHighScore(&js)){
+				if(displayHighScore(&controls.js)){
 					menu = mainMenu;
 				}
 				break;
 			case CALIBRATE_JS:
-				if(joystick_user_calibrate(&js)){
+				if(joystick_user_calibrate(&controls.js)){
 					menu = mainMenu;
 				}
 				break;
@@ -117,14 +108,14 @@ int main(void){
 			case NOINT:
 				break;
 			case ERR:
-				printf("roFL eRRoR LOLz\n\r");
+				//printf("roFL eRRoR LOLz\n\r");
 				break;
 			case RX0:
-				printf("RECEIVED ON RX0\n\r");
+				//printf("RECEIVED ON RX0\n\r");
 				CAN_data_receive(&msgInn0, MCP_RXB0CTRL);
 				break;
 			case RX1:
-				printf("RECEIVED ON RX1\n\r");
+				//printf("RECEIVED ON RX1\n\r");
 				CAN_data_receive(&msgInn1, MCP_RXB1CTRL);
 				break;
 			default:

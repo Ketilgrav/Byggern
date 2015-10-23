@@ -35,5 +35,5 @@ void servo_set(int percent){
 	else if(percent < -100){
 		percent = -100;		
 	}
-	OCR1A = (pulse_width_neutral + ((pulse_width_max-pulse_width_min)/200)*percent)* F_CPU / clock_scaler_val;
+	OCR1A = (pulse_width_neutral + ((pulse_width_max-pulse_width_min)/200)*(-percent))* F_CPU / clock_scaler_val;
 }

@@ -35,7 +35,8 @@ LINKER_SCRIPT_DEP:=
 SUBDIRS :=  \
 ../CommunicationDrivers \
 ../MainInclude \
-../MotorDrivers
+../MotorDrivers \
+../InternalDrivers
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
@@ -44,6 +45,7 @@ C_SRCS +=  \
 ../CommunicationDrivers/mcp2515.c \
 ../CommunicationDrivers/spi.c \
 ../CommunicationDrivers/UsartDriver.c \
+../InternalDrivers/adc.c \
 ../MotorDrivers/servo.c \
 ../Node2.c
 
@@ -59,6 +61,7 @@ CommunicationDrivers/can.o \
 CommunicationDrivers/mcp2515.o \
 CommunicationDrivers/spi.o \
 CommunicationDrivers/UsartDriver.o \
+InternalDrivers/adc.o \
 MotorDrivers/servo.o \
 Node2.o
 
@@ -67,6 +70,7 @@ CommunicationDrivers/can.o \
 CommunicationDrivers/mcp2515.o \
 CommunicationDrivers/spi.o \
 CommunicationDrivers/UsartDriver.o \
+InternalDrivers/adc.o \
 MotorDrivers/servo.o \
 Node2.o
 
@@ -75,6 +79,7 @@ CommunicationDrivers/can.d \
 CommunicationDrivers/mcp2515.d \
 CommunicationDrivers/spi.d \
 CommunicationDrivers/UsartDriver.d \
+InternalDrivers/adc.d \
 MotorDrivers/servo.d \
 Node2.d
 
@@ -83,6 +88,7 @@ CommunicationDrivers/can.d \
 CommunicationDrivers/mcp2515.d \
 CommunicationDrivers/spi.d \
 CommunicationDrivers/UsartDriver.d \
+InternalDrivers/adc.d \
 MotorDrivers/servo.d \
 Node2.d
 
@@ -113,7 +119,16 @@ LINKER_SCRIPT_DEP+=
 
 
 
+
+
 CommunicationDrivers/%.o: ../CommunicationDrivers/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+InternalDrivers/%.o: ../InternalDrivers/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.8.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

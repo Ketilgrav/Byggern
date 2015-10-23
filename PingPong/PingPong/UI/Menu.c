@@ -85,26 +85,23 @@ void menu_go(menyNode** meny, JoyStick* js){
 		}
 		oled_mem_print((*meny)->barn[i-1]->tekst,i,2);
 	}
-	if(js->x_descreet != js->x_prev_descreet){
-		if(js->x_descreet > 0){
-			if((*meny)->pilNivaa !=0  &&((*meny)->pilNivaa <= (*meny)->nBarn)){
-				*meny = (*meny)->barn[((*meny)->pilNivaa)-1];
-			}
+	if(js->x_descreet_edge > 0){
+		if((*meny)->pilNivaa !=0  &&((*meny)->pilNivaa <= (*meny)->nBarn)){
+			*meny = (*meny)->barn[((*meny)->pilNivaa)-1];
 		}
-		else if(js->x_descreet < 0){
-			if((*meny)->forelder != NULL){
-				*meny = (*meny)->forelder;
-			}
+	}
+	else if(js->x_descreet_edge < 0){
+		if((*meny)->forelder != NULL){
+			*meny = (*meny)->forelder;
 		}
 	}
 }
 
 void flyttPil(uint8_t* nivaa, JoyStick* js, uint8_t nBarn){
-	if(js->y_prev_descreet == js->y_descreet){
+	if(js->y_descreet_edge == 0){
 		return;
 	}
 	(*nivaa) -= js->y_descreet;
 	if((*nivaa) <1) *nivaa = nBarn;
 	else if((*nivaa) > nBarn) *nivaa = 1;
-	
 }
