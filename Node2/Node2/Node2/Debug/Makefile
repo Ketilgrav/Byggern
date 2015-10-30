@@ -42,6 +42,7 @@ SUBDIRS :=  \
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../CommunicationDrivers/can.c \
+../CommunicationDrivers/I2C.c \
 ../CommunicationDrivers/mcp2515.c \
 ../CommunicationDrivers/spi.c \
 ../CommunicationDrivers/UsartDriver.c \
@@ -58,6 +59,7 @@ ASM_SRCS +=
 
 OBJS +=  \
 CommunicationDrivers/can.o \
+CommunicationDrivers/I2C.o \
 CommunicationDrivers/mcp2515.o \
 CommunicationDrivers/spi.o \
 CommunicationDrivers/UsartDriver.o \
@@ -67,6 +69,7 @@ Node2.o
 
 OBJS_AS_ARGS +=  \
 CommunicationDrivers/can.o \
+CommunicationDrivers/I2C.o \
 CommunicationDrivers/mcp2515.o \
 CommunicationDrivers/spi.o \
 CommunicationDrivers/UsartDriver.o \
@@ -76,6 +79,7 @@ Node2.o
 
 C_DEPS +=  \
 CommunicationDrivers/can.d \
+CommunicationDrivers/I2C.d \
 CommunicationDrivers/mcp2515.d \
 CommunicationDrivers/spi.d \
 CommunicationDrivers/UsartDriver.d \
@@ -85,6 +89,7 @@ Node2.d
 
 C_DEPS_AS_ARGS +=  \
 CommunicationDrivers/can.d \
+CommunicationDrivers/I2C.d \
 CommunicationDrivers/mcp2515.d \
 CommunicationDrivers/spi.d \
 CommunicationDrivers/UsartDriver.d \
@@ -106,6 +111,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

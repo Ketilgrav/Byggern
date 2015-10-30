@@ -3,12 +3,14 @@
 #include "CommunicationDrivers/UsartDriver.h"
 #include "MotorDrivers/servo.h"
 #include "InternalDrivers/adc.h"
+#include "CommunicationDrivers/I2C.h"
 
 int main(){
 	USART_init();
 	CAN_init();
 	servo_init();
 	adc_init();
+	I2C_init();
 	interrupt CAN_interrupt;
 	
 	CAN_message msgInn0;
@@ -41,6 +43,9 @@ int main(){
 		servo_set(msgInn0.data[0]);
 		adc_measure(&adcSignal);
 		printf("%u \r",adcSignal.boolState);
+		
+		I2C_transmit(60,ADRESS_DAC);
+		//_delay_ms(500);
 	}
 	return 0;
 }

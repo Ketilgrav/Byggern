@@ -35,7 +35,7 @@ uint16_t adc_measure(ADC_signal* signal){
 	if(signal->nrMeasurements > averagingPeriod){
 		if(signal->sumValue / signal->nrMeasurements < boolValueBorder){
 			if(signal->boolState != 1){
-				count++;
+				signal->count++;
 			}
 			signal->boolState = 1;
 		}

@@ -8,6 +8,7 @@
 #include "UsartDriver.h"
 
 void USART_init(){
+	
 	//ubbr = F_CPU
 	unsigned int ubrr = MYUBRR;
 	//Set baud rate

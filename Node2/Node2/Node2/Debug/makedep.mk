@@ -4,6 +4,8 @@
 
 CommunicationDrivers\can.c
 
+CommunicationDrivers\I2C.c
+
 CommunicationDrivers\mcp2515.c
 
 CommunicationDrivers\spi.c

@@ -107,6 +107,15 @@
     <Compile Include="CommunicationDrivers\canID.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="CommunicationDrivers\I2C.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="CommunicationDrivers\I2C.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="CommunicationDrivers\I2C_defines.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="CommunicationDrivers\mcp2515.c">
       <SubType>compile</SubType>
     </Compile>
