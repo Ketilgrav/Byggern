@@ -12,6 +12,8 @@
 #include "../MainInclude/MainInclude.h"
 #include "../CommunicationDrivers/I2C.h"
 
+#define board_size 8800
+
 #define MOTORBOX_CONTROLL_REG PORTF //MJ1
 #define MOTORBOX_CONTROLL_DDR DDRF
 #define	ENCODER_OUTPUTENABLE_NOT PF7

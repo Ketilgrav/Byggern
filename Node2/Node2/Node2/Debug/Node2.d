@@ -27,7 +27,10 @@ Node2.d Node2.o: .././Node2.c .././CommunicationDrivers/can.h \
  .././MainInclude/MainInclude.h .././CommunicationDrivers/UsartDriver.h \
  .././MotorDrivers/servo.h .././InternalDrivers/adc.h \
  .././CommunicationDrivers/I2C.h \
- .././../../../InterNodeHeaders/CanMessageFormat.h
+ .././../../../InterNodeHeaders/CanMessageFormat.h .././regulator.h \
+ .././MotorDrivers/MotorBox.h \
+ .././MotorDrivers/../MainInclude/MainInclude.h \
+ .././MotorDrivers/../CommunicationDrivers/I2C.h
 
 .././CommunicationDrivers/can.h:
 
@@ -92,3 +95,11 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 .././CommunicationDrivers/I2C.h:
 
 .././../../../InterNodeHeaders/CanMessageFormat.h:
+
+.././regulator.h:
+
+.././MotorDrivers/MotorBox.h:
+
+.././MotorDrivers/../MainInclude/MainInclude.h:
+
+.././MotorDrivers/../CommunicationDrivers/I2C.h:

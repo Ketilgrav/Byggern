@@ -44,17 +44,17 @@ void motorbox_set_power(uint8_t dir, uint8_t power){
 
 int16_t motorbox_get_encoder(){
 	set_bit(MOTORBOX_CONTROLL_REG,ENCODER_SELECTHIGHBIT);
-	_delay_ms(1);
+	_delay_us(20);
 	uint16_t encoder_data = reverse_byte(MOTORBOX_DATA_PIN);;
 	clear_bit(MOTORBOX_CONTROLL_REG,ENCODER_SELECTHIGHBIT);
-	_delay_ms(1);
+	_delay_us(20);
 	encoder_data |= (reverse_byte(MOTORBOX_DATA_PIN)<<8);
-	return encoder_data;
+	return -board_size/2-encoder_data;
 }
 
 void motorbox_reset_encoder(){
 	clear_bit(MOTORBOX_CONTROLL_REG,ENCODER_RESET_NOT);
-	_delay_ms(1);
+	_delay_us(20);
 	set_bit(MOTORBOX_CONTROLL_REG,ENCODER_RESET_NOT);
 }
 

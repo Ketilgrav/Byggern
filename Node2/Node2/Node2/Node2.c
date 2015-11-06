@@ -19,6 +19,7 @@ int main(){
 	CAN_message msgInn0;
 	ADC_signal adcSignal;
 	PI pi_state;
+	int8_t reg_ref;
 	regulator_init(&pi_state);
 	while(1){
 		uint16_t encoder = motorbox_get_encoder();
@@ -45,7 +46,7 @@ int main(){
 		switch(msgInn0.data[CANMSG_PACKAGESPECIFIER]){
 			case PACKAGESPECIFIER_MOTORSIGNALS:
 				servo_set(msgInn0.data[CANMSG_SERVO]);
-				motorbox_set_percent(msgInn0.data[CANMSG_MOTOR]);
+				reg_ref = msgInn0.data[CANMSG_MOTOR];
 			break;
 			case PACKAGESPECIFIER_SWITCHOFF:
 				//printf("SWITCHING OFFF");
@@ -53,9 +54,14 @@ int main(){
 				motorbox_set_percent(0);
 			break;
 		}
-		
 		adc_measure(&adcSignal);
-		printf("Encoder diff: %i       \r",motorbox_get_encoder());
+		
+		regulator_increment(&pi_state,reg_ref);
+		motorbox_set_percent(pi_state.u);
+		printf("U:%i    ", (get_pos_from_percent(reg_ref)-motorbox_get_encoder())/(board_size/100));
+		printf("Encoder:%i    \r", motorbox_get_encoder());
+		
+		//printf("Encoder diff: %i       \r",motorbox_get_encoder());
 		//motorbox_reset_encoder();
 		//printf("%u",reverse_byte(0));
 		
