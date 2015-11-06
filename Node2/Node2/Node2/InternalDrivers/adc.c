@@ -11,7 +11,7 @@ void adc_init(){
 	clear_bit(DDRF,PF0);
 	
 	
-	ADMUX |= (0<<MUX0); //Bruker ADC0
+	ADMUX |= (1<<MUX0); //Bruker ADC1
 	ADMUX |= (1<<REFS0); //Bruker AVCC som refferanse.
 	
 	//ADC enable. //Prescaler, bytt ut en med verdier opp til 7. //Aktiverer interupt

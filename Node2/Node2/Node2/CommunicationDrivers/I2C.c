@@ -66,7 +66,7 @@ uint8_t I2C_getInterrupt(){
 	return read_bit(TWCR,TWINT);
 }
 //Setter flagget lavt som får den til å begynne med en oppgave
-uint8_t I2C_clearInterupt(){
+void I2C_clearInterupt(){
 	set_bit(TWCR,TWINT);
 }
 

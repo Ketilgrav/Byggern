@@ -26,7 +26,8 @@ Node2.d Node2.o: .././Node2.c .././CommunicationDrivers/can.h \
  .././CommunicationDrivers/MCP2515_register.h \
  .././MainInclude/MainInclude.h .././CommunicationDrivers/UsartDriver.h \
  .././MotorDrivers/servo.h .././InternalDrivers/adc.h \
- .././CommunicationDrivers/I2C.h
+ .././CommunicationDrivers/I2C.h \
+ .././../../../InterNodeHeaders/CanMessageFormat.h
 
 .././CommunicationDrivers/can.h:
 
@@ -89,3 +90,5 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 .././InternalDrivers/adc.h:
 
 .././CommunicationDrivers/I2C.h:
+
+.././../../../InterNodeHeaders/CanMessageFormat.h:

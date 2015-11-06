@@ -75,24 +75,29 @@ int main(void){
 		}
 		switch (menu->tilstand){
 			case MENU:
+				printf("MENU");
 				menu_go(&menu, &controls.js);
 				break;
 			case RUN_GAME:
+				printf("RUN_GAME");
 				if(runGame(&controls)){
 					menu = mainMenu;
 				}
 				break;
 			case HIGH_SCORE:
+				printf("HS");
 				if(displayHighScore(&controls.js)){
 					menu = mainMenu;
 				}
 				break;
 			case CALIBRATE_JS:
+				printf("Calibrate");
 				if(joystick_user_calibrate(&controls.js)){
 					menu = mainMenu;
 				}
 				break;
 			case SHOW_CAN_MSG:
+				printf("Show msg");
 				oled_mem_clear();
 				oled_mem_print(menu->tekst,0,0);
 				oled_mem_print("MSG0:",2,0);

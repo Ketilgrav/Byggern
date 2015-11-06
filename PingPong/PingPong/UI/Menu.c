@@ -8,6 +8,8 @@
 #include "../Drivers/Controllers.h"
 #include "../Drivers/OLED.h"
 #include "Menu.h"
+#include "../../../InterNodeHeaders/CanMessageFormat.h"
+#include "../Communication_drivers/can.h"
 
 menyNode mainMenu;
 menyNode options;
@@ -95,6 +97,13 @@ void menu_go(menyNode** meny, JoyStick* js){
 			*meny = (*meny)->forelder;
 		}
 	}
+	
+	CAN_message msgOut0;
+	msgOut0.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_SWITCHOFF;
+	msgOut0.length = 1;
+	msgOut0.id = 0b00100000001;
+	msgOut0.priority = 2;	
+	CAN_message_send(&msgOut0);
 }
 
 void flyttPil(uint8_t* nivaa, JoyStick* js, uint8_t nBarn){

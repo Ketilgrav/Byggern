@@ -146,6 +146,12 @@
     <Compile Include="MainInclude\MainInclude.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="MotorDrivers\MotorBox.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MotorDrivers\MotorBox.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="MotorDrivers\servo.c">
       <SubType>compile</SubType>
     </Compile>
@@ -153,6 +159,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Node2.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="regulator.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="regulator.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

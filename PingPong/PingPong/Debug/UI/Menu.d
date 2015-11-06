@@ -26,7 +26,13 @@ UI/Menu.d UI/Menu.o: ../UI/Menu.c ../UI/../Drivers/Controllers.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h \
  ../UI/../Drivers/../Drivers/ADC_Driver.h \
  ../UI/../Drivers/../Drivers/../MainInclude/MainInclude.h \
- ../UI/../Drivers/OLED.h ../UI/Menu.h ../UI/../MainInclude/MainInclude.h
+ ../UI/../Drivers/OLED.h ../UI/Menu.h ../UI/../MainInclude/MainInclude.h \
+ ../UI/../../../InterNodeHeaders/CanMessageFormat.h \
+ ../UI/../Communication_drivers/can.h \
+ ../UI/../Communication_drivers/mcp2515.h \
+ ../UI/../Communication_drivers/../MainInclude/MainInclude.h \
+ ../UI/../Communication_drivers/spi.h \
+ ../UI/../Communication_drivers/MCP2515_register.h
 
 ../UI/../Drivers/Controllers.h:
 
@@ -89,3 +95,15 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 ../UI/Menu.h:
 
 ../UI/../MainInclude/MainInclude.h:
+
+../UI/../../../InterNodeHeaders/CanMessageFormat.h:
+
+../UI/../Communication_drivers/can.h:
+
+../UI/../Communication_drivers/mcp2515.h:
+
+../UI/../Communication_drivers/../MainInclude/MainInclude.h:
+
+../UI/../Communication_drivers/spi.h:
+
+../UI/../Communication_drivers/MCP2515_register.h:

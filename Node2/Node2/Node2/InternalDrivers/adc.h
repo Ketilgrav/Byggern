@@ -13,10 +13,11 @@ void adc_init();
 uint16_t adc_getVal();
 
 #define adc_DDR DDRF
-#define adc_BIT PF0
+#define adc_BIT PF1
 
 #define averagingPeriod 50
 #define boolValueBorder 200
+
 typedef struct ADC_signal{
 	uint8_t nrMeasurements;
 	uint16_t sumValue;		//Tåler ca 100 målinger

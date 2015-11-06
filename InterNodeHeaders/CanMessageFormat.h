@@ -1,0 +1,26 @@
+/*
+ * CanMessageFormat.h
+ *
+ * Created: 06.11.2015 09:07:02
+ *  Author: sverrevr
+ */ 
+
+
+#ifndef CANMESSAGEFORMAT_H_
+#define CANMESSAGEFORMAT_H_
+
+#define CANMSG_PACKAGESPECIFIER 0
+#define CANMSG_MOTORDIR_BYTE 1
+#define CANMSG_MOTORDIR_BIT 0
+#define CANMSG_PUSH_BYTE 1
+#define CANMSG_PUSH_BIT 1
+#define CANMSG_SERVO 2
+#define CANMSG_MOTOR 3
+#define CANMSG_LEN 4
+
+#define PACKAGESPECIFIER_MOTORSIGNALS 0x00
+#define PACKAGESPECIFIER_SWITCHOFF 0x01
+
+
+
+#endif /* CANMESSAGEFORMAT_H_ */

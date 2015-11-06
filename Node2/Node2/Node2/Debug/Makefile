@@ -47,8 +47,10 @@ C_SRCS +=  \
 ../CommunicationDrivers/spi.c \
 ../CommunicationDrivers/UsartDriver.c \
 ../InternalDrivers/adc.c \
+../MotorDrivers/MotorBox.c \
 ../MotorDrivers/servo.c \
-../Node2.c
+../Node2.c \
+../regulator.c
 
 
 PREPROCESSING_SRCS += 
@@ -64,8 +66,10 @@ CommunicationDrivers/mcp2515.o \
 CommunicationDrivers/spi.o \
 CommunicationDrivers/UsartDriver.o \
 InternalDrivers/adc.o \
+MotorDrivers/MotorBox.o \
 MotorDrivers/servo.o \
-Node2.o
+Node2.o \
+regulator.o
 
 OBJS_AS_ARGS +=  \
 CommunicationDrivers/can.o \
@@ -74,8 +78,10 @@ CommunicationDrivers/mcp2515.o \
 CommunicationDrivers/spi.o \
 CommunicationDrivers/UsartDriver.o \
 InternalDrivers/adc.o \
+MotorDrivers/MotorBox.o \
 MotorDrivers/servo.o \
-Node2.o
+Node2.o \
+regulator.o
 
 C_DEPS +=  \
 CommunicationDrivers/can.d \
@@ -84,8 +90,10 @@ CommunicationDrivers/mcp2515.d \
 CommunicationDrivers/spi.d \
 CommunicationDrivers/UsartDriver.d \
 InternalDrivers/adc.d \
+MotorDrivers/MotorBox.d \
 MotorDrivers/servo.d \
-Node2.d
+Node2.d \
+regulator.d
 
 C_DEPS_AS_ARGS +=  \
 CommunicationDrivers/can.d \
@@ -94,8 +102,10 @@ CommunicationDrivers/mcp2515.d \
 CommunicationDrivers/spi.d \
 CommunicationDrivers/UsartDriver.d \
 InternalDrivers/adc.d \
+MotorDrivers/MotorBox.d \
 MotorDrivers/servo.d \
-Node2.d
+Node2.d \
+regulator.d
 
 OUTPUT_FILE_PATH +=Node2.elf
 
@@ -111,6 +121,10 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
+
+
 
 
 

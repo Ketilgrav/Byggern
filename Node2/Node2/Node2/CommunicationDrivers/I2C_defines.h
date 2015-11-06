@@ -5,6 +5,7 @@
  *  Author: sverrevr
  */ 
 
+/*BRUKES IKKE?*/
 
 #ifndef I2C_DEFINES_H_
 #define I2C_DEFINES_H_

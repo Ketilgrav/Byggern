@@ -14,8 +14,8 @@
 
 #define channelX 1
 #define channelY 0
-#define channel_R_slider 2
-#define channel_L_slider 3
+#define channel_R_slider 3
+#define channel_L_slider 2
 #define slack_js 50
 #define slack_slider 15
 #define slack_update_slider 11
