@@ -754,10 +754,10 @@ END GROUP
  .text.OLED_init
                 0x00000c6c       0x96 Drivers/OLED.o
                 0x00000c6c                OLED_init
- .text.runGame  0x00000d02      0x15c Game/Game.o
+ .text.runGame  0x00000d02      0x11c Game/Game.o
                 0x00000d02                runGame
- .text.main     0x00000e5e      0x1f4 PingPong.o
-                0x00000e5e                main
+ .text.main     0x00000e1e      0x234 PingPong.o
+                0x00000e1e                main
  .text.displayHighScore
                 0x00001052       0x30 UI/HighScore.o
                 0x00001052                displayHighScore
@@ -1089,7 +1089,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2fd0
+.debug_info     0x00000000     0x2fad
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x7e3 Communication_drivers/can.o
  .debug_info    0x000007e3      0x2af Communication_drivers/mcp2515.o
@@ -1100,12 +1100,12 @@ END GROUP
  .debug_info    0x00001347      0x23a Drivers/external_SRAM.o
  .debug_info    0x00001581      0x622 Drivers/OLED.o
  .debug_info    0x00001ba3       0x8a Etc/font.o
- .debug_info    0x00001c2d      0x4b8 Game/Game.o
- .debug_info    0x000020e5      0x874 PingPong.o
- .debug_info    0x00002959      0x1d6 UI/HighScore.o
- .debug_info    0x00002b2f      0x4a1 UI/Menu.o
+ .debug_info    0x00001c2d      0x432 Game/Game.o
+ .debug_info    0x0000205f      0x8d7 PingPong.o
+ .debug_info    0x00002936      0x1d6 UI/HighScore.o
+ .debug_info    0x00002b0c      0x4a1 UI/Menu.o
 
-.debug_abbrev   0x00000000     0x1074
+.debug_abbrev   0x00000000     0x1045
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x23e Communication_drivers/can.o
  .debug_abbrev  0x0000023e      0x126 Communication_drivers/mcp2515.o
@@ -1116,12 +1116,12 @@ END GROUP
  .debug_abbrev  0x00000758      0x12e Drivers/external_SRAM.o
  .debug_abbrev  0x00000886      0x1b5 Drivers/OLED.o
  .debug_abbrev  0x00000a3b       0x50 Etc/font.o
- .debug_abbrev  0x00000a8b      0x165 Game/Game.o
- .debug_abbrev  0x00000bf0      0x1c6 PingPong.o
- .debug_abbrev  0x00000db6       0xe8 UI/HighScore.o
- .debug_abbrev  0x00000e9e      0x1d6 UI/Menu.o
+ .debug_abbrev  0x00000a8b      0x136 Game/Game.o
+ .debug_abbrev  0x00000bc1      0x1c6 PingPong.o
+ .debug_abbrev  0x00000d87       0xe8 UI/HighScore.o
+ .debug_abbrev  0x00000e6f      0x1d6 UI/Menu.o
 
-.debug_line     0x00000000     0x1102
+.debug_line     0x00000000     0x110c
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x1fb Communication_drivers/can.o
  .debug_line    0x000001fb      0x132 Communication_drivers/mcp2515.o
@@ -1132,12 +1132,12 @@ END GROUP
  .debug_line    0x000007c2      0x100 Drivers/external_SRAM.o
  .debug_line    0x000008c2      0x25f Drivers/OLED.o
  .debug_line    0x00000b21       0x2b Etc/font.o
- .debug_line    0x00000b4c      0x149 Game/Game.o
- .debug_line    0x00000c95      0x1c4 PingPong.o
- .debug_line    0x00000e59      0x100 UI/HighScore.o
- .debug_line    0x00000f59      0x1a9 UI/Menu.o
+ .debug_line    0x00000b4c      0x144 Game/Game.o
+ .debug_line    0x00000c90      0x1d3 PingPong.o
+ .debug_line    0x00000e63      0x100 UI/HighScore.o
+ .debug_line    0x00000f63      0x1a9 UI/Menu.o
 
-.debug_frame    0x00000000      0x5d0
+.debug_frame    0x00000000      0x5d8
  *(.debug_frame)
  .debug_frame   0x00000000       0xdc Communication_drivers/can.o
  .debug_frame   0x000000dc       0x98 Communication_drivers/mcp2515.o
@@ -1147,12 +1147,12 @@ END GROUP
  .debug_frame   0x00000220       0xd8 Drivers/Controllers.o
  .debug_frame   0x000002f8       0x70 Drivers/external_SRAM.o
  .debug_frame   0x00000368      0x12c Drivers/OLED.o
- .debug_frame   0x00000494       0x54 Game/Game.o
- .debug_frame   0x000004e8       0x34 PingPong.o
- .debug_frame   0x0000051c       0x30 UI/HighScore.o
- .debug_frame   0x0000054c       0x84 UI/Menu.o
+ .debug_frame   0x00000494       0x5c Game/Game.o
+ .debug_frame   0x000004f0       0x34 PingPong.o
+ .debug_frame   0x00000524       0x30 UI/HighScore.o
+ .debug_frame   0x00000554       0x84 UI/Menu.o
 
-.debug_str      0x00000000      0x86c
+.debug_str      0x00000000      0x8a9
  *(.debug_str)
  .debug_str     0x00000000      0x277 Communication_drivers/can.o
                                 0x2d8 (size before relaxing)
@@ -1172,16 +1172,16 @@ END GROUP
                                 0x263 (size before relaxing)
  .debug_str     0x000006e2        0xe Etc/font.o
                                 0x145 (size before relaxing)
- .debug_str     0x000006f0       0x27 Game/Game.o
-                                0x2c5 (size before relaxing)
- .debug_str     0x00000717       0xf3 PingPong.o
-                                0x483 (size before relaxing)
- .debug_str     0x0000080a       0x12 UI/HighScore.o
+ .debug_str     0x000006f0       0x54 Game/Game.o
+                                0x2b3 (size before relaxing)
+ .debug_str     0x00000744      0x103 PingPong.o
+                                0x49c (size before relaxing)
+ .debug_str     0x00000847       0x12 UI/HighScore.o
                                 0x1f3 (size before relaxing)
- .debug_str     0x0000081c       0x50 UI/Menu.o
+ .debug_str     0x00000859       0x50 UI/Menu.o
                                 0x2f8 (size before relaxing)
 
-.debug_loc      0x00000000     0x11c5
+.debug_loc      0x00000000     0x11e6
  *(.debug_loc)
  .debug_loc     0x00000000      0x35b Communication_drivers/can.o
  .debug_loc     0x0000035b      0x1b6 Communication_drivers/mcp2515.o
@@ -1190,10 +1190,10 @@ END GROUP
  .debug_loc     0x00000543      0x2bd Drivers/Controllers.o
  .debug_loc     0x00000800      0x219 Drivers/external_SRAM.o
  .debug_loc     0x00000a19      0x438 Drivers/OLED.o
- .debug_loc     0x00000e51      0x109 Game/Game.o
- .debug_loc     0x00000f5a       0xa5 PingPong.o
- .debug_loc     0x00000fff       0x65 UI/HighScore.o
- .debug_loc     0x00001064      0x161 UI/Menu.o
+ .debug_loc     0x00000e51      0x12d Game/Game.o
+ .debug_loc     0x00000f7e       0xa2 PingPong.o
+ .debug_loc     0x00001020       0x65 UI/HighScore.o
+ .debug_loc     0x00001085      0x161 UI/Menu.o
 
 .debug_macinfo
  *(.debug_macinfo)

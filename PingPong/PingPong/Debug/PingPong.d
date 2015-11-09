@@ -28,11 +28,16 @@ PingPong.d PingPong.o: .././PingPong.c .././MainInclude/MainInclude.h \
  .././Drivers/Controllers.h .././Drivers/../Drivers/ADC_Driver.h \
  .././Drivers/OLED.h .././UI/Menu.h .././UI/../Drivers/Controllers.h \
  .././UI/../MainInclude/MainInclude.h .././Game/Game.h \
- .././UI/HighScore.h .././Communication_drivers/can.h \
- .././Communication_drivers/mcp2515.h \
- .././Communication_drivers/../MainInclude/MainInclude.h \
- .././Communication_drivers/spi.h \
- .././Communication_drivers/MCP2515_register.h
+ .././Game/../MainInclude/MainInclude.h \
+ .././Game/../Drivers/Controllers.h \
+ .././Game/../Communication_drivers/can.h \
+ .././Game/../Communication_drivers/mcp2515.h \
+ .././Game/../Communication_drivers/../MainInclude/MainInclude.h \
+ .././Game/../Communication_drivers/spi.h \
+ .././Game/../Communication_drivers/MCP2515_register.h \
+ .././Game/../../../InterNodeHeaders/CanMessageFormat.h \
+ .././Game/../Communication\ drivers/can.h .././UI/HighScore.h \
+ .././Communication_drivers/can.h
 
 .././MainInclude/MainInclude.h:
 
@@ -106,14 +111,24 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 .././Game/Game.h:
 
+.././Game/../MainInclude/MainInclude.h:
+
+.././Game/../Drivers/Controllers.h:
+
+.././Game/../Communication_drivers/can.h:
+
+.././Game/../Communication_drivers/mcp2515.h:
+
+.././Game/../Communication_drivers/../MainInclude/MainInclude.h:
+
+.././Game/../Communication_drivers/spi.h:
+
+.././Game/../Communication_drivers/MCP2515_register.h:
+
+.././Game/../../../InterNodeHeaders/CanMessageFormat.h:
+
+.././Game/../Communication\ drivers/can.h:
+
 .././UI/HighScore.h:
 
 .././Communication_drivers/can.h:
-
-.././Communication_drivers/mcp2515.h:
-
-.././Communication_drivers/../MainInclude/MainInclude.h:
-
-.././Communication_drivers/spi.h:
-
-.././Communication_drivers/MCP2515_register.h:

@@ -1,4 +1,4 @@
-Game/Game.d Game/Game.o: ../Game/Game.c \
+Game/Game.d Game/Game.o: ../Game/Game.c ../Game/Game.h \
  ../Game/../MainInclude/MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
@@ -33,7 +33,10 @@ Game/Game.d Game/Game.o: ../Game/Game.c \
  ../Game/../Communication_drivers/../MainInclude/MainInclude.h \
  ../Game/../Communication_drivers/spi.h \
  ../Game/../Communication_drivers/MCP2515_register.h \
- ../Game/../../../InterNodeHeaders/CanMessageFormat.h
+ ../Game/../../../InterNodeHeaders/CanMessageFormat.h \
+ ../Game/../Communication\ drivers/can.h
+
+../Game/Game.h:
 
 ../Game/../MainInclude/MainInclude.h:
 
@@ -104,3 +107,5 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 ../Game/../Communication_drivers/MCP2515_register.h:
 
 ../Game/../../../InterNodeHeaders/CanMessageFormat.h:
+
+../Game/../Communication\ drivers/can.h:

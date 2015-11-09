@@ -51,21 +51,13 @@ int main(){
 			case PACKAGESPECIFIER_SWITCHOFF:
 				//printf("SWITCHING OFFF");
 				servo_set(0);
-				motorbox_set_percent(0);
+				reg_ref = 0;
 			break;
 		}
 		adc_measure(&adcSignal);
 		
 		regulator_increment(&pi_state,reg_ref);
 		motorbox_set_percent(pi_state.u);
-		//printf("U:%i    ", (get_pos_from_percent(reg_ref)-motorbox_get_encoder())/(board_size/100));
-		//printf("Encoder:%i    \r", motorbox_get_encoder());
-		
-		//printf("Encoder diff: %i       \r",motorbox_get_encoder());
-		//motorbox_reset_encoder();
-		//printf("%u",reverse_byte(0));
-		
-		
 	}
 	return 0;
 }

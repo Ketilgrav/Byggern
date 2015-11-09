@@ -8,8 +8,12 @@
 
 #ifndef GAME_H_
 #define GAME_H_
-
-uint8_t runGame(Controls* controls);
+#include "../MainInclude/MainInclude.h"
+#include "../Drivers/Controllers.h"
+#include "../Communication_drivers/can.h"
+#include "../../../InterNodeHeaders/CanMessageFormat.h"
+#include "../Communication drivers/can.h"
+uint8_t runGame(Controls* controls, CAN_message* msgOut);
 
 
 

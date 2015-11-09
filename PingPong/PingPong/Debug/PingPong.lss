@@ -13,19 +13,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   4 .debug_aranges 000002c8  00000000  00000000  000023da  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00002fd0  00000000  00000000  000026a2  2**0
+  5 .debug_info   00002fad  00000000  00000000  000026a2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00001074  00000000  00000000  00005672  2**0
+  6 .debug_abbrev 00001045  00000000  00000000  0000564f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00001102  00000000  00000000  000066e6  2**0
+  7 .debug_line   0000110c  00000000  00000000  00006694  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000005d0  00000000  00000000  000077e8  2**2
+  8 .debug_frame  000005d8  00000000  00000000  000077a0  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000086c  00000000  00000000  00007db8  2**0
+  9 .debug_str    000008a9  00000000  00000000  00007d78  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000011c5  00000000  00000000  00008624  2**0
+ 10 .debug_loc    000011e6  00000000  00000000  00008621  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 000001f0  00000000  00000000  000097e9  2**0
+ 11 .debug_ranges 000001f0  00000000  00000000  00009807  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -497,7 +497,7 @@ Disassembly of section .text:
      3c4:	ae 37       	cpi	r26, 0x7E	; 126
      3c6:	b2 07       	cpc	r27, r18
      3c8:	e1 f7       	brne	.-8      	; 0x3c2 <.do_clear_bss_loop>
-     3ca:	0e 94 2f 07 	call	0xe5e	; 0xe5e <main>
+     3ca:	0e 94 0f 07 	call	0xe1e	; 0xe1e <main>
      3ce:	0c 94 a2 10 	jmp	0x2144	; 0x2144 <_exit>
 
 000003d2 <__bad_interrupt>:
@@ -2411,568 +2411,573 @@ void OLED_init(){
      d00:	08 95       	ret
 
 00000d02 <runGame>:
-#include "../MainInclude/MainInclude.h"
-#include "../Drivers/Controllers.h"
-#include "../Communication_drivers/can.h"
-#include "../../../InterNodeHeaders/CanMessageFormat.h"
+ * Created: 25.09.2015 16:51:47
+ *  Author: sverrevr
+ */ 
 
-uint8_t runGame(Controls* controls){
-     d02:	cf 92       	push	r12
-     d04:	df 92       	push	r13
-     d06:	ef 92       	push	r14
-     d08:	ff 92       	push	r15
-     d0a:	0f 93       	push	r16
-     d0c:	1f 93       	push	r17
-     d0e:	cf 93       	push	r28
-     d10:	df 93       	push	r29
-     d12:	cd b7       	in	r28, 0x3d	; 61
-     d14:	de b7       	in	r29, 0x3e	; 62
-     d16:	6b 97       	sbiw	r28, 0x1b	; 27
-     d18:	0f b6       	in	r0, 0x3f	; 63
-     d1a:	f8 94       	cli
-     d1c:	de bf       	out	0x3e, r29	; 62
-     d1e:	0f be       	out	0x3f, r0	; 63
-     d20:	cd bf       	out	0x3d, r28	; 61
-     d22:	8c 01       	movw	r16, r24
+#include "Game.h"
+uint8_t runGame(Controls* controls, CAN_message* msgOut){
+     d02:	af 92       	push	r10
+     d04:	bf 92       	push	r11
+     d06:	cf 92       	push	r12
+     d08:	df 92       	push	r13
+     d0a:	ef 92       	push	r14
+     d0c:	ff 92       	push	r15
+     d0e:	0f 93       	push	r16
+     d10:	1f 93       	push	r17
+     d12:	cf 93       	push	r28
+     d14:	df 93       	push	r29
+     d16:	cd b7       	in	r28, 0x3d	; 61
+     d18:	de b7       	in	r29, 0x3e	; 62
+     d1a:	2f 97       	sbiw	r28, 0x0f	; 15
+     d1c:	0f b6       	in	r0, 0x3f	; 63
+     d1e:	f8 94       	cli
+     d20:	de bf       	out	0x3e, r29	; 62
+     d22:	0f be       	out	0x3f, r0	; 63
+     d24:	cd bf       	out	0x3d, r28	; 61
+     d26:	7c 01       	movw	r14, r24
+     d28:	8b 01       	movw	r16, r22
 	oled_mem_clear();
-     d24:	0e 94 2e 06 	call	0xc5c	; 0xc5c <oled_mem_clear>
+     d2a:	0e 94 2e 06 	call	0xc5c	; 0xc5c <oled_mem_clear>
 	oled_mem_print("SPILLET KJORER", 3, 0);
-     d28:	40 e0       	ldi	r20, 0x00	; 0
-     d2a:	63 e0       	ldi	r22, 0x03	; 3
-     d2c:	86 ee       	ldi	r24, 0xE6	; 230
-     d2e:	91 e0       	ldi	r25, 0x01	; 1
-     d30:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
+     d2e:	40 e0       	ldi	r20, 0x00	; 0
+     d30:	63 e0       	ldi	r22, 0x03	; 3
+     d32:	86 ee       	ldi	r24, 0xE6	; 230
+     d34:	91 e0       	ldi	r25, 0x01	; 1
+     d36:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
 	char a[5];
 	sprintf(a, "%i", controls->js.x_percent);
-     d34:	f8 01       	movw	r30, r16
-     d36:	26 85       	ldd	r18, Z+14	; 0x0e
-     d38:	82 2f       	mov	r24, r18
-     d3a:	99 27       	eor	r25, r25
-     d3c:	87 fd       	sbrc	r24, 7
-     d3e:	90 95       	com	r25
-     d40:	9f 93       	push	r25
-     d42:	2f 93       	push	r18
-     d44:	0f 2e       	mov	r0, r31
-     d46:	f5 ef       	ldi	r31, 0xF5	; 245
-     d48:	ef 2e       	mov	r14, r31
-     d4a:	f1 e0       	ldi	r31, 0x01	; 1
-     d4c:	ff 2e       	mov	r15, r31
-     d4e:	f0 2d       	mov	r31, r0
-     d50:	ff 92       	push	r15
-     d52:	ef 92       	push	r14
-     d54:	9e 01       	movw	r18, r28
-     d56:	2f 5f       	subi	r18, 0xFF	; 255
-     d58:	3f 4f       	sbci	r19, 0xFF	; 255
-     d5a:	69 01       	movw	r12, r18
-     d5c:	df 92       	push	r13
-     d5e:	2f 93       	push	r18
-     d60:	0e 94 33 0c 	call	0x1866	; 0x1866 <sprintf>
+     d3a:	f7 01       	movw	r30, r14
+     d3c:	26 85       	ldd	r18, Z+14	; 0x0e
+     d3e:	82 2f       	mov	r24, r18
+     d40:	99 27       	eor	r25, r25
+     d42:	87 fd       	sbrc	r24, 7
+     d44:	90 95       	com	r25
+     d46:	9f 93       	push	r25
+     d48:	2f 93       	push	r18
+     d4a:	0f 2e       	mov	r0, r31
+     d4c:	f5 ef       	ldi	r31, 0xF5	; 245
+     d4e:	cf 2e       	mov	r12, r31
+     d50:	f1 e0       	ldi	r31, 0x01	; 1
+     d52:	df 2e       	mov	r13, r31
+     d54:	f0 2d       	mov	r31, r0
+     d56:	df 92       	push	r13
+     d58:	cf 92       	push	r12
+     d5a:	ce 01       	movw	r24, r28
+     d5c:	01 96       	adiw	r24, 0x01	; 1
+     d5e:	5c 01       	movw	r10, r24
+     d60:	bf 92       	push	r11
+     d62:	8f 93       	push	r24
+     d64:	0e 94 33 0c 	call	0x1866	; 0x1866 <sprintf>
 	char b[5];
 	sprintf(b, "%i", controls->js.y_percent);
-     d64:	f8 01       	movw	r30, r16
-     d66:	27 85       	ldd	r18, Z+15	; 0x0f
-     d68:	82 2f       	mov	r24, r18
-     d6a:	99 27       	eor	r25, r25
-     d6c:	87 fd       	sbrc	r24, 7
-     d6e:	90 95       	com	r25
-     d70:	9f 93       	push	r25
-     d72:	2f 93       	push	r18
-     d74:	ff 92       	push	r15
-     d76:	ef 92       	push	r14
-     d78:	7e 01       	movw	r14, r28
-     d7a:	f6 e0       	ldi	r31, 0x06	; 6
-     d7c:	ef 0e       	add	r14, r31
-     d7e:	f1 1c       	adc	r15, r1
-     d80:	ff 92       	push	r15
-     d82:	ef 92       	push	r14
-     d84:	0e 94 33 0c 	call	0x1866	; 0x1866 <sprintf>
+     d68:	f7 01       	movw	r30, r14
+     d6a:	27 85       	ldd	r18, Z+15	; 0x0f
+     d6c:	82 2f       	mov	r24, r18
+     d6e:	99 27       	eor	r25, r25
+     d70:	87 fd       	sbrc	r24, 7
+     d72:	90 95       	com	r25
+     d74:	9f 93       	push	r25
+     d76:	2f 93       	push	r18
+     d78:	df 92       	push	r13
+     d7a:	cf 92       	push	r12
+     d7c:	6e 01       	movw	r12, r28
+     d7e:	f6 e0       	ldi	r31, 0x06	; 6
+     d80:	cf 0e       	add	r12, r31
+     d82:	d1 1c       	adc	r13, r1
+     d84:	df 92       	push	r13
+     d86:	cf 92       	push	r12
+     d88:	0e 94 33 0c 	call	0x1866	; 0x1866 <sprintf>
 	oled_mem_print(a, 4, 0);
-     d88:	40 e0       	ldi	r20, 0x00	; 0
-     d8a:	64 e0       	ldi	r22, 0x04	; 4
-     d8c:	c6 01       	movw	r24, r12
-     d8e:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
+     d8c:	40 e0       	ldi	r20, 0x00	; 0
+     d8e:	64 e0       	ldi	r22, 0x04	; 4
+     d90:	c5 01       	movw	r24, r10
+     d92:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
 	oled_mem_print(b, 5, 0);
-     d92:	40 e0       	ldi	r20, 0x00	; 0
-     d94:	65 e0       	ldi	r22, 0x05	; 5
-     d96:	c7 01       	movw	r24, r14
-     d98:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
+     d96:	40 e0       	ldi	r20, 0x00	; 0
+     d98:	65 e0       	ldi	r22, 0x05	; 5
+     d9a:	c6 01       	movw	r24, r12
+     d9c:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
 	
 	
 	
- 	CAN_message msgOut0;
- 	if ((controls->btns.A_count) % 2){
-     d9c:	f8 01       	movw	r30, r16
-     d9e:	84 81       	ldd	r24, Z+4	; 0x04
-     da0:	0f b6       	in	r0, 0x3f	; 63
-     da2:	f8 94       	cli
-     da4:	de bf       	out	0x3e, r29	; 62
-     da6:	0f be       	out	0x3f, r0	; 63
-     da8:	cd bf       	out	0x3d, r28	; 61
-     daa:	80 ff       	sbrs	r24, 0
-     dac:	1e c0       	rjmp	.+60     	; 0xdea <runGame+0xe8>
-		msgOut0.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_MOTORSIGNALS;
-     dae:	1e 86       	std	Y+14, r1	; 0x0e
-		msgOut0.data[CANMSG_SERVO] = controls->sliders.r_percent;
-     db0:	92 85       	ldd	r25, Z+10	; 0x0a
-     db2:	98 8b       	std	Y+16, r25	; 0x10
-		msgOut0.data[CANMSG_MOTOR] = controls->js.x_percent;
-     db4:	96 85       	ldd	r25, Z+14	; 0x0e
-     db6:	99 8b       	std	Y+17, r25	; 0x11
+ 	//if ((controls->btns.A_count) % 2){
+		msgOut->data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_MOTORSIGNALS;
+     da0:	f8 01       	movw	r30, r16
+     da2:	13 82       	std	Z+3, r1	; 0x03
+		msgOut->data[CANMSG_SERVO] = controls->sliders.r_percent;
+     da4:	f7 01       	movw	r30, r14
+     da6:	82 85       	ldd	r24, Z+10	; 0x0a
+     da8:	f8 01       	movw	r30, r16
+     daa:	85 83       	std	Z+5, r24	; 0x05
+		msgOut->data[CANMSG_MOTOR] = controls->js.x_percent;
+     dac:	f7 01       	movw	r30, r14
+     dae:	86 85       	ldd	r24, Z+14	; 0x0e
+     db0:	f8 01       	movw	r30, r16
+     db2:	86 83       	std	Z+6, r24	; 0x06
 		char c[5];
 		sprintf(c, "%u", controls->btns.A_count);
+     db4:	f7 01       	movw	r30, r14
+     db6:	84 81       	ldd	r24, Z+4	; 0x04
      db8:	1f 92       	push	r1
      dba:	8f 93       	push	r24
      dbc:	88 ef       	ldi	r24, 0xF8	; 248
      dbe:	91 e0       	ldi	r25, 0x01	; 1
      dc0:	9f 93       	push	r25
      dc2:	8f 93       	push	r24
-     dc4:	8e 01       	movw	r16, r28
-     dc6:	09 5e       	subi	r16, 0xE9	; 233
-     dc8:	1f 4f       	sbci	r17, 0xFF	; 255
-     dca:	1f 93       	push	r17
-     dcc:	0f 93       	push	r16
-     dce:	0e 94 33 0c 	call	0x1866	; 0x1866 <sprintf>
+     dc4:	7e 01       	movw	r14, r28
+     dc6:	fb e0       	ldi	r31, 0x0B	; 11
+     dc8:	ef 0e       	add	r14, r31
+     dca:	f1 1c       	adc	r15, r1
+     dcc:	ff 92       	push	r15
+     dce:	ef 92       	push	r14
+     dd0:	0e 94 33 0c 	call	0x1866	; 0x1866 <sprintf>
 		oled_mem_print(c, 6, 0);
-     dd2:	40 e0       	ldi	r20, 0x00	; 0
-     dd4:	66 e0       	ldi	r22, 0x06	; 6
-     dd6:	c8 01       	movw	r24, r16
-     dd8:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
-     ddc:	0f 90       	pop	r0
-     dde:	0f 90       	pop	r0
-     de0:	0f 90       	pop	r0
-     de2:	0f 90       	pop	r0
-     de4:	0f 90       	pop	r0
-     de6:	0f 90       	pop	r0
-     de8:	1e c0       	rjmp	.+60     	; 0xe26 <runGame+0x124>
-	}
-	else{
-		msgOut0.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_MOTORSIGNALS;
-     dea:	1e 86       	std	Y+14, r1	; 0x0e
-		msgOut0.data[CANMSG_SERVO] = controls->js.x_percent;
-     dec:	f8 01       	movw	r30, r16
-     dee:	96 85       	ldd	r25, Z+14	; 0x0e
-     df0:	98 8b       	std	Y+16, r25	; 0x10
-		msgOut0.data[CANMSG_MOTOR] = controls->sliders.r_percent;
-     df2:	92 85       	ldd	r25, Z+10	; 0x0a
-     df4:	99 8b       	std	Y+17, r25	; 0x11
+     dd4:	40 e0       	ldi	r20, 0x00	; 0
+     dd6:	66 e0       	ldi	r22, 0x06	; 6
+     dd8:	c7 01       	movw	r24, r14
+     dda:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
+		msgOut->data[CANMSG_MOTOR] = controls->sliders.r_percent;
 		char c[5];
 		sprintf(c, "%u", controls->btns.A_count);
-     df6:	1f 92       	push	r1
-     df8:	8f 93       	push	r24
-     dfa:	88 ef       	ldi	r24, 0xF8	; 248
-     dfc:	91 e0       	ldi	r25, 0x01	; 1
-     dfe:	9f 93       	push	r25
-     e00:	8f 93       	push	r24
-     e02:	8e 01       	movw	r16, r28
-     e04:	09 5e       	subi	r16, 0xE9	; 233
-     e06:	1f 4f       	sbci	r17, 0xFF	; 255
-     e08:	1f 93       	push	r17
-     e0a:	0f 93       	push	r16
-     e0c:	0e 94 33 0c 	call	0x1866	; 0x1866 <sprintf>
 		oled_mem_print(c, 6, 0);
-     e10:	40 e0       	ldi	r20, 0x00	; 0
-     e12:	66 e0       	ldi	r22, 0x06	; 6
-     e14:	c8 01       	movw	r24, r16
-     e16:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
-     e1a:	0f 90       	pop	r0
-     e1c:	0f 90       	pop	r0
-     e1e:	0f 90       	pop	r0
-     e20:	0f 90       	pop	r0
-     e22:	0f 90       	pop	r0
-     e24:	0f 90       	pop	r0
-	}
-	msgOut0.length = CANMSG_LEN;
-     e26:	84 e0       	ldi	r24, 0x04	; 4
-     e28:	8d 87       	std	Y+13, r24	; 0x0d
-	msgOut0.id = 0b00100000001;
-     e2a:	81 e0       	ldi	r24, 0x01	; 1
-     e2c:	91 e0       	ldi	r25, 0x01	; 1
-     e2e:	9c 87       	std	Y+12, r25	; 0x0c
-     e30:	8b 87       	std	Y+11, r24	; 0x0b
-	msgOut0.priority = 2;
-     e32:	82 e0       	ldi	r24, 0x02	; 2
-     e34:	8e 8b       	std	Y+22, r24	; 0x16
+	}*/
+	msgOut->length = CANMSG_LEN;
+     dde:	84 e0       	ldi	r24, 0x04	; 4
+     de0:	f8 01       	movw	r30, r16
+     de2:	82 83       	std	Z+2, r24	; 0x02
+	msgOut->id = 0b00100000001;
+     de4:	81 e0       	ldi	r24, 0x01	; 1
+     de6:	91 e0       	ldi	r25, 0x01	; 1
+     de8:	91 83       	std	Z+1, r25	; 0x01
+     dea:	80 83       	st	Z, r24
+	msgOut->priority = 2;
+     dec:	82 e0       	ldi	r24, 0x02	; 2
+     dee:	83 87       	std	Z+11, r24	; 0x0b
 	
-	CAN_message_send(&msgOut0);
-     e36:	ce 01       	movw	r24, r28
-     e38:	0b 96       	adiw	r24, 0x0b	; 11
-     e3a:	0e 94 3d 02 	call	0x47a	; 0x47a <CAN_message_send>
 	return 0;
+     df0:	0f b6       	in	r0, 0x3f	; 63
+     df2:	f8 94       	cli
+     df4:	de bf       	out	0x3e, r29	; 62
+     df6:	0f be       	out	0x3f, r0	; 63
+     df8:	cd bf       	out	0x3d, r28	; 61
 }
-     e3e:	80 e0       	ldi	r24, 0x00	; 0
-     e40:	6b 96       	adiw	r28, 0x1b	; 27
-     e42:	0f b6       	in	r0, 0x3f	; 63
-     e44:	f8 94       	cli
-     e46:	de bf       	out	0x3e, r29	; 62
-     e48:	0f be       	out	0x3f, r0	; 63
-     e4a:	cd bf       	out	0x3d, r28	; 61
-     e4c:	df 91       	pop	r29
-     e4e:	cf 91       	pop	r28
-     e50:	1f 91       	pop	r17
-     e52:	0f 91       	pop	r16
-     e54:	ff 90       	pop	r15
-     e56:	ef 90       	pop	r14
-     e58:	df 90       	pop	r13
-     e5a:	cf 90       	pop	r12
-     e5c:	08 95       	ret
+     dfa:	80 e0       	ldi	r24, 0x00	; 0
+     dfc:	2f 96       	adiw	r28, 0x0f	; 15
+     dfe:	0f b6       	in	r0, 0x3f	; 63
+     e00:	f8 94       	cli
+     e02:	de bf       	out	0x3e, r29	; 62
+     e04:	0f be       	out	0x3f, r0	; 63
+     e06:	cd bf       	out	0x3d, r28	; 61
+     e08:	df 91       	pop	r29
+     e0a:	cf 91       	pop	r28
+     e0c:	1f 91       	pop	r17
+     e0e:	0f 91       	pop	r16
+     e10:	ff 90       	pop	r15
+     e12:	ef 90       	pop	r14
+     e14:	df 90       	pop	r13
+     e16:	cf 90       	pop	r12
+     e18:	bf 90       	pop	r11
+     e1a:	af 90       	pop	r10
+     e1c:	08 95       	ret
 
-00000e5e <main>:
+00000e1e <main>:
 #include "UI/HighScore.h"
 #include "Communication_drivers/can.h"
 
 #include <stdio.h>
 
 int main(void){	
-     e5e:	cf 93       	push	r28
-     e60:	df 93       	push	r29
-     e62:	cd b7       	in	r28, 0x3d	; 61
-     e64:	de b7       	in	r29, 0x3e	; 62
-     e66:	e0 97       	sbiw	r28, 0x30	; 48
-     e68:	0f b6       	in	r0, 0x3f	; 63
-     e6a:	f8 94       	cli
-     e6c:	de bf       	out	0x3e, r29	; 62
-     e6e:	0f be       	out	0x3f, r0	; 63
-     e70:	cd bf       	out	0x3d, r28	; 61
+     e1e:	cf 93       	push	r28
+     e20:	df 93       	push	r29
+     e22:	cd b7       	in	r28, 0x3d	; 61
+     e24:	de b7       	in	r29, 0x3e	; 62
+     e26:	c8 54       	subi	r28, 0x48	; 72
+     e28:	d1 09       	sbc	r29, r1
+     e2a:	0f b6       	in	r0, 0x3f	; 63
+     e2c:	f8 94       	cli
+     e2e:	de bf       	out	0x3e, r29	; 62
+     e30:	0f be       	out	0x3f, r0	; 63
+     e32:	cd bf       	out	0x3d, r28	; 61
 	
 	USART_init();
-     e72:	0e 94 a3 03 	call	0x746	; 0x746 <USART_init>
+     e34:	0e 94 a3 03 	call	0x746	; 0x746 <USART_init>
 	SRAM_init();
-     e76:	0e 94 64 05 	call	0xac8	; 0xac8 <SRAM_init>
+     e38:	0e 94 64 05 	call	0xac8	; 0xac8 <SRAM_init>
 	ADC_init();
-     e7a:	0e 94 b2 03 	call	0x764	; 0x764 <ADC_init>
+     e3c:	0e 94 b2 03 	call	0x764	; 0x764 <ADC_init>
 	OLED_init();
-     e7e:	0e 94 36 06 	call	0xc6c	; 0xc6c <OLED_init>
+     e40:	0e 94 36 06 	call	0xc6c	; 0xc6c <OLED_init>
 	CAN_init();
-     e82:	0e 94 b7 02 	call	0x56e	; 0x56e <CAN_init>
+     e44:	0e 94 b7 02 	call	0x56e	; 0x56e <CAN_init>
 	controllers_init();
-     e86:	0e 94 bf 03 	call	0x77e	; 0x77e <controllers_init>
+     e48:	0e 94 bf 03 	call	0x77e	; 0x77e <controllers_init>
 	set_bit(DDRB, PB0); //led, blink
-     e8a:	b8 9a       	sbi	0x17, 0	; 23
+     e4c:	b8 9a       	sbi	0x17, 0	; 23
 	
 	Controls controls;
 	joystick_calibrate(&controls.js);
-     e8c:	ce 01       	movw	r24, r28
-     e8e:	0d 96       	adiw	r24, 0x0d	; 13
-     e90:	0e 94 c2 03 	call	0x784	; 0x784 <joystick_calibrate>
+     e4e:	ce 01       	movw	r24, r28
+     e50:	0d 96       	adiw	r24, 0x0d	; 13
+     e52:	0e 94 c2 03 	call	0x784	; 0x784 <joystick_calibrate>
 
 	
 	printf("\n\n\n");
-     e94:	8b ef       	ldi	r24, 0xFB	; 251
-     e96:	91 e0       	ldi	r25, 0x01	; 1
-     e98:	0e 94 06 0c 	call	0x180c	; 0x180c <puts>
+     e56:	8b ef       	ldi	r24, 0xFB	; 251
+     e58:	91 e0       	ldi	r25, 0x01	; 1
+     e5a:	0e 94 06 0c 	call	0x180c	; 0x180c <puts>
 
 	//Tillstandsvariabler
 	menyNode* menu = menu_init();
-     e9c:	0e 94 41 08 	call	0x1082	; 0x1082 <menu_init>
-     ea0:	7c 01       	movw	r14, r24
-     ea2:	98 8f       	std	Y+24, r25	; 0x18
-     ea4:	8f 8b       	std	Y+23, r24	; 0x17
-	msgOut0.id = 0b00100000001;
-	msgOut0.priority = 1;
+     e5e:	0e 94 41 08 	call	0x1082	; 0x1082 <menu_init>
+     e62:	7c 01       	movw	r14, r24
+     e64:	98 8f       	std	Y+24, r25	; 0x18
+     e66:	8f 8b       	std	Y+23, r24	; 0x17
 
+	CAN_message msgInn0;
+	CAN_message msgInn1;
+	
+	CAN_message msgOut0;
+	msgOut0.length = 0;
+     e68:	1b aa       	std	Y+51, r1	; 0x33
+	CAN_message msgOut1;
+	msgOut1.length = 0;
+     e6a:	1f ae       	std	Y+63, r1	; 0x3f
+	
+	/*60hz timer*/
+	TCCR3B |= (1<<CS31); //1/8 prescaler
+     e6c:	ea e8       	ldi	r30, 0x8A	; 138
+     e6e:	f0 e0       	ldi	r31, 0x00	; 0
+     e70:	80 81       	ld	r24, Z
+     e72:	82 60       	ori	r24, 0x02	; 2
+     e74:	80 83       	st	Z, r24
+	
+	
     while(1){
 		//Main loop counter and blinker
 		mainLoopCounter++;
-     ea6:	01 e0       	ldi	r16, 0x01	; 1
-     ea8:	10 e0       	ldi	r17, 0x00	; 0
-				if(runGame(&controls)){
+     e76:	01 e0       	ldi	r16, 0x01	; 1
+     e78:	10 e0       	ldi	r17, 0x00	; 0
+				if(runGame(&controls,&msgOut0)){
 					menu = mainMenu;
 				}
 				break;
 			case HIGH_SCORE:
 				printf("HS");
-     eaa:	0f 2e       	mov	r0, r31
-     eac:	fc e0       	ldi	r31, 0x0C	; 12
-     eae:	8f 2e       	mov	r8, r31
-     eb0:	f2 e0       	ldi	r31, 0x02	; 2
-     eb2:	9f 2e       	mov	r9, r31
-     eb4:	f0 2d       	mov	r31, r0
+     e7a:	0f 2e       	mov	r0, r31
+     e7c:	fc e0       	ldi	r31, 0x0C	; 12
+     e7e:	8f 2e       	mov	r8, r31
+     e80:	f2 e0       	ldi	r31, 0x02	; 2
+     e82:	9f 2e       	mov	r9, r31
+     e84:	f0 2d       	mov	r31, r0
 				if(displayHighScore(&controls.js)){
 					menu = mainMenu;
 				}
 				break;
 			case CALIBRATE_JS:
 				printf("Calibrate");
-     eb6:	0f 2e       	mov	r0, r31
-     eb8:	ff e0       	ldi	r31, 0x0F	; 15
-     eba:	af 2e       	mov	r10, r31
-     ebc:	f2 e0       	ldi	r31, 0x02	; 2
-     ebe:	bf 2e       	mov	r11, r31
-     ec0:	f0 2d       	mov	r31, r0
+     e86:	0f 2e       	mov	r0, r31
+     e88:	ff e0       	ldi	r31, 0x0F	; 15
+     e8a:	af 2e       	mov	r10, r31
+     e8c:	f2 e0       	ldi	r31, 0x02	; 2
+     e8e:	bf 2e       	mov	r11, r31
+     e90:	f0 2d       	mov	r31, r0
 				if(joystick_user_calibrate(&controls.js)){
 					menu = mainMenu;
 				}
 				break;
 			case SHOW_CAN_MSG:
 				printf("Show msg");
-     ec2:	0f 2e       	mov	r0, r31
-     ec4:	f9 e1       	ldi	r31, 0x19	; 25
-     ec6:	cf 2e       	mov	r12, r31
-     ec8:	f2 e0       	ldi	r31, 0x02	; 2
-     eca:	df 2e       	mov	r13, r31
-     ecc:	f0 2d       	mov	r31, r0
+     e92:	0f 2e       	mov	r0, r31
+     e94:	f9 e1       	ldi	r31, 0x19	; 25
+     e96:	cf 2e       	mov	r12, r31
+     e98:	f2 e0       	ldi	r31, 0x02	; 2
+     e9a:	df 2e       	mov	r13, r31
+     e9c:	f0 2d       	mov	r31, r0
 		if(controls.btns.B){ //Bytt til en annen knapp som alltid returnerer til main
 			menu = mainMenu;
 		}
 		switch (menu->tilstand){
 			case MENU:
 				printf("MENU");
-     ece:	0f 2e       	mov	r0, r31
-     ed0:	fe ef       	ldi	r31, 0xFE	; 254
-     ed2:	6f 2e       	mov	r6, r31
-     ed4:	f1 e0       	ldi	r31, 0x01	; 1
-     ed6:	7f 2e       	mov	r7, r31
-     ed8:	f0 2d       	mov	r31, r0
-				menu_go(&menu, &controls.js);
-				break;
-			case RUN_GAME:
-				printf("RUN_GAME");
-     eda:	0f 2e       	mov	r0, r31
-     edc:	f3 e0       	ldi	r31, 0x03	; 3
-     ede:	4f 2e       	mov	r4, r31
-     ee0:	f2 e0       	ldi	r31, 0x02	; 2
-     ee2:	5f 2e       	mov	r5, r31
-     ee4:	f0 2d       	mov	r31, r0
-	msgOut0.priority = 1;
-
+     e9e:	0f 2e       	mov	r0, r31
+     ea0:	fe ef       	ldi	r31, 0xFE	; 254
+     ea2:	6f 2e       	mov	r6, r31
+     ea4:	f1 e0       	ldi	r31, 0x01	; 1
+     ea6:	7f 2e       	mov	r7, r31
+     ea8:	f0 2d       	mov	r31, r0
+     eaa:	1a c0       	rjmp	.+52     	; 0xee0 <main+0xc2>
+	TCCR3B |= (1<<CS31); //1/8 prescaler
+	
+	
     while(1){
 		//Main loop counter and blinker
 		mainLoopCounter++;
+     eac:	0f 5f       	subi	r16, 0xFF	; 255
+     eae:	1f 4f       	sbci	r17, 0xFF	; 255
 		if(!(mainLoopCounter%100)){
-     ee6:	0f 2e       	mov	r0, r31
-     ee8:	f4 e6       	ldi	r31, 0x64	; 100
-     eea:	3f 2e       	mov	r3, r31
-     eec:	f0 2d       	mov	r31, r0
-     eee:	04 c0       	rjmp	.+8      	; 0xef8 <main+0x9a>
+     eb0:	98 01       	movw	r18, r16
+     eb2:	36 95       	lsr	r19
+     eb4:	27 95       	ror	r18
+     eb6:	36 95       	lsr	r19
+     eb8:	27 95       	ror	r18
+     eba:	ab e7       	ldi	r26, 0x7B	; 123
+     ebc:	b4 e1       	ldi	r27, 0x14	; 20
+     ebe:	0e 94 26 0b 	call	0x164c	; 0x164c <__umulhisi3>
+     ec2:	96 95       	lsr	r25
+     ec4:	87 95       	ror	r24
+     ec6:	44 e6       	ldi	r20, 0x64	; 100
+     ec8:	48 9f       	mul	r20, r24
+     eca:	90 01       	movw	r18, r0
+     ecc:	49 9f       	mul	r20, r25
+     ece:	30 0d       	add	r19, r0
+     ed0:	11 24       	eor	r1, r1
+     ed2:	02 17       	cp	r16, r18
+     ed4:	13 07       	cpc	r17, r19
+     ed6:	21 f4       	brne	.+8      	; 0xee0 <main+0xc2>
 			toggle_bit(PORTB, PB0);
-     ef0:	98 b3       	in	r25, 0x18	; 24
-     ef2:	81 e0       	ldi	r24, 0x01	; 1
-     ef4:	89 27       	eor	r24, r25
-     ef6:	88 bb       	out	0x18, r24	; 24
+     ed8:	98 b3       	in	r25, 0x18	; 24
+     eda:	81 e0       	ldi	r24, 0x01	; 1
+     edc:	89 27       	eor	r24, r25
+     ede:	88 bb       	out	0x18, r24	; 24
 		}
 		
 		//Oppdater tilstandene ut ifra input
 		controllers_update(&controls);
-     ef8:	ce 01       	movw	r24, r28
-     efa:	01 96       	adiw	r24, 0x01	; 1
-     efc:	0e 94 05 05 	call	0xa0a	; 0xa0a <controllers_update>
+     ee0:	ce 01       	movw	r24, r28
+     ee2:	01 96       	adiw	r24, 0x01	; 1
+     ee4:	0e 94 05 05 	call	0xa0a	; 0xa0a <controllers_update>
 		CAN_interrupt = CAN_int();
-     f00:	0e 94 a8 02 	call	0x550	; 0x550 <CAN_int>
-     f04:	28 2e       	mov	r2, r24
+     ee8:	0e 94 a8 02 	call	0x550	; 0x550 <CAN_int>
+     eec:	58 2e       	mov	r5, r24
 		
 		
 		//Meny og program kjøring
 		//Ved trykk av start går man uansett til main menu.
 		if(controls.btns.B){ //Bytt til en annen knapp som alltid returnerer til main
-     f06:	8a 81       	ldd	r24, Y+2	; 0x02
-     f08:	88 23       	and	r24, r24
-     f0a:	11 f0       	breq	.+4      	; 0xf10 <main+0xb2>
+     eee:	8a 81       	ldd	r24, Y+2	; 0x02
+     ef0:	88 23       	and	r24, r24
+     ef2:	11 f0       	breq	.+4      	; 0xef8 <main+0xda>
 			menu = mainMenu;
-     f0c:	f8 8e       	std	Y+24, r15	; 0x18
-     f0e:	ef 8a       	std	Y+23, r14	; 0x17
+     ef4:	f8 8e       	std	Y+24, r15	; 0x18
+     ef6:	ef 8a       	std	Y+23, r14	; 0x17
 		}
 		switch (menu->tilstand){
-     f10:	ef 89       	ldd	r30, Y+23	; 0x17
-     f12:	f8 8d       	ldd	r31, Y+24	; 0x18
-     f14:	80 81       	ld	r24, Z
-     f16:	82 30       	cpi	r24, 0x02	; 2
-     f18:	49 f1       	breq	.+82     	; 0xf6c <main+0x10e>
-     f1a:	28 f4       	brcc	.+10     	; 0xf26 <main+0xc8>
-     f1c:	88 23       	and	r24, r24
-     f1e:	41 f0       	breq	.+16     	; 0xf30 <main+0xd2>
-     f20:	81 30       	cpi	r24, 0x01	; 1
-     f22:	a1 f0       	breq	.+40     	; 0xf4c <main+0xee>
-     f24:	68 c0       	rjmp	.+208    	; 0xff6 <main+0x198>
-     f26:	83 30       	cpi	r24, 0x03	; 3
-     f28:	81 f1       	breq	.+96     	; 0xf8a <main+0x12c>
-     f2a:	84 30       	cpi	r24, 0x04	; 4
-     f2c:	e9 f1       	breq	.+122    	; 0xfa8 <main+0x14a>
-     f2e:	63 c0       	rjmp	.+198    	; 0xff6 <main+0x198>
+     ef8:	ef 89       	ldd	r30, Y+23	; 0x17
+     efa:	f8 8d       	ldd	r31, Y+24	; 0x18
+     efc:	80 81       	ld	r24, Z
+     efe:	82 30       	cpi	r24, 0x02	; 2
+     f00:	79 f1       	breq	.+94     	; 0xf60 <main+0x142>
+     f02:	28 f4       	brcc	.+10     	; 0xf0e <main+0xf0>
+     f04:	88 23       	and	r24, r24
+     f06:	49 f0       	breq	.+18     	; 0xf1a <main+0xfc>
+     f08:	81 30       	cpi	r24, 0x01	; 1
+     f0a:	a9 f0       	breq	.+42     	; 0xf36 <main+0x118>
+     f0c:	6e c0       	rjmp	.+220    	; 0xfea <main+0x1cc>
+     f0e:	83 30       	cpi	r24, 0x03	; 3
+     f10:	b1 f1       	breq	.+108    	; 0xf7e <main+0x160>
+     f12:	84 30       	cpi	r24, 0x04	; 4
+     f14:	09 f4       	brne	.+2      	; 0xf18 <main+0xfa>
+     f16:	42 c0       	rjmp	.+132    	; 0xf9c <main+0x17e>
+     f18:	68 c0       	rjmp	.+208    	; 0xfea <main+0x1cc>
 			case MENU:
 				printf("MENU");
-     f30:	7f 92       	push	r7
-     f32:	6f 92       	push	r6
-     f34:	0e 94 f2 0b 	call	0x17e4	; 0x17e4 <printf>
+     f1a:	7f 92       	push	r7
+     f1c:	6f 92       	push	r6
+     f1e:	0e 94 f2 0b 	call	0x17e4	; 0x17e4 <printf>
 				menu_go(&menu, &controls.js);
-     f38:	be 01       	movw	r22, r28
-     f3a:	63 5f       	subi	r22, 0xF3	; 243
-     f3c:	7f 4f       	sbci	r23, 0xFF	; 255
-     f3e:	ce 01       	movw	r24, r28
-     f40:	47 96       	adiw	r24, 0x17	; 23
-     f42:	0e 94 f2 08 	call	0x11e4	; 0x11e4 <menu_go>
+     f22:	be 01       	movw	r22, r28
+     f24:	63 5f       	subi	r22, 0xF3	; 243
+     f26:	7f 4f       	sbci	r23, 0xFF	; 255
+     f28:	ce 01       	movw	r24, r28
+     f2a:	47 96       	adiw	r24, 0x17	; 23
+     f2c:	0e 94 f2 08 	call	0x11e4	; 0x11e4 <menu_go>
 				break;
-     f46:	0f 90       	pop	r0
-     f48:	0f 90       	pop	r0
-     f4a:	55 c0       	rjmp	.+170    	; 0xff6 <main+0x198>
+     f30:	0f 90       	pop	r0
+     f32:	0f 90       	pop	r0
+     f34:	5a c0       	rjmp	.+180    	; 0xfea <main+0x1cc>
 			case RUN_GAME:
 				printf("RUN_GAME");
-     f4c:	5f 92       	push	r5
-     f4e:	4f 92       	push	r4
-     f50:	0e 94 f2 0b 	call	0x17e4	; 0x17e4 <printf>
-				if(runGame(&controls)){
-     f54:	ce 01       	movw	r24, r28
-     f56:	01 96       	adiw	r24, 0x01	; 1
-     f58:	0e 94 81 06 	call	0xd02	; 0xd02 <runGame>
-     f5c:	0f 90       	pop	r0
-     f5e:	0f 90       	pop	r0
-     f60:	88 23       	and	r24, r24
-     f62:	09 f4       	brne	.+2      	; 0xf66 <main+0x108>
-     f64:	48 c0       	rjmp	.+144    	; 0xff6 <main+0x198>
+     f36:	83 e0       	ldi	r24, 0x03	; 3
+     f38:	92 e0       	ldi	r25, 0x02	; 2
+     f3a:	9f 93       	push	r25
+     f3c:	8f 93       	push	r24
+     f3e:	0e 94 f2 0b 	call	0x17e4	; 0x17e4 <printf>
+				if(runGame(&controls,&msgOut0)){
+     f42:	be 01       	movw	r22, r28
+     f44:	6f 5c       	subi	r22, 0xCF	; 207
+     f46:	7f 4f       	sbci	r23, 0xFF	; 255
+     f48:	ce 01       	movw	r24, r28
+     f4a:	01 96       	adiw	r24, 0x01	; 1
+     f4c:	0e 94 81 06 	call	0xd02	; 0xd02 <runGame>
+     f50:	0f 90       	pop	r0
+     f52:	0f 90       	pop	r0
+     f54:	88 23       	and	r24, r24
+     f56:	09 f4       	brne	.+2      	; 0xf5a <main+0x13c>
+     f58:	48 c0       	rjmp	.+144    	; 0xfea <main+0x1cc>
 					menu = mainMenu;
-     f66:	f8 8e       	std	Y+24, r15	; 0x18
-     f68:	ef 8a       	std	Y+23, r14	; 0x17
-     f6a:	45 c0       	rjmp	.+138    	; 0xff6 <main+0x198>
+     f5a:	f8 8e       	std	Y+24, r15	; 0x18
+     f5c:	ef 8a       	std	Y+23, r14	; 0x17
+     f5e:	45 c0       	rjmp	.+138    	; 0xfea <main+0x1cc>
 				}
 				break;
 			case HIGH_SCORE:
 				printf("HS");
-     f6c:	9f 92       	push	r9
-     f6e:	8f 92       	push	r8
-     f70:	0e 94 f2 0b 	call	0x17e4	; 0x17e4 <printf>
+     f60:	9f 92       	push	r9
+     f62:	8f 92       	push	r8
+     f64:	0e 94 f2 0b 	call	0x17e4	; 0x17e4 <printf>
 				if(displayHighScore(&controls.js)){
-     f74:	ce 01       	movw	r24, r28
-     f76:	0d 96       	adiw	r24, 0x0d	; 13
-     f78:	0e 94 29 08 	call	0x1052	; 0x1052 <displayHighScore>
-     f7c:	0f 90       	pop	r0
-     f7e:	0f 90       	pop	r0
-     f80:	88 23       	and	r24, r24
-     f82:	c9 f1       	breq	.+114    	; 0xff6 <main+0x198>
+     f68:	ce 01       	movw	r24, r28
+     f6a:	0d 96       	adiw	r24, 0x0d	; 13
+     f6c:	0e 94 29 08 	call	0x1052	; 0x1052 <displayHighScore>
+     f70:	0f 90       	pop	r0
+     f72:	0f 90       	pop	r0
+     f74:	88 23       	and	r24, r24
+     f76:	c9 f1       	breq	.+114    	; 0xfea <main+0x1cc>
 					menu = mainMenu;
-     f84:	f8 8e       	std	Y+24, r15	; 0x18
-     f86:	ef 8a       	std	Y+23, r14	; 0x17
-     f88:	36 c0       	rjmp	.+108    	; 0xff6 <main+0x198>
+     f78:	f8 8e       	std	Y+24, r15	; 0x18
+     f7a:	ef 8a       	std	Y+23, r14	; 0x17
+     f7c:	36 c0       	rjmp	.+108    	; 0xfea <main+0x1cc>
 				}
 				break;
 			case CALIBRATE_JS:
 				printf("Calibrate");
-     f8a:	bf 92       	push	r11
-     f8c:	af 92       	push	r10
-     f8e:	0e 94 f2 0b 	call	0x17e4	; 0x17e4 <printf>
+     f7e:	bf 92       	push	r11
+     f80:	af 92       	push	r10
+     f82:	0e 94 f2 0b 	call	0x17e4	; 0x17e4 <printf>
 				if(joystick_user_calibrate(&controls.js)){
-     f92:	ce 01       	movw	r24, r28
-     f94:	0d 96       	adiw	r24, 0x0d	; 13
-     f96:	0e 94 d0 03 	call	0x7a0	; 0x7a0 <joystick_user_calibrate>
-     f9a:	0f 90       	pop	r0
-     f9c:	0f 90       	pop	r0
-     f9e:	88 23       	and	r24, r24
-     fa0:	51 f1       	breq	.+84     	; 0xff6 <main+0x198>
+     f86:	ce 01       	movw	r24, r28
+     f88:	0d 96       	adiw	r24, 0x0d	; 13
+     f8a:	0e 94 d0 03 	call	0x7a0	; 0x7a0 <joystick_user_calibrate>
+     f8e:	0f 90       	pop	r0
+     f90:	0f 90       	pop	r0
+     f92:	88 23       	and	r24, r24
+     f94:	51 f1       	breq	.+84     	; 0xfea <main+0x1cc>
 					menu = mainMenu;
-     fa2:	f8 8e       	std	Y+24, r15	; 0x18
-     fa4:	ef 8a       	std	Y+23, r14	; 0x17
-     fa6:	27 c0       	rjmp	.+78     	; 0xff6 <main+0x198>
+     f96:	f8 8e       	std	Y+24, r15	; 0x18
+     f98:	ef 8a       	std	Y+23, r14	; 0x17
+     f9a:	27 c0       	rjmp	.+78     	; 0xfea <main+0x1cc>
 				}
 				break;
 			case SHOW_CAN_MSG:
 				printf("Show msg");
-     fa8:	df 92       	push	r13
-     faa:	cf 92       	push	r12
-     fac:	0e 94 f2 0b 	call	0x17e4	; 0x17e4 <printf>
+     f9c:	df 92       	push	r13
+     f9e:	cf 92       	push	r12
+     fa0:	0e 94 f2 0b 	call	0x17e4	; 0x17e4 <printf>
 				oled_mem_clear();
-     fb0:	0e 94 2e 06 	call	0xc5c	; 0xc5c <oled_mem_clear>
+     fa4:	0e 94 2e 06 	call	0xc5c	; 0xc5c <oled_mem_clear>
 				oled_mem_print(menu->tekst,0,0);
-     fb4:	8f 89       	ldd	r24, Y+23	; 0x17
-     fb6:	98 8d       	ldd	r25, Y+24	; 0x18
-     fb8:	40 e0       	ldi	r20, 0x00	; 0
-     fba:	60 e0       	ldi	r22, 0x00	; 0
-     fbc:	03 96       	adiw	r24, 0x03	; 3
-     fbe:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
+     fa8:	8f 89       	ldd	r24, Y+23	; 0x17
+     faa:	98 8d       	ldd	r25, Y+24	; 0x18
+     fac:	40 e0       	ldi	r20, 0x00	; 0
+     fae:	60 e0       	ldi	r22, 0x00	; 0
+     fb0:	03 96       	adiw	r24, 0x03	; 3
+     fb2:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
 				oled_mem_print("MSG0:",2,0);
-     fc2:	40 e0       	ldi	r20, 0x00	; 0
-     fc4:	62 e0       	ldi	r22, 0x02	; 2
-     fc6:	82 e2       	ldi	r24, 0x22	; 34
-     fc8:	92 e0       	ldi	r25, 0x02	; 2
-     fca:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
+     fb6:	40 e0       	ldi	r20, 0x00	; 0
+     fb8:	62 e0       	ldi	r22, 0x02	; 2
+     fba:	82 e2       	ldi	r24, 0x22	; 34
+     fbc:	92 e0       	ldi	r25, 0x02	; 2
+     fbe:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
 				oled_mem_print(msgInn0.data,3,0);
-     fce:	40 e0       	ldi	r20, 0x00	; 0
-     fd0:	63 e0       	ldi	r22, 0x03	; 3
-     fd2:	ce 01       	movw	r24, r28
-     fd4:	4c 96       	adiw	r24, 0x1c	; 28
-     fd6:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
+     fc2:	40 e0       	ldi	r20, 0x00	; 0
+     fc4:	63 e0       	ldi	r22, 0x03	; 3
+     fc6:	ce 01       	movw	r24, r28
+     fc8:	4c 96       	adiw	r24, 0x1c	; 28
+     fca:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
 				oled_mem_print("MSG1:",5,0);
-     fda:	40 e0       	ldi	r20, 0x00	; 0
-     fdc:	65 e0       	ldi	r22, 0x05	; 5
-     fde:	88 e2       	ldi	r24, 0x28	; 40
-     fe0:	92 e0       	ldi	r25, 0x02	; 2
-     fe2:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
+     fce:	40 e0       	ldi	r20, 0x00	; 0
+     fd0:	65 e0       	ldi	r22, 0x05	; 5
+     fd2:	88 e2       	ldi	r24, 0x28	; 40
+     fd4:	92 e0       	ldi	r25, 0x02	; 2
+     fd6:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
 				oled_mem_print(msgInn1.data,6,0);
-     fe6:	40 e0       	ldi	r20, 0x00	; 0
-     fe8:	66 e0       	ldi	r22, 0x06	; 6
-     fea:	ce 01       	movw	r24, r28
-     fec:	88 96       	adiw	r24, 0x28	; 40
-     fee:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
+     fda:	40 e0       	ldi	r20, 0x00	; 0
+     fdc:	66 e0       	ldi	r22, 0x06	; 6
+     fde:	ce 01       	movw	r24, r28
+     fe0:	88 96       	adiw	r24, 0x28	; 40
+     fe2:	0e 94 9c 05 	call	0xb38	; 0xb38 <oled_mem_print>
 				break;
-     ff2:	0f 90       	pop	r0
-     ff4:	0f 90       	pop	r0
+     fe6:	0f 90       	pop	r0
+     fe8:	0f 90       	pop	r0
 				
 		}
 		
 		//Interupts
 		switch(CAN_interrupt){
-     ff6:	86 e0       	ldi	r24, 0x06	; 6
-     ff8:	28 16       	cp	r2, r24
-     ffa:	21 f0       	breq	.+8      	; 0x1004 <main+0x1a6>
-     ffc:	87 e0       	ldi	r24, 0x07	; 7
-     ffe:	28 16       	cp	r2, r24
-    1000:	39 f0       	breq	.+14     	; 0x1010 <main+0x1b2>
-    1002:	0b c0       	rjmp	.+22     	; 0x101a <main+0x1bc>
+     fea:	26 e0       	ldi	r18, 0x06	; 6
+     fec:	52 16       	cp	r5, r18
+     fee:	21 f0       	breq	.+8      	; 0xff8 <main+0x1da>
+     ff0:	87 e0       	ldi	r24, 0x07	; 7
+     ff2:	58 16       	cp	r5, r24
+     ff4:	39 f0       	breq	.+14     	; 0x1004 <main+0x1e6>
+     ff6:	0b c0       	rjmp	.+22     	; 0x100e <main+0x1f0>
 			case ERR:
 				//printf("roFL eRRoR LOLz\n\r");
 				break;
 			case RX0:
 				//printf("RECEIVED ON RX0\n\r");
 				CAN_data_receive(&msgInn0, MCP_RXB0CTRL);
-    1004:	60 e6       	ldi	r22, 0x60	; 96
-    1006:	ce 01       	movw	r24, r28
-    1008:	49 96       	adiw	r24, 0x19	; 25
-    100a:	0e 94 4a 02 	call	0x494	; 0x494 <CAN_data_receive>
+     ff8:	60 e6       	ldi	r22, 0x60	; 96
+     ffa:	ce 01       	movw	r24, r28
+     ffc:	49 96       	adiw	r24, 0x19	; 25
+     ffe:	0e 94 4a 02 	call	0x494	; 0x494 <CAN_data_receive>
 				break;
-    100e:	05 c0       	rjmp	.+10     	; 0x101a <main+0x1bc>
+    1002:	05 c0       	rjmp	.+10     	; 0x100e <main+0x1f0>
 			case RX1:
 				//printf("RECEIVED ON RX1\n\r");
 				CAN_data_receive(&msgInn1, MCP_RXB1CTRL);
-    1010:	60 e7       	ldi	r22, 0x70	; 112
-    1012:	ce 01       	movw	r24, r28
-    1014:	85 96       	adiw	r24, 0x25	; 37
-    1016:	0e 94 4a 02 	call	0x494	; 0x494 <CAN_data_receive>
+    1004:	60 e7       	ldi	r22, 0x70	; 112
+    1006:	ce 01       	movw	r24, r28
+    1008:	85 96       	adiw	r24, 0x25	; 37
+    100a:	0e 94 4a 02 	call	0x494	; 0x494 <CAN_data_receive>
 				break;
 			default:
 
 				break;
 		}
-		CAN_int_clear(CAN_interrupt);
-    101a:	82 2d       	mov	r24, r2
-    101c:	0e 94 37 03 	call	0x66e	; 0x66e <CAN_int_clear>
-		oled_mem_update_screen();
-    1020:	0e 94 20 06 	call	0xc40	; 0xc40 <oled_mem_update_screen>
-	msgOut0.id = 0b00100000001;
-	msgOut0.priority = 1;
-
-    while(1){
-		//Main loop counter and blinker
-		mainLoopCounter++;
-    1024:	0f 5f       	subi	r16, 0xFF	; 255
-    1026:	1f 4f       	sbci	r17, 0xFF	; 255
-		if(!(mainLoopCounter%100)){
-    1028:	98 01       	movw	r18, r16
-    102a:	36 95       	lsr	r19
-    102c:	27 95       	ror	r18
-    102e:	36 95       	lsr	r19
-    1030:	27 95       	ror	r18
-    1032:	ab e7       	ldi	r26, 0x7B	; 123
-    1034:	b4 e1       	ldi	r27, 0x14	; 20
-    1036:	0e 94 26 0b 	call	0x164c	; 0x164c <__umulhisi3>
-    103a:	96 95       	lsr	r25
-    103c:	87 95       	ror	r24
-    103e:	38 9e       	mul	r3, r24
-    1040:	90 01       	movw	r18, r0
-    1042:	39 9e       	mul	r3, r25
-    1044:	30 0d       	add	r19, r0
-    1046:	11 24       	eor	r1, r1
-    1048:	02 17       	cp	r16, r18
-    104a:	13 07       	cpc	r17, r19
-    104c:	09 f4       	brne	.+2      	; 0x1050 <main+0x1f2>
-    104e:	50 cf       	rjmp	.-352    	; 0xef0 <main+0x92>
-    1050:	53 cf       	rjmp	.-346    	; 0xef8 <main+0x9a>
+		CAN_int_clear(CAN_interrupt);	
+    100e:	85 2d       	mov	r24, r5
+    1010:	0e 94 37 03 	call	0x66e	; 0x66e <CAN_int_clear>
+		
+		
+		//60hz tasks
+		if(TCNT3 > 33333){
+    1014:	80 91 88 00 	lds	r24, 0x0088
+    1018:	90 91 89 00 	lds	r25, 0x0089
+    101c:	86 33       	cpi	r24, 0x36	; 54
+    101e:	92 48       	sbci	r25, 0x82	; 130
+    1020:	08 f4       	brcc	.+2      	; 0x1024 <main+0x206>
+    1022:	44 cf       	rjmp	.-376    	; 0xeac <main+0x8e>
+			if(msgOut0.length){
+    1024:	8b a9       	ldd	r24, Y+51	; 0x33
+    1026:	88 23       	and	r24, r24
+    1028:	29 f0       	breq	.+10     	; 0x1034 <main+0x216>
+				CAN_message_send(&msgOut0);
+    102a:	ce 01       	movw	r24, r28
+    102c:	c1 96       	adiw	r24, 0x31	; 49
+    102e:	0e 94 3d 02 	call	0x47a	; 0x47a <CAN_message_send>
+				msgOut0.length = 0;
+    1032:	1b aa       	std	Y+51, r1	; 0x33
+			}
+			if(msgOut1.length){
+    1034:	8f ad       	ldd	r24, Y+63	; 0x3f
+    1036:	88 23       	and	r24, r24
+    1038:	29 f0       	breq	.+10     	; 0x1044 <main+0x226>
+				CAN_message_send(&msgOut1);
+    103a:	ce 01       	movw	r24, r28
+    103c:	cd 96       	adiw	r24, 0x3d	; 61
+    103e:	0e 94 3d 02 	call	0x47a	; 0x47a <CAN_message_send>
+				msgOut1.length = 0;
+    1042:	1f ae       	std	Y+63, r1	; 0x3f
+			}
+			
+			oled_mem_update_screen();
+    1044:	0e 94 20 06 	call	0xc40	; 0xc40 <oled_mem_update_screen>
+			TCNT3 = 0;	
+    1048:	10 92 89 00 	sts	0x0089, r1
+    104c:	10 92 88 00 	sts	0x0088, r1
+    1050:	2d cf       	rjmp	.-422    	; 0xeac <main+0x8e>
 
 00001052 <displayHighScore>:
  *  Author: sverrevr
@@ -3021,11 +3026,6 @@ menyNode* menu_init(){
     1082:	1f 93       	push	r17
     1084:	cf 93       	push	r28
     1086:	df 93       	push	r29
-// 	menyNode* reCalibrateJs = (menyNode*) malloc(sizeof(menyNode));
-// 	menyNode* newGame = (menyNode*) malloc(sizeof(menyNode));
-// 	menyNode* highScore = (menyNode*) malloc(sizeof(menyNode));
-	
-	
 	strcpy(options.tekst,			"Options       ");
     1088:	8f e0       	ldi	r24, 0x0F	; 15
     108a:	e4 e4       	ldi	r30, 0x44	; 68

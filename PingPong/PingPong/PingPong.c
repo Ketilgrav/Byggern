@@ -50,12 +50,14 @@ int main(void){
 	CAN_message msgInn1;
 	
 	CAN_message msgOut0;
-	msgOut0.data[0] = 'a';
-	msgOut0.data[1] = '\0';
-	msgOut0.length = 2;
-	msgOut0.id = 0b00100000001;
-	msgOut0.priority = 1;
-
+	msgOut0.length = 0;
+	CAN_message msgOut1;
+	msgOut1.length = 0;
+	
+	/*60hz timer*/
+	TCCR3B |= (1<<CS31); //1/8 prescaler
+	
+	
     while(1){
 		//Main loop counter and blinker
 		mainLoopCounter++;
@@ -80,7 +82,7 @@ int main(void){
 				break;
 			case RUN_GAME:
 				printf("RUN_GAME");
-				if(runGame(&controls)){
+				if(runGame(&controls,&msgOut0)){
 					menu = mainMenu;
 				}
 				break;
@@ -127,7 +129,22 @@ int main(void){
 
 				break;
 		}
-		CAN_int_clear(CAN_interrupt);
-		oled_mem_update_screen();
+		CAN_int_clear(CAN_interrupt);	
+		
+		
+		//60hz tasks
+		if(TCNT3 > 33333){
+			if(msgOut0.length){
+				CAN_message_send(&msgOut0);
+				msgOut0.length = 0;
+			}
+			if(msgOut1.length){
+				CAN_message_send(&msgOut1);
+				msgOut1.length = 0;
+			}
+			
+			oled_mem_update_screen();
+			TCNT3 = 0;	
+		}
     }
 }

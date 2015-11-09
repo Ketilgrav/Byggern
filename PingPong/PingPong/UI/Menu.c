@@ -19,13 +19,6 @@ menyNode highScore;
 menyNode canMsg;
 
 menyNode* menu_init(){
-// 	menyNode* mainMenu = (menyNode*) malloc(sizeof(menyNode));
-// 	menyNode* options = (menyNode*) malloc(sizeof(menyNode));
-// 	menyNode* reCalibrateJs = (menyNode*) malloc(sizeof(menyNode));
-// 	menyNode* newGame = (menyNode*) malloc(sizeof(menyNode));
-// 	menyNode* highScore = (menyNode*) malloc(sizeof(menyNode));
-	
-	
 	strcpy(options.tekst,			"Options       ");
 	strcpy(newGame.tekst,			"New Game      ");
 	strcpy(highScore.tekst,			"High scores   ");
