@@ -32,7 +32,7 @@ void motorbox_init();
 void motorbox_set_power(uint8_t dir, uint8_t power);
 int16_t motorbox_get_encoder();
 void motorbox_reset_encoder();
-void motorbox_set_percent(int8_t percent);
+void motorbox_set_percent(int16_t percent);
 uint8_t reverse_byte(uint8_t b);
 
 #endif /* MOTORBOX_H_ */

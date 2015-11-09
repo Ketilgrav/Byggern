@@ -9,14 +9,15 @@
 #ifndef REGULATOR_H_
 #define REGULATOR_H_
 #include "MotorDrivers/MotorBox.h"
+#include "MainInclude/MainInclude.h"
 
 typedef struct PI{
-	int8_t P;
-	int8_t I;
+	uint8_t P;
+	uint8_t I;
 	
-	int8_t u;
+	int16_t u;
 	
-	int16_t HundredTimesIntegralValue;
+	//int16_t MillionIntegralValue;
 } PI;
 
 void regulator_init(PI* pi_state);

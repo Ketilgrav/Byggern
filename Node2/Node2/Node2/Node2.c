@@ -58,8 +58,8 @@ int main(){
 		
 		regulator_increment(&pi_state,reg_ref);
 		motorbox_set_percent(pi_state.u);
-		printf("U:%i    ", (get_pos_from_percent(reg_ref)-motorbox_get_encoder())/(board_size/100));
-		printf("Encoder:%i    \r", motorbox_get_encoder());
+		//printf("U:%i    ", (get_pos_from_percent(reg_ref)-motorbox_get_encoder())/(board_size/100));
+		//printf("Encoder:%i    \r", motorbox_get_encoder());
 		
 		//printf("Encoder diff: %i       \r",motorbox_get_encoder());
 		//motorbox_reset_encoder();

@@ -10,7 +10,7 @@ void regulator_init(PI* pi_state){
 	pi_state->P = 4;
 	pi_state->I = 1;
 	pi_state->u= 0;
-	//pi_state->integralValue = 0;
+	//pi_state->MillionIntegralValue = 0;
 	
 	/* Setter opp klokken som beregner tiden mellom hver incrementering*/
 	//Bruker timer/counter 3 med normal opperation
@@ -19,11 +19,12 @@ void regulator_init(PI* pi_state){
 }
 
 void regulator_increment(PI* pi_state, int8_t ref_percent){
-	int8_t avvik = (get_pos_from_percent(ref_percent)-motorbox_get_encoder())/(board_size/100); //I prosent, -100er motor helt til høyre, mens vi vil helt til venstre
-	/*pi_state->integralValue+=avvik*TCNT3/F_CPU;
-	TCNT3 = 0;*/
-	
-	
+	int16_t refPos = get_pos_from_percent(ref_percent);
+	int16_t encoderPos = motorbox_get_encoder();
+	int16_t avvik = (refPos-encoderPos)/(board_size/100); //I prosent, -100er motor helt til høyre, mens vi vil helt til venstre
+	//pi_state->MillionIntegralValue+=avvik*TCNT3/(F_CPU/1000000);	
+	printf("Ref: %i   \tEncoder: %i    \tAvvik: %i    \r", refPos,encoderPos,avvik);
+	//TCNT3 = 0;
 	//Definerer brettet som venstre -4400, høyre 4400, encoder er fikset til å gi ut dette
 	//u_val = oversett refferansen  til possisjon - encoderen
 	//Må gjøre om til prosent siden det er det vi sender inn i motor power
@@ -37,7 +38,7 @@ void regulator_increment(PI* pi_state, int8_t ref_percent){
 	//Oppgradering: implementer I.
 	
 	//Oversetter refferansen til 
-	pi_state->u =  avvik * pi_state->P; /*+ pi_state->I*(pi_state->integralValue);*/
+	pi_state->u =  avvik /** pi_state->P*/ /*+ pi_state->MillionIntegralValue/1000000 * pi_state->I*/;
 }
 int16_t get_pos_from_percent(int8_t percent){
 	return (board_size/200) * percent;
