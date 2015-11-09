@@ -60,10 +60,7 @@ int main(void){
 	
     while(1){
 		//Main loop counter and blinker
-		mainLoopCounter++;
-		if(!(mainLoopCounter%100)){
-			toggle_bit(PORTB, PB0);
-		}
+
 		
 		//Oppdater tilstandene ut ifra input
 		controllers_update(&controls);
@@ -133,7 +130,11 @@ int main(void){
 		
 		
 		//60hz tasks
-		if(TCNT3 > 33333){
+		if(TCNT3 > (F_CPU/(8*60))){
+			mainLoopCounter++;
+			if(!(mainLoopCounter%60)){
+				toggle_bit(PORTB, PB0);
+			}
 			if(msgOut0.length){
 				CAN_message_send(&msgOut0);
 				msgOut0.length = 0;

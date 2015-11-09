@@ -17,6 +17,7 @@ void motorbox_init(){
 	motorbox_reset_encoder();
 }
 
+
 void motorbox_set_percent(int16_t percent){
 	if(percent > 100){
 		percent = 100;
@@ -24,11 +25,14 @@ void motorbox_set_percent(int16_t percent){
 	else if(percent < -100){
 		percent = -100;
 	}
-	if(percent < 0){
-		motorbox_set_power(!POS_DIR, -percent);
+	if(percent<10 && percent>-10){
+		motorbox_set_power(!POS_DIR, 0);
+	}
+	else if(percent < 0){
+		motorbox_set_power(!POS_DIR, -percent + 35);
 	}
 	else{
-		motorbox_set_power(POS_DIR, percent);
+		motorbox_set_power(POS_DIR, percent +35);
 	}
 }
 

@@ -11,16 +11,17 @@
 #include "MotorDrivers/MotorBox.h"
 #include "MainInclude/MainInclude.h"
 
-#define CONTROLLER_GAIN 0.01f
+#define CONTROLLER_GAIN 3
 
 typedef struct PI{
 	int8_t P;
-	int8_t I;
-	
+	float I;
+	int8_t D;
 	int16_t u;
 	
 	float integralValue;
 	float refPosValue;
+	int8_t prevVal;
 } PI;
 
 void regulator_init(PI* pi_state);
