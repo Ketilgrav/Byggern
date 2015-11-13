@@ -34,20 +34,7 @@ LINKER_SCRIPT_DEP:=
 # Every subdirectory with source files must be described here
 SUBDIRS :=  \
 ../Communication_drivers \
-../TouchDrivers \
-../src/ \
-../src/ASF/ \
-../src/ASF/common/ \
-../src/ASF/common/boards/ \
-../src/ASF/common/boards/user_board/ \
-../src/ASF/common/utils/ \
-../src/ASF/common/utils/interrupt/ \
-../src/ASF/common/utils/make/ \
-../src/ASF/mega/ \
-../src/ASF/mega/utils/ \
-../src/ASF/mega/utils/assembler/ \
-../src/ASF/mega/utils/preprocessor/ \
-../src/config/
+../TouchDrivers
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
@@ -57,7 +44,7 @@ C_SRCS +=  \
 ../TouchDrivers/oled.c \
 ../TouchDrivers/touch.c \
 ../TouchDrivers/touchdrivertest.c \
-../src/ASF/common/boards/user_board/init.c
+../TouchDrivers/touchPWM.c
 
 
 PREPROCESSING_SRCS +=  \
@@ -74,7 +61,7 @@ TouchDrivers/oled.o \
 TouchDrivers/qm_asm_tiny_mega.o \
 TouchDrivers/touch.o \
 TouchDrivers/touchdrivertest.o \
-src/ASF/common/boards/user_board/init.o
+TouchDrivers/touchPWM.o
 
 OBJS_AS_ARGS +=  \
 Communication_drivers/USB.o \
@@ -83,7 +70,7 @@ TouchDrivers/oled.o \
 TouchDrivers/qm_asm_tiny_mega.o \
 TouchDrivers/touch.o \
 TouchDrivers/touchdrivertest.o \
-src/ASF/common/boards/user_board/init.o
+TouchDrivers/touchPWM.o
 
 C_DEPS +=  \
 Communication_drivers/USB.d \
@@ -92,7 +79,7 @@ TouchDrivers/oled.d \
 TouchDrivers/qm_asm_tiny_mega.d \
 TouchDrivers/touch.d \
 TouchDrivers/touchdrivertest.d \
-src/ASF/common/boards/user_board/init.d
+TouchDrivers/touchPWM.d
 
 C_DEPS_AS_ARGS +=  \
 Communication_drivers/USB.d \
@@ -101,7 +88,7 @@ TouchDrivers/oled.d \
 TouchDrivers/qm_asm_tiny_mega.d \
 TouchDrivers/touch.d \
 TouchDrivers/touchdrivertest.d \
-src/ASF/common/boards/user_board/init.d
+TouchDrivers/touchPWM.d
 
 OUTPUT_FILE_PATH +=Node3USB.elf
 
@@ -146,13 +133,6 @@ Communication_drivers/%.o: ../Communication_drivers/%.c
 	
 
 TouchDrivers/%.o: ../TouchDrivers/%.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 4.8.1
-	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -DDEBUG -D_QMATRIX_ -D_ROTOR_SLIDER_ -DQT_DELAY_CYCLES=1 -DQT_NUM_CHANNELS=16 -DQT_MAX_NUM_ROTORS_SLIDERS=2 -DNUM_X_LINES=8 -DNUM_Y_LINES=2 -DNUM_X_PORTS=2 -DPORT_NUM_1=1 -DPORT_NUM_2=2 -DPORT_X_1=E -DPORT_X_2=C -DPORT_YA=C -DPORT_YB=F -DPORT_SMP=F -DSMP_PIN=5 -DF_CPU=16000000 -DNDEBUG -DBOARD=USER_BOARD  -I"../common/applications/user_application/user_board/config" -I"../src/config" -I"../src/ASF/common/boards" -I"../src/ASF/mega/utils" -I"../src/ASF/common/utils" -I"../src/ASF/mega/utils/preprocessor" -I"../src" -I"../src/ASF/common/boards/user_board"  -O1 -fdata-sections -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g3 -Wall -mmcu=at90usb1287 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-src/ASF/common/boards/user_board/%.o: ../src/ASF/common/boards/user_board/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.8.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -DDEBUG -D_QMATRIX_ -D_ROTOR_SLIDER_ -DQT_DELAY_CYCLES=1 -DQT_NUM_CHANNELS=16 -DQT_MAX_NUM_ROTORS_SLIDERS=2 -DNUM_X_LINES=8 -DNUM_Y_LINES=2 -DNUM_X_PORTS=2 -DPORT_NUM_1=1 -DPORT_NUM_2=2 -DPORT_X_1=E -DPORT_X_2=C -DPORT_YA=C -DPORT_YB=F -DPORT_SMP=F -DSMP_PIN=5 -DF_CPU=16000000 -DNDEBUG -DBOARD=USER_BOARD  -I"../common/applications/user_application/user_board/config" -I"../src/config" -I"../src/ASF/common/boards" -I"../src/ASF/mega/utils" -I"../src/ASF/common/utils" -I"../src/ASF/mega/utils/preprocessor" -I"../src" -I"../src/ASF/common/boards/user_board"  -O1 -fdata-sections -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g3 -Wall -mmcu=at90usb1287 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

@@ -10,7 +10,7 @@
 #define USB_H_
 
 #include "../MainInclude.h"
-
+void USB_init();
 
 
 #endif /* USB_H_ */

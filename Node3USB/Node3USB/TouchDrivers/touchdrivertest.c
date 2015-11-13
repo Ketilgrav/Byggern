@@ -11,7 +11,7 @@
 #include <util/delay.h>
 #include <stdlib.h>
 
-int main(void)
+int mainTest(void)
 {
 	_delay_ms(300);
 	

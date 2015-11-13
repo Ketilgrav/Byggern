@@ -6,6 +6,13 @@
  */ 
 
 /*
+DEafult controll pipe er 0. Litt tipping siden nr 1 har 256bytes, og ikke nr 0
+*/
+
+
+
+
+/*
 USB power on:
 Power on Pads regulator
 Configure PLL interface
@@ -22,26 +29,26 @@ Disable PLL
 Disable USB pad regulator
 */
 #include "USB.h"
-void USB_init(){
-	
-	//If that behavior represents a limitation for the Host application, the following work-around may be	used
-	//UVCONE og VBUSREQ	cleared
-	//VBUSHWC set (disables hardware controll of UVCON)
-	//PORTE7 set
-	//Device connection will be detected by SRPI flag.
-	
+
+void USB_init_general(){
 	USBCON |= (1<<USBE); //Enable USB. 0 - disable og reset
 	
-	//Host mode, bruke register for å bestemme mode (ikke harwarekobling), aktiverer pad regulator (trengs for å kjøre Usb)
-	UHWCON |= (0<<UIMOD) | (0<<UIDE) | (1<<UVREGE);
-	UHWCON |= (1<<UVCONE); //The Host must use the UVCON pin to drive an external power switch or regulator that powers the Vbus line. The UVCON pin is automatically asserted and set high by hardware when UVCONE and VBUSREQ bits are set by firmware
-	
+	//Må cleare detach før jeg går inn i host mode:
+	clear_bit(UDCON,DETACH);
 	
 	USBCON |= (1<<HOST); //Enable host mode
-	USBCON |= (1<<OTGPADE); //Wnable OTG pad som egentlig er VBUS pad. 
-	USBCON |= (0<<IDTE); //ID transition interupt generation 
-	USBCON |= (0<<VBUSTE); //Vbus transition interupt generation
+	clear_bit(USBCON, FRZCLK); //Unfreezer klokka.
+	USBCON |= (1<<OTGPADE); //Wnable OTG pad som egentlig er VBUS pad.
+	USBCON |= (1<<IDTE); //ID transition interupt generation
+	USBCON |= (1<<VBUSTE); //Vbus transition interupt generation
 	
+	clear_bit(UHWCON,UIMOD);	//Host mode,
+	clear_bit(UHWCON,UIDE);		//bruke register for å bestemme mode, istedet for UID som ikke er koblet til noe
+	set_bit(UHWCON, UVCONE);	//The Host must use the UVCON pin to drive an external power switch or regulator that powers the Vbus line. The UVCON pin is automatically asserted and set high by hardware when UVCONE and VBUSREQ bits are set by firmware
+	set_bit(UHWCON, UVREGE);	//aktiverer pad regulator (trengs for å kjøre Usb)
+		
+	
+
 	//Kan lese:
 	//(USBSTA & SPEED) 1=full speed mode, 0=low speed mode
 	//(USBSTA & ID) Statusen på UID pin
@@ -51,7 +58,7 @@ void USB_init(){
 	//(USBINT & IDTI) og (USBINT & VBUSTI) må cleares av software.
 	
 	OTGCON |= (1<<HNPREQ);	//1: aksepterer HNP
-	OTGCON |= (1<<SRPSEL);	//1: VBUS pulsing as SRP method, 0: data line pulsing as SRP
+	clear_bit(OTGCON, SRPSEL);	//1: VBUS pulsing as SRP method, 0: data line pulsing as SRP. Kan ikke pulse VBUS, så slik.
 	OTGCON |= (1<<VBUSHWC); //Set to disable hardware controll over UVCON pin
 	
 	//UVCON assert og deassert. Må gjøres av host
@@ -63,7 +70,12 @@ void USB_init(){
 	
 	//OTGIEN: Interupt enable for: suspend Time-out, HNP error, Role exchange, BCERRE b connect error, vbus error, srp interrupt
 	//OTGINT: Lese interuptene:
-	
+}
+
+
+
+void USB_init(){	
+	USB_init_general();
 	
 	//HC = Hardware cleared
 	//Host stuff:
@@ -87,9 +99,9 @@ void USB_init(){
 	
 	UPCONX &= ~(1<<PFREEZE); //Clear to unfreez, Freezes ved feil. Kan også freeze ved å sette til 1
 	
-	UPCONX |= (1<<INMODE); //Lar den sende infinite IN requests Om vi ikke har inf se UPINRQX
+	UPCONX |= (1<<INMODE);	//Lar den sende infinite IN requests Om vi ikke har inf se UPINRQX
 	UPCONX |= (0<<RSTDT);	//Reset data toggle til init verdi. HC
-	UPCONX |= (1<<PEN); //Pipe enable
+	UPCONX |= (1<<PEN);		//Pipe enable
 	
 	
 	//Velger pipe type
@@ -119,10 +131,15 @@ void USB_init(){
 	//UPINTX interputs, UPIENX enable
 	//RXIN er om vi ha fåt data, denne er viktig, se diagram på in ting.
 	
-	UPDATX = 0xFF; //Set/les byte fra/til pipe FIFO selected by PNUM
+	//UPDATX = 0xFF; //Set/les byte fra/til pipe FIFO selected by PNUM
 	//UPBCX; Byte count: Out: increase ved hver writing til pipe, decrement  after each byte sent.
 	//IN: Increase ved hver receivec, decrement ved hver lest av software.
 	//Så da er UPDATAX en byte, vi leser den, og da sendes inn en ny. UPBCX er antall bytes som venter?
-	//UPINT pipe interupt
+	//UPINT pipe interupt	
+}
+
+
+
+uint8_t USB_read(){
 	
 }

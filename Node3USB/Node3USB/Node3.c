@@ -5,9 +5,11 @@
  *  Author: sverrevr
  */ 
 
+#include "MainInclude.h"
+#include "Communication_drivers/USB.h"
 
-int main3(){
-	
+int main(){
+	USB_init();
 	while(1){
 		
 	}
