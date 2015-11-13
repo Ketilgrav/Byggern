@@ -30,7 +30,8 @@ Node2.d Node2.o: .././Node2.c .././CommunicationDrivers/can.h \
  .././../../../InterNodeHeaders/CanMessageFormat.h .././regulator.h \
  .././MotorDrivers/MotorBox.h \
  .././MotorDrivers/../MainInclude/MainInclude.h \
- .././MotorDrivers/../CommunicationDrivers/I2C.h
+ .././MotorDrivers/../CommunicationDrivers/I2C.h \
+ .././MotorDrivers/Solenoid.h
 
 .././CommunicationDrivers/can.h:
 
@@ -103,3 +104,5 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 .././MotorDrivers/../MainInclude/MainInclude.h:
 
 .././MotorDrivers/../CommunicationDrivers/I2C.h:
+
+.././MotorDrivers/Solenoid.h:

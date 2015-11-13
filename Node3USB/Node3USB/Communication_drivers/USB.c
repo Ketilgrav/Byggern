@@ -21,7 +21,7 @@ Disable USB interface
 Disable PLL
 Disable USB pad regulator
 */
-
+#include "USB.h"
 void USB_init(){
 	
 	//If that behavior represents a limitation for the Host application, the following work-around may be	used

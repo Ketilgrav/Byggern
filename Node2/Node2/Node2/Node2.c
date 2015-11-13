@@ -6,6 +6,7 @@
 #include "CommunicationDrivers/I2C.h"
 #include "../../../InterNodeHeaders/CanMessageFormat.h"
 #include "regulator.h"
+#include "MotorDrivers/Solenoid.h"
 
 int main(){
 	USART_init();
@@ -14,9 +15,11 @@ int main(){
 	adc_init();
 	I2C_init();
 	motorbox_init();
+	SOLENOID_DDR |= 1<<SOLENOID_BIT;
 	interrupt CAN_interrupt;
 	
 	CAN_message msgInn0;
+	uint8_t new_msg;
 	ADC_signal adcSignal;
 	PI pi_state;
 	int8_t reg_ref;
@@ -34,26 +37,38 @@ int main(){
 			case RX0:
 				//printf("Receved on RX0\n");
 				CAN_data_receive(&msgInn0, MCP_RXB0CTRL);
+				new_msg = 1;
 				break;
 			case RX1:
 				//printf("Receved on RX1\n");
 				CAN_data_receive(&msgInn0, MCP_RXB1CTRL);
+				new_msg = 1;
 				break;
 			default:
 				break;
 		}
 		CAN_int_clear(CAN_interrupt);
-		switch(msgInn0.data[CANMSG_PACKAGESPECIFIER]){
-			case PACKAGESPECIFIER_MOTORSIGNALS:
+		if(new_msg){
+			switch(msgInn0.data[CANMSG_PACKAGESPECIFIER]){
+				case PACKAGESPECIFIER_MOTORSIGNALS:
 				servo_set(msgInn0.data[CANMSG_SERVO]);
 				reg_ref = msgInn0.data[CANMSG_MOTOR];
-			break;
-			case PACKAGESPECIFIER_SWITCHOFF:
+				if(msgInn0.data[CANMSG_PUSH_BYTE]){
+					set_bit(SOLENOID_PORT,SOLENOID_BIT);
+				}
+				else{
+					//printf("Wait\r");
+					clear_bit(SOLENOID_PORT,SOLENOID_BIT);
+				}
+				break;
+				case PACKAGESPECIFIER_SWITCHOFF:
 				//printf("SWITCHING OFFF");
 				servo_set(0);
 				reg_ref = 0;
-			break;
+				break;
+			}	
 		}
+		new_msg = 0;
 		adc_measure(&adcSignal);
 		
 		regulator_increment(&pi_state,reg_ref);

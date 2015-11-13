@@ -6,7 +6,7 @@
  */ 
 
 
-int main(){
+int main3(){
 	
 	while(1){
 		
