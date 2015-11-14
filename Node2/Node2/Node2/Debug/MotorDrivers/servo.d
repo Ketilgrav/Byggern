@@ -1,5 +1,5 @@
 MotorDrivers/servo.d MotorDrivers/servo.o: ../MotorDrivers/servo.c \
- ../MotorDrivers/servo.h ../MotorDrivers/../MainInclude/MainInclude.h \
+ ../MotorDrivers/servo.h ../MotorDrivers/../MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -24,7 +24,7 @@ MotorDrivers/servo.d MotorDrivers/servo.o: ../MotorDrivers/servo.c \
 
 ../MotorDrivers/servo.h:
 
-../MotorDrivers/../MainInclude/MainInclude.h:
+../MotorDrivers/../MainInclude.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h:
 

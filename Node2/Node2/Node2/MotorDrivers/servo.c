@@ -5,7 +5,7 @@
  *  Author: sverrevr
  */ 
 #include "servo.h"
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 
 void servo_init(){
 	set_bit(PWM_DDR, PWM_bit);

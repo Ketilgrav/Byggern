@@ -74,7 +74,7 @@ void OLED_init(){
 	oled_control = 0xaf;    // display on
 	
 	
-	oled_mem_clear();
+	oled_clear();
 }
 
 void oled_home(){
@@ -94,13 +94,13 @@ void oled_moveRight(uint8_t lsb, uint8_t msb){
 	oled_control = 0x10|msb;
 }
 
-void oled_clear_line(uint8_t line){
+/*void oled_clear_line(uint8_t line){
 	oled_goto_line(line);
 	for(uint8_t i = 0; i<128; ++i){
-		oled_print(" ");
+		oled_direct_print(" ");
 	}
 	oled_goto_line(line);
-}
+}*/
 
 void oled_pos(uint8_t row,uint8_t column){
 	oled_control = 0xB0 | (row%8);			//Sett Linje
@@ -108,45 +108,46 @@ void oled_pos(uint8_t row,uint8_t column){
 	oled_control = 0x10 | (column / 0x10);	//Sett msb kolonne
 }
 
-void oled_print(char tekst[]){
+/*
+void oled_direct_print(char tekst[]){
 	//Må trekke fra 32 for å slå opp i font.
 	for(uint8_t i = 0; tekst[i] != '\0' && i<16; ++i){
 		if(tekst[i] == '-'){
 			switch(tekst[i+1]){
 				case '^':
-					oled_print_char(127);
+					oled_direct_print_char(127);
 					i++;
 					break;
 				case 'v':
-					oled_print_char(128);
+					oled_direct_print_char(128);
 					i++;
 					break;
 				case '<':
-					oled_print_char(129);
+					oled_direct_print_char(129);
 					i++;
 					break;
 				case '>':
-					oled_print_char(130);
+					oled_direct_print_char(130);
 					i++;
 					break;
 				case 's':
-					oled_print_char(131);
-					oled_print_char(132);
+					oled_direct_print_char(131);
+					oled_direct_print_char(132);
 					i++;
 					break;
 				default:
-					oled_print_char('-');
+					oled_direct_print_char('-');
 					break;
 					
 			}
 		}
 		else{
-			oled_print_char(tekst[i]);	
+			oled_direct_print_char(tekst[i]);	
 		}
 	}
 }
 
-void oled_print_char(char ch){
+void oled_direct_print_char(char ch){
 	//Må trekke fra 32 for å slå opp i font.
 	for(int j = 0; j<8; ++j){
 		oled_data = pgm_read_byte(&font[ch-asciiOffset][j]);
@@ -158,8 +159,8 @@ void oled_clear_screen(){
 		oled_clear_line(i);
 	}
 }
-
-void oled_mem_print(char tekst[], uint8_t lineNr, uint8_t charStartPoint){
+*/
+void oled_print(char tekst[], uint8_t lineNr, uint8_t charStartPoint){
 	if(lineNr > 7){
 		lineNr = 7;
 	}
@@ -169,56 +170,57 @@ void oled_mem_print(char tekst[], uint8_t lineNr, uint8_t charStartPoint){
 		if(tekst[i] == '-'){
 			switch(tekst[i+1]){
 				case '^':
-				oled_mem_print_char(127, lineNr, i+charStartPoint);
+				oled_print_char(127, lineNr, i+charStartPoint);
 				i++;
 				break;
 				case 'v':
-				oled_mem_print_char(128, lineNr, i+charStartPoint);
+				oled_print_char(128, lineNr, i+charStartPoint);
 				i++;
 				break;
 				case '<':
-				oled_mem_print_char(129, lineNr, i+charStartPoint);
+				oled_print_char(129, lineNr, i+charStartPoint);
 				i++;
 				break;
 				case '>':
-				oled_mem_print_char(130, lineNr, i+charStartPoint);
+				oled_print_char(130, lineNr, i+charStartPoint);
 				i++;
 				break;
 				case 's':
-				oled_mem_print_char(131, lineNr, i+charStartPoint);
+				oled_print_char(131, lineNr, i+charStartPoint);
 				i++;
-				oled_mem_print_char(132, lineNr, i+charStartPoint);
+				oled_print_char(132, lineNr, i+charStartPoint);
 				break;
 				default:
-				oled_mem_print_char('-', lineNr, i+charStartPoint);
+				oled_print_char('-', lineNr, i+charStartPoint);
 				break;
 				
 			}
 		}
 		else{
-			oled_mem_print_char(tekst[i], lineNr, i+charStartPoint);
+			oled_print_char(tekst[i], lineNr, i+charStartPoint);
 		}
 	}
 }
 
-void oled_mem_print_char(char ch, uint8_t line, uint8_t loc){
+void oled_print_char(char ch, uint8_t line, uint8_t loc){
 	//Må trekke fra 32 for å slå opp i font.
 	for(int j = 0; j<8; ++j){
 		oled_mem_line_loc(line, loc, j) = pgm_read_byte(&font[ch-asciiOffset][j]);
 	}
 }
 
-void oled_mem_update_screen(){
+void oled_clear(){
+	volatile char* memBegin = oled_mem_begin;
+	for(unsigned int i = 0; i < 1024; ++i){
+		*(memBegin+i) = 0x00;
+	}
+}
+
+
+void oled_update_screen(){
 	oled_goto_line(0);
 	volatile char* memBegin = oled_mem_begin;
 	for(unsigned int i = 0; i < 1024; ++i){
 		oled_data = *(memBegin+i);
-	}
-}
-
-void oled_mem_clear(){
-	volatile char* memBegin = oled_mem_begin;
-	for(unsigned int i = 0; i < 1024; ++i){
-		*(memBegin+i) = 0x00;
 	}
 }

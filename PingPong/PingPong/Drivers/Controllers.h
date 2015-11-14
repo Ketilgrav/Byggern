@@ -9,7 +9,7 @@
 #ifndef CONTROLLERS_H_
 #define CONTROLLERS_H_
 
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 #include "../Drivers/ADC_Driver.h"
 
 #define channelX 1
@@ -24,51 +24,40 @@
 #define btn_B read_bit(PINB,PB3)
 
 typedef struct JoyStick{
-	uint8_t x_voltage;
-	uint8_t y_voltage;
-	int8_t x_percent;
-	int8_t y_percent;
-	
-	int8_t x_descreet;
-	int8_t y_descreet;
-	
-	int8_t x_descreet_edge;
-	int8_t y_descreet_edge;
-	
-	uint8_t x_rest;
-	uint8_t y_rest;
+	uint8_t voltage;
+	int8_t percent;
+	int8_t descreet;
+	int8_t descreet_edge;	
+	uint8_t rest;
 } JoyStick;
 
 typedef struct Slider{
-	uint8_t l_voltage;
-	int8_t l_percent;
-	int8_t l_descreet;
-	uint8_t r_voltage;
-	int8_t r_percent;
-	int8_t r_descreet;
+	uint8_t voltage;
+	int8_t percent;
+	int8_t descreet;
 } Slider;
 
-typedef struct Buttons{
-	uint8_t A;
-	uint8_t B;
-	uint8_t A_prev;
-	uint8_t B_prev;
-	uint8_t A_count;
-	uint8_t B_count;
-} Buttons;
+typedef struct Button{
+	uint8_t state;
+	uint8_t edge;
+	uint8_t pressCount;
+} Button;
 
 typedef struct Controls{
-	Buttons btns;
-	Slider sliders;
-	JoyStick js;
+	Button btnL;
+	Button btnR;
+	Slider sliderL;
+	Slider sliderR;
+	JoyStick jsX;
+	JoyStick jsY;
 } Controls;
 
-void joystick_calibrate(JoyStick* js);
-uint8_t joystick_user_calibrate(JoyStick* js);
-void joystick_update(JoyStick* js);
+void joystick_calibrate(JoyStick* jsX, JoyStick* jsY);
+uint8_t joystick_user_calibrate(Controls* control);
+void joystick_update(JoyStick* jsX, JoyStick* jsY);
 int8_t joystick_descreet(int8_t val);
-void slider_update(Slider* sl);
+void slider_update(Slider* slL, Slider* slR);
 void controllers_init();
-void read_button(Buttons* btns);
+void read_button(Button* btnL, Button* btnR);
 void controllers_update(Controls* controls);
 #endif /* JOYSTICK_H_ */

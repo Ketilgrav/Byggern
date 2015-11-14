@@ -9,7 +9,7 @@
 #ifndef ADC_DRIVER_H_
 #define ADC_DRIVER_H_
 
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 
 #define INTR_DDR DDRB
 #define INTR_PORT PORTB

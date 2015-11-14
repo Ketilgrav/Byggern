@@ -5,7 +5,7 @@
  *  Author: sverrevr
 */ 
 
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 #include "I2C.h"
 #include "I2C_defines.h"
 

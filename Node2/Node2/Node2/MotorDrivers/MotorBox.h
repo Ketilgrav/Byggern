@@ -9,7 +9,7 @@
 #ifndef MOTORBOX_H_
 #define MOTORBOX_H_
 
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 #include "../CommunicationDrivers/I2C.h"
 
 #define board_size 8800

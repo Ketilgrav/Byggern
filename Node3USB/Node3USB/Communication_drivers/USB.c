@@ -69,6 +69,7 @@ void USB_init_general(){
 	//Kan ha spesielle timer ting nederst side 259
 	
 	//OTGIEN: Interupt enable for: suspend Time-out, HNP error, Role exchange, BCERRE b connect error, vbus error, srp interrupt
+	OTGIEN = 0xFF;
 	//OTGINT: Lese interuptene:
 }
 
@@ -77,24 +78,36 @@ void USB_init_general(){
 void USB_init(){	
 	USB_init_general();
 	
-	//HC = Hardware cleared
-	//Host stuff:
-	//Må disable DETACH først
-	
-	UHCON |= (0<<RESUME);	//Sender resume signal. Kun ved SOFEN = 1. HC
-	UHCON |= (0<<RESET);	//Sender USB reset signal. HC
+	UHCON |= (1<<RESUME);	//Sender resume signal. Kun ved SOFEN = 1. HC
+	UHCON |= (1<<RESET);	//Sender USB reset signal. HC
 	UHCON |= (1<<SOFEN);	//Generer SOF på busen i fullspeed, keep-alive i low speed. 0-idle usb bus
 	
+	
 	//TOp 293 for interupts. Host wakeup, Host start of frame, upstream resume, downstream resume, usb reset sent, device disconnection, device connection
+	UHIEN = 0xFF;
 	 
 	//USB host adress
-	UHADDR = 0x99; //Hva skal vi velge?
+	UHADDR = 0x67; //Hva skal vi velge?
 	//Frame number: ligger i de 11 første bitene på UHFNUM, kan endres
 	//UHFLEN data frame length transmited
 	
 	
-	//Herfra pipe nr 0
-	UPNUM |= 0b000; //Slect pipe number 0
+	/*//Pipe 0, default controll pipe:
+	UPNUM |= 0b000;
+	clear_bit(UPCONX,PFREEZE);
+	set_bit(UPCONX, INMODE);
+	set_bit(UPCONX, PEN);
+	
+	UPCFG0X |= 0b00 << PEPNUM0;
+	UPCFG0X |= 0b00 << PTOKEN0;
+	UPCFG0X |= 1 << PEPNUM0;
+	
+	UPCFG1X |= 0b011 << PSIZE0;
+	UPCFG1X |= 0b00 << PBK0;*/
+	
+	
+	//Pipe 1
+	UPNUM = 0b001; //Slect pipe number 0
 	//uprst sende reset til en pipe, pipe 0 er bit 0, pipe 6 er bit 6
 	
 	UPCONX &= ~(1<<PFREEZE); //Clear to unfreez, Freezes ved feil. Kan også freeze ved å sette til 1

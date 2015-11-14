@@ -9,7 +9,7 @@
 #ifndef REGULATOR_H_
 #define REGULATOR_H_
 #include "MotorDrivers/MotorBox.h"
-#include "MainInclude/MainInclude.h"
+#include "MainInclude.h"
 
 #define CONTROLLER_GAIN 3
 

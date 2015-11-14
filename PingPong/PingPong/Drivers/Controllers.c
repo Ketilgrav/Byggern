@@ -8,65 +8,66 @@
 #include "Controllers.h"
 
 void controllers_init(){
-		clear_bit(DDRB, PB2);
-		clear_bit(DDRB, PB3);
+	clear_bit(DDRB, PB2);
+	clear_bit(DDRB, PB3);
 }
 
 
-void joystick_calibrate(JoyStick* js){
-	js->x_rest = ADC_convert(channelX);
-	js->y_rest = ADC_convert(channelY);
+void joystick_calibrate(JoyStick* jsX, JoyStick* jsY){
+	jsX->rest = ADC_convert(channelX);
+	jsY->rest = ADC_convert(channelY);
 }
 
-uint8_t joystick_user_calibrate(JoyStick* js){
-	oled_mem_clear();
-	oled_mem_print("Calibrating JS: ",0,0);
-	oled_mem_print("Press A to      ",2,0);
-	oled_mem_print("calibrate       ",3,0);
+uint8_t joystick_user_calibrate(Controls* control){
+	oled_clear();
+	oled_print("Calibrating JS: ",0,0);
+	oled_print("Press R to      ",2,0);
+	oled_print("calibrate       ",3,0);
 	
-	if(btn_A){
-		joystick_calibrate(js);		
+	if(control->btnR.edge){
+		joystick_calibrate(&control->jsX,&control->jsY);		
 		return 1;
 	}
 	return 0;
 	
 }
 
-void joystick_update(JoyStick* js){
-	js->x_voltage = ADC_convert(channelX);
-	js->y_voltage = ADC_convert(channelY);
-	if(js->x_voltage <= js->x_rest){
-		js->x_percent = (js->x_voltage - js->x_rest)*100/(js->x_rest-1);
+void joystick_update(JoyStick* jsX, JoyStick* jsY){
+	jsX->voltage = ADC_convert(channelX);
+	jsY->voltage = ADC_convert(channelY);
+	
+	if(jsX->voltage <= jsX->rest){
+		jsX->percent = (jsX->voltage - jsX->rest)*100/(jsX->rest-1);
 	}
 	else{
-		js->x_percent = (js->x_voltage - js->x_rest)*100/(255-js->x_rest);
+		jsX->percent = (jsX->voltage - jsX->rest)*100/(255-jsX->rest);
 	}
-	if(js->y_voltage <= js->y_rest){
-		js->y_percent = (js->y_voltage - js->y_rest)*100/(js->y_rest-1);
-	}
-	else{
-		js->y_percent = (js->y_voltage - js->y_rest)*100/(255-js->y_rest);
-	}
-	
-	int8_t xDescTemp = joystick_descreet(js->x_percent);
-	int8_t yDescTemp = joystick_descreet(js->y_percent);
-	
-	if(xDescTemp != js->x_descreet){
-		js->x_descreet_edge = xDescTemp;
+	if(jsY->voltage <= jsY->rest){
+		jsY->percent = (jsY->voltage - jsY->rest)*100/(jsY->rest-1);
 	}
 	else{
-		js->x_descreet_edge = 0;
+		jsY->percent = (jsY->voltage - jsY->rest)*100/(255-jsY->rest);
 	}
 	
-	if(yDescTemp != js->y_descreet){
-		js->y_descreet_edge = yDescTemp;
+	int8_t xDescTemp = joystick_descreet(jsX->percent);
+	int8_t yDescTemp = joystick_descreet(jsY->percent);
+	
+	if(xDescTemp != jsX->descreet){
+		jsX->descreet_edge = xDescTemp;
 	}
 	else{
-		js->y_descreet_edge = 0;
+		jsX->descreet_edge = 0;
 	}
 	
-	js->x_descreet = xDescTemp;
-	js->y_descreet = yDescTemp;
+	if(yDescTemp != jsY->descreet){
+		jsY->descreet_edge = yDescTemp;
+	}
+	else{
+		jsY->descreet_edge = 0;
+	}
+	
+	jsX->descreet = xDescTemp;
+	jsY->descreet = yDescTemp;
 	
 }
 
@@ -83,58 +84,57 @@ int8_t joystick_descreet(int8_t val){
 }
 
 
-void slider_update(Slider* sl){
+void slider_update(Slider* slL, Slider* slR){
 	uint8_t r_voltage = ADC_convert(channel_R_slider);
 	uint8_t l_voltage = ADC_convert(channel_L_slider);
 	
-	if(l_voltage < sl->l_voltage - slack_update_slider  || l_voltage > sl->l_voltage + slack_update_slider){
-		sl->l_voltage = l_voltage;
-		sl->l_percent = (2*sl->l_voltage/2.55) - 100;
-		if(sl->l_percent < 50-slack_slider){
-			sl->l_descreet = -1;
+	if(l_voltage < slL->voltage - slack_update_slider  || l_voltage > slL->voltage + slack_update_slider){
+		slL->voltage = l_voltage;
+		slL->percent = (2*slL->voltage/2.55) - 100;
+		if(slL->percent < 50-slack_slider){
+			slL->descreet = -1;
 		}
-		else if(sl->l_percent > 50 + slack_slider){
-			sl->l_descreet = + 1;
-		}
-		else{
-			sl->l_descreet = 0;
-		};
-	}
-	if(r_voltage < sl->r_voltage - slack_update_slider  || r_voltage > sl->r_voltage + slack_update_slider){
-		sl->r_voltage = r_voltage;
-		sl->r_percent = (2*sl->r_voltage/2.55) - 100;
-		if(sl->r_percent < 50 - slack_slider){
-			sl->r_descreet =	-1;
-		}
-		else if(sl->r_percent > 50 + slack_slider){
-			sl->r_descreet = + 1;
+		else if(slL->percent > 50 + slack_slider){
+			slL->descreet = + 1;
 		}
 		else{
-			sl->r_descreet = 0;
+			slL->descreet = 0;
 		};
 	}
-
-	
+	if(r_voltage < slR->voltage - slack_update_slider  || r_voltage > slR->voltage + slack_update_slider){
+		slR->voltage = r_voltage;
+		slR->percent = (2*slR->voltage/2.55) - 100;
+		if(slR->percent < 50 - slack_slider){
+			slR->descreet =	-1;
+		}
+		else if(slR->percent > 50 + slack_slider){
+			slR->descreet = + 1;
+		}
+		else{
+			slR->descreet = 0;
+		};
+	}
 }
 
-void read_button(Buttons* btns){
-	btns->A = 0;
-	btns->B = 0;
-	if (btn_A != btns->A_prev && btns->A_prev == 0){
-		btns->A = 1;
-		btns->A_count++;
-	}
-	if (btn_B != btns->B_prev && btns->B_prev == 0){
-		btns->B = 1;
-		btns->B_count++;
-	}
-	btns->A_prev = btn_A;
-	btns->B_prev = btn_B;
+void read_button(Button* btnL, Button* btnR){	
+	btnL->edge = 0;
+	btnR->edge = 0;
 	
+	if (btn_A != btnL->state && btnL->state == 0){
+		btnL->edge = 1;
+		btnL->pressCount++;
+	}
+	if (btn_B != btnR->state && btnR->state == 0){
+		btnR->edge = 1;
+		btnR->pressCount++;
+	}
+	
+	btnL->state = btn_A;
+	btnR->state = btn_B;
 }
 
 void controllers_update(Controls* controls){
-		joystick_update(&controls->js);
-		slider_update(&controls->sliders);
-		read_button(&controls->btns);
+		joystick_update(&controls->jsX,&controls->jsY);
+		slider_update(&controls->sliderL,&controls->sliderR);
+		read_button(&controls->btnL,&controls->btnR);
 }

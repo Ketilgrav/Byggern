@@ -10,9 +10,9 @@
 #define MENU_H_
 
 #include "../Drivers/Controllers.h"
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 
-enum Tilstand {MENU = 0, RUN_GAME = 1, HIGH_SCORE = 2, CALIBRATE_JS=3, SHOW_CAN_MSG=4};
+enum Tilstand {MENU = 0, RUN_GAME = 1, HIGH_SCORE = 2, CALIBRATE_JS=3, SHOW_CAN_MSG=4, CNTRL_JS=5, CNTRL_SENS=6};
 
 typedef struct menyNode{
 	enum Tilstand tilstand;
@@ -24,7 +24,7 @@ typedef struct menyNode{
 }menyNode;
 
 menyNode* menu_init();
-void menu_go(menyNode** meny, JoyStick* js);
+void menu_go(menyNode** meny, Controls* controls);
 void flyttPil(uint8_t* nivaa, JoyStick* js, uint8_t nBarn);
 
 #endif /* MENU_H_ */

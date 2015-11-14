@@ -7,12 +7,12 @@
 
 #include "HighScore.h"
 
-uint8_t displayHighScore(JoyStick* js){
-	oled_mem_clear();
-	oled_mem_print("Highscore",0,0);
-	oled_mem_print("  Per: 1024",2,0);
+uint8_t displayHighScore(Controls* control){
+	oled_clear();
+	oled_print("Highscore",0,0);
+	oled_print("  Per: 1024",2,0);
 	
-	if(js->x_descreet_edge < 0){
+	if(control->jsX.descreet_edge < 0){
 		return 1;
 	}
 	return 0;

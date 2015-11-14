@@ -1,4 +1,4 @@
-PingPong.d PingPong.o: .././PingPong.c .././MainInclude/MainInclude.h \
+PingPong.d PingPong.o: .././PingPong.c .././MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -16,30 +16,28 @@ PingPong.d PingPong.o: .././PingPong.c .././MainInclude/MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h \
- .././MainInclude/../Drivers/OLED.h \
- .././MainInclude/../Drivers/../MainInclude/MainInclude.h \
- .././MainInclude/../Drivers/../Etc/Font.h \
+ .././Drivers/OLED.h .././Drivers/../MainInclude.h \
+ .././Drivers/../Etc/Font.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h \
- .././Drivers/UsartDriver.h .././Drivers/../MainInclude/MainInclude.h \
- .././Drivers/external_SRAM.h .././Drivers/ADC_Driver.h \
- .././Drivers/Controllers.h .././Drivers/../Drivers/ADC_Driver.h \
- .././Drivers/OLED.h .././UI/Menu.h .././UI/../Drivers/Controllers.h \
- .././UI/../MainInclude/MainInclude.h .././Game/Game.h \
- .././Game/../MainInclude/MainInclude.h \
+ .././Drivers/UsartDriver.h .././Drivers/external_SRAM.h \
+ .././Drivers/ADC_Driver.h .././Drivers/Controllers.h \
+ .././Drivers/../Drivers/ADC_Driver.h .././UI/Menu.h \
+ .././UI/../Drivers/Controllers.h .././UI/../MainInclude.h \
+ .././Game/Game.h .././Game/../MainInclude.h \
  .././Game/../Drivers/Controllers.h \
  .././Game/../Communication_drivers/can.h \
  .././Game/../Communication_drivers/mcp2515.h \
- .././Game/../Communication_drivers/../MainInclude/MainInclude.h \
+ .././Game/../Communication_drivers/../MainInclude.h \
  .././Game/../Communication_drivers/spi.h \
  .././Game/../Communication_drivers/MCP2515_register.h \
  .././Game/../../../InterNodeHeaders/CanMessageFormat.h \
  .././Game/../Communication\ drivers/can.h .././UI/HighScore.h \
  .././Communication_drivers/can.h
 
-.././MainInclude/MainInclude.h:
+.././MainInclude.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -75,11 +73,11 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h:
 
-.././MainInclude/../Drivers/OLED.h:
+.././Drivers/OLED.h:
 
-.././MainInclude/../Drivers/../MainInclude/MainInclude.h:
+.././Drivers/../MainInclude.h:
 
-.././MainInclude/../Drivers/../Etc/Font.h:
+.././Drivers/../Etc/Font.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
 
@@ -91,8 +89,6 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 .././Drivers/UsartDriver.h:
 
-.././Drivers/../MainInclude/MainInclude.h:
-
 .././Drivers/external_SRAM.h:
 
 .././Drivers/ADC_Driver.h:
@@ -101,17 +97,15 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 .././Drivers/../Drivers/ADC_Driver.h:
 
-.././Drivers/OLED.h:
-
 .././UI/Menu.h:
 
 .././UI/../Drivers/Controllers.h:
 
-.././UI/../MainInclude/MainInclude.h:
+.././UI/../MainInclude.h:
 
 .././Game/Game.h:
 
-.././Game/../MainInclude/MainInclude.h:
+.././Game/../MainInclude.h:
 
 .././Game/../Drivers/Controllers.h:
 
@@ -119,7 +113,7 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 .././Game/../Communication_drivers/mcp2515.h:
 
-.././Game/../Communication_drivers/../MainInclude/MainInclude.h:
+.././Game/../Communication_drivers/../MainInclude.h:
 
 .././Game/../Communication_drivers/spi.h:
 

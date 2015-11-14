@@ -1,5 +1,5 @@
 #include "CommunicationDrivers/can.h"
-#include "MainInclude/MainInclude.h"
+#include "MainInclude.h"
 #include "CommunicationDrivers/UsartDriver.h"
 #include "MotorDrivers/servo.h"
 #include "InternalDrivers/adc.h"
@@ -7,8 +7,10 @@
 #include "../../../InterNodeHeaders/CanMessageFormat.h"
 #include "regulator.h"
 #include "MotorDrivers/Solenoid.h"
+#include "SensorDrivers/HC-SR04.h"
 
 int main(){
+	/*INITIALISATION*/
 	USART_init();
 	CAN_init();
 	servo_init();
@@ -16,31 +18,32 @@ int main(){
 	I2C_init();
 	motorbox_init();
 	SOLENOID_DDR |= 1<<SOLENOID_BIT;
-	interrupt CAN_interrupt;
 	
-	CAN_message msgInn0;
+	/*Tillstandsvariable*/
+	interrupt CAN_interrupt;
 	uint8_t new_msg;
+	CAN_message msgInn0;
 	ADC_signal adcSignal;
 	PI pi_state;
-	int8_t reg_ref;
+	int8_t pos_ref;
+	uint16_t encoder;
 	regulator_init(&pi_state);
+	
 	while(1){
-		uint16_t encoder = motorbox_get_encoder();
+		printf("%u   \r",HCSR04_measure());
+		encoder = motorbox_get_encoder();
 		CAN_interrupt = CAN_int();
 		switch(CAN_interrupt){
 			case NOINT:
-				//printf("No intrpt\n");
 				break;
 			case ERR:
-				//printf("Error\n");
+				printf("CAN ERROR");
 				break;
 			case RX0:
-				//printf("Receved on RX0\n");
 				CAN_data_receive(&msgInn0, MCP_RXB0CTRL);
 				new_msg = 1;
 				break;
 			case RX1:
-				//printf("Receved on RX1\n");
 				CAN_data_receive(&msgInn0, MCP_RXB1CTRL);
 				new_msg = 1;
 				break;
@@ -52,7 +55,7 @@ int main(){
 			switch(msgInn0.data[CANMSG_PACKAGESPECIFIER]){
 				case PACKAGESPECIFIER_MOTORSIGNALS:
 				servo_set(msgInn0.data[CANMSG_SERVO]);
-				reg_ref = msgInn0.data[CANMSG_MOTOR];
+				pos_ref = msgInn0.data[CANMSG_MOTOR];
 				if(msgInn0.data[CANMSG_PUSH_BYTE]){
 					set_bit(SOLENOID_PORT,SOLENOID_BIT);
 				}
@@ -62,16 +65,15 @@ int main(){
 				}
 				break;
 				case PACKAGESPECIFIER_SWITCHOFF:
-				//printf("SWITCHING OFFF");
-				servo_set(0);
-				reg_ref = 0;
+					//printf("SWITCHING OFFF");
+					servo_set(0);
 				break;
 			}	
 		}
 		new_msg = 0;
 		adc_measure(&adcSignal);
 		
-		regulator_increment(&pi_state,reg_ref);
+		regulator_increment(&pi_state,pos_ref);
 		motorbox_set_percent(pi_state.u);
 	}
 	return 0;

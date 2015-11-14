@@ -9,7 +9,7 @@
 #ifndef SPI_H_
 #define SPI_H_
 
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 
 #define slave_cs_bit 0
 #define slave_cs_reg PORTB

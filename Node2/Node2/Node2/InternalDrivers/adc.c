@@ -4,7 +4,7 @@
  * Created: 23.10.2015 15:56:56
  *  Author: sverrevr
  */ 
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 #include "adc.h"
 
 void adc_init(){

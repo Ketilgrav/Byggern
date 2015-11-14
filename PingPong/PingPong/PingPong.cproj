@@ -175,7 +175,7 @@
     <Compile Include="Game\Game.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MainInclude\MainInclude.h">
+    <Compile Include="MainInclude.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="PingPong.c">
@@ -195,7 +195,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MainInclude" />
     <Folder Include="Drivers" />
     <Folder Include="Etc" />
     <Folder Include="Game" />

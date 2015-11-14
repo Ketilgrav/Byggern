@@ -1,7 +1,7 @@
 Communication_drivers/can.d Communication_drivers/can.o: \
  ../Communication_drivers/can.c ../Communication_drivers/can.h \
  ../Communication_drivers/mcp2515.h \
- ../Communication_drivers/../MainInclude/MainInclude.h \
+ ../Communication_drivers/../MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -19,9 +19,9 @@ Communication_drivers/can.d Communication_drivers/can.o: \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h \
- ../Communication_drivers/../MainInclude/../Drivers/OLED.h \
- ../Communication_drivers/../MainInclude/../Drivers/../MainInclude/MainInclude.h \
- ../Communication_drivers/../MainInclude/../Drivers/../Etc/Font.h \
+ ../Communication_drivers/../Drivers/OLED.h \
+ ../Communication_drivers/../Drivers/../MainInclude.h \
+ ../Communication_drivers/../Drivers/../Etc/Font.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
@@ -34,7 +34,7 @@ Communication_drivers/can.d Communication_drivers/can.o: \
 
 ../Communication_drivers/mcp2515.h:
 
-../Communication_drivers/../MainInclude/MainInclude.h:
+../Communication_drivers/../MainInclude.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -70,11 +70,11 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h:
 
-../Communication_drivers/../MainInclude/../Drivers/OLED.h:
+../Communication_drivers/../Drivers/OLED.h:
 
-../Communication_drivers/../MainInclude/../Drivers/../MainInclude/MainInclude.h:
+../Communication_drivers/../Drivers/../MainInclude.h:
 
-../Communication_drivers/../MainInclude/../Drivers/../Etc/Font.h:
+../Communication_drivers/../Drivers/../Etc/Font.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
 

@@ -11,9 +11,13 @@
 #include "../../../InterNodeHeaders/CanMessageFormat.h"
 #include "../Communication_drivers/can.h"
 
+//Genererer manytillstandene, uten å alokere minnet manuelt. 
 menyNode mainMenu;
 menyNode options;
 menyNode reCalibrateJs;
+menyNode chooseController;
+menyNode controllerJoystick;
+menyNode controllerSensor;
 menyNode newGame;
 menyNode highScore;
 menyNode canMsg;
@@ -25,6 +29,9 @@ menyNode* menu_init(){
 	strcpy(mainMenu.tekst,			"Main menu!    ");
 	strcpy(reCalibrateJs.tekst,		"Re calib. js. ");
 	strcpy(canMsg.tekst,			"Disp. CAN msg.");
+	strcpy(chooseController.tekst,	"Choose cntrlr.");
+	strcpy(controllerJoystick.tekst,"Joystick      ");
+	strcpy(controllerSensor.tekst,	"Sensor        ");
 	
 	mainMenu.forelder = NULL;
 	mainMenu.nBarn = 4;
@@ -36,8 +43,9 @@ menyNode* menu_init(){
 	mainMenu.tilstand = MENU;
 	
 	options.forelder = &mainMenu;
-	options.nBarn = 1;
+	options.nBarn = 2;
 	options.barn[0] = &reCalibrateJs;
+	options.barn[1] = &chooseController;
 	options.pilNivaa = 1;
 	options.tilstand = MENU;
 	
@@ -45,6 +53,23 @@ menyNode* menu_init(){
 	reCalibrateJs.nBarn = 0;
 	reCalibrateJs.pilNivaa = 1;
 	reCalibrateJs.tilstand = CALIBRATE_JS;
+	
+	chooseController.forelder = &options;
+	chooseController.nBarn = 2;
+	chooseController.barn[0] = &controllerJoystick;
+	chooseController.barn[1] = &controllerSensor;
+	chooseController.pilNivaa = 1;
+	chooseController.tilstand = MENU;
+	
+	controllerJoystick.forelder = &chooseController;
+	controllerJoystick.nBarn = 0;
+	controllerJoystick.pilNivaa = 1;
+	controllerJoystick.tilstand = CNTRL_JS;
+	
+	controllerSensor.forelder = &chooseController;
+	controllerSensor.nBarn = 0;
+	controllerSensor.pilNivaa = 1;
+	controllerSensor.tilstand = CNTRL_SENS;
 	
 	newGame.forelder = &mainMenu;
 	newGame.nBarn = 0;
@@ -65,45 +90,48 @@ menyNode* menu_init(){
 	
 }
 
-void menu_go(menyNode** meny, JoyStick* js){
-	flyttPil(&((*meny)->pilNivaa), js, (*meny)->nBarn);
+void menu_go(menyNode** meny, Controls* control){
+	//Flytter pilen ihht joystick
+	flyttPil(&((*meny)->pilNivaa), &control->jsY, (*meny)->nBarn);
 	
-	oled_mem_clear();
-	oled_mem_print((*meny)->tekst,0,0);
-
+	oled_clear();
+	//Skriver ut tittelen
+	oled_print((*meny)->tekst,0,0);
+	
+	//Går gjennom alle undermenyene og skriver dem ut.
 	for(int i=1; i<=(*meny)->nBarn; ++i){
+		//skriver ut spaceinvader for å vise nivået brukeren peker på
 		if((*meny)->pilNivaa == i){
-			oled_mem_print("-s",i,0);
+			oled_print("-s",i,0);
 		}
 		else{
-			oled_mem_print("  ",i,0);
+			oled_print("  ",i,0);
 		}
-		oled_mem_print((*meny)->barn[i-1]->tekst,i,2);
+		oled_print((*meny)->barn[i-1]->tekst,i,2);
 	}
-	if(js->x_descreet_edge > 0){
+	
+	//Høyre/venstre på joystick endrer menynivå. 
+	//gå til barnet vi peker på
+	if(control->jsX.descreet_edge > 0){
 		if((*meny)->pilNivaa !=0  &&((*meny)->pilNivaa <= (*meny)->nBarn)){
 			*meny = (*meny)->barn[((*meny)->pilNivaa)-1];
 		}
 	}
-	else if(js->x_descreet_edge < 0){
+	//Gå til forelderen
+	else if(control->jsX.descreet_edge < 0){
 		if((*meny)->forelder != NULL){
 			*meny = (*meny)->forelder;
 		}
 	}
-	
-	CAN_message msgOut0;
-	msgOut0.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_SWITCHOFF;
-	msgOut0.length = 1;
-	msgOut0.id = 0b00100000001;
-	msgOut0.priority = 2;	
-	CAN_message_send(&msgOut0);
 }
 
-void flyttPil(uint8_t* nivaa, JoyStick* js, uint8_t nBarn){
-	if(js->y_descreet_edge == 0){
+void flyttPil(uint8_t* nivaa, JoyStick* jsY, uint8_t nBarn){
+	if(jsY->descreet_edge == 0){
+		//Har ikke trykket, da skal den ikke flyttes
 		return;
 	}
-	(*nivaa) -= js->y_descreet;
-	if((*nivaa) <1) *nivaa = nBarn;
-	else if((*nivaa) > nBarn) *nivaa = 1;
+	//Flytter utifra joystick
+	(*nivaa) -= jsY->descreet;
+	if((*nivaa) <1) *nivaa = nBarn;			//Om vi er før første element underflower vi til siste
+	else if((*nivaa) > nBarn) *nivaa = 1;	//etter siste overflower vi til første.
 }

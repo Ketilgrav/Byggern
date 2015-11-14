@@ -9,7 +9,7 @@
 #ifndef HIGHSCORE_H_
 #define HIGHSCORE_H_
 
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 #include "../Drivers/Controllers.h"
 
 uint8_t displayHighScore();

@@ -4,7 +4,7 @@
  * Created: 28.08.2015 15:43:58
  *  Author: ketilgs
  */ 
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 #include "UsartDriver.h"
 
 void USART_init(){

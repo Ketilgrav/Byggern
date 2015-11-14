@@ -4,7 +4,7 @@
  * Created: 04.09.2015 13:14:58
  *  Author: sverrevr
  */ 
-#include "../MainInclude/MainInclude.h"
+#include "../MainInclude.h"
 
 
 #ifndef EXTERNAL_SRAM_H_
