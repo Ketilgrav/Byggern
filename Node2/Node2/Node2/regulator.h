@@ -20,12 +20,12 @@ typedef struct PI{
 	int16_t u;
 	
 	float integralValue;
-	float refPosValue;
+	//float refPosValue;
 	int8_t prevVal;
 } PI;
 
 void regulator_init(PI* pi_state);
-void regulator_increment(PI* pi_state, int8_t ref_percent);
+void regulator_increment(PI* pi_state, int16_t pos_ref, int16_t* joyPos, int16_t joySpeed);
 int16_t get_pos_from_percent(int8_t percent);
 
 #endif /* REGULATOR_H_ */

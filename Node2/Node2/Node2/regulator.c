@@ -12,7 +12,7 @@ void regulator_init(PI* pi_state){
 	pi_state->D	= 1;
 	pi_state->u= 0;
 	pi_state->integralValue = 0.0f;
-	pi_state->refPosValue = 0.0f;
+	//pi_state->refPosValue = 0.0f;
 	pi_state->prevVal = 0;
 	/* Setter opp klokken som beregner tiden mellom hver incrementering*/
 	//Bruker timer/counter 3 med normal opperation
@@ -21,13 +21,16 @@ void regulator_init(PI* pi_state){
 	//TCNT3 holder verdien, resettes ved å sette den lik 0;	
 }
 
-void regulator_increment(PI* piState, int8_t refSpeedPercent){
+void regulator_increment(PI* piState, int16_t sensPos, int16_t* joyPos, int16_t joySpeed){
 	float dt = TCNT3*1.0/((F_CPU/64)*1.0);
 	TCNT3 = 0;
-	//int16_t ref->
-	piState->refPosValue += get_pos_from_percent(refSpeedPercent)*dt *CONTROLLER_GAIN;
+	
+	*joyPos += get_pos_from_percent(joySpeed)*dt *CONTROLLER_GAIN;
+	
+	int16_t ref = *joyPos; //bytt med sensPos for sensor.
+	
 	int16_t encoderPos = motorbox_get_encoder();
-	int16_t avvik = (piState->refPosValue-encoderPos)/(board_size/100); //I prosent, -100er motor helt til høyre, mens vi vil helt til venstre
+	int16_t avvik = (ref-encoderPos)/(board_size/100); //I prosent, -100er motor helt til høyre, mens vi vil helt til venstre
 	piState->integralValue+=avvik*dt;
 	int16_t derivatLedd = (avvik-piState->prevVal)/dt;
 	

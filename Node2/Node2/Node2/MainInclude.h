@@ -23,7 +23,7 @@
 #define toggle_bit( reg, bit) (reg ^= (1<<bit))
 #define read_bit( reg, bit ) (reg & (1<<bit))
 #define wait_until_bit_is_set( reg, bit) while( !read_bit(reg, bit))
-#define wait_until_bit_is_cleared(reg, bit) while( test_bit(reg, bit))
+#define wait_until_bit_is_cleared(reg, bit) while( read_bit(reg, bit))
 
 #include <stdio.h>
 #include <string.h>

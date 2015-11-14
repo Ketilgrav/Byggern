@@ -43,6 +43,7 @@ void motorbox_set_power(uint8_t dir, uint8_t power){
 	else{
 		clear_bit(MOTORBOX_CONTROLL_REG,MOTOR_DIRECTION);
 	}
+	//printf("%u \r",power);
 	I2C_transmit(power,DAC_ADRESS);	
 }
 

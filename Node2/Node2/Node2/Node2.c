@@ -17,6 +17,7 @@ int main(){
 	adc_init();
 	I2C_init();
 	motorbox_init();
+	HCSR04_inti();
 	SOLENOID_DDR |= 1<<SOLENOID_BIT;
 	
 	/*Tillstandsvariable*/
@@ -25,13 +26,24 @@ int main(){
 	CAN_message msgInn0;
 	ADC_signal adcSignal;
 	PI pi_state;
-	int8_t pos_ref;
+	
+	HCSR04_data dist_data;
+	dist_data.queuePointer = 0;
+	for(uint8_t i=0;i<HCSR04_averagingPeriod;++i){
+		dist_data.mesurements[i] = 0;
+	}
+	int16_t joySpeed = 0;
+	int16_t joyPos = 0;
+	
 	uint16_t encoder;
 	regulator_init(&pi_state);
 	
 	while(1){
-		printf("%u   \r",HCSR04_measure());
-		encoder = motorbox_get_encoder();
+		//_delay_ms(40);
+		//encoder = motorbox_get_encoder();
+		HCSR04_update_ref(&dist_data);
+		//printf("%i   \r",dist_data.pos_ref);
+		
 		CAN_interrupt = CAN_int();
 		switch(CAN_interrupt){
 			case NOINT:
@@ -55,7 +67,7 @@ int main(){
 			switch(msgInn0.data[CANMSG_PACKAGESPECIFIER]){
 				case PACKAGESPECIFIER_MOTORSIGNALS:
 				servo_set(msgInn0.data[CANMSG_SERVO]);
-				pos_ref = msgInn0.data[CANMSG_MOTOR];
+				joySpeed = msgInn0.data[CANMSG_MOTOR];
 				if(msgInn0.data[CANMSG_PUSH_BYTE]){
 					set_bit(SOLENOID_PORT,SOLENOID_BIT);
 				}
@@ -71,10 +83,14 @@ int main(){
 			}	
 		}
 		new_msg = 0;
-		adc_measure(&adcSignal);
 		
-		regulator_increment(&pi_state,pos_ref);
+		//adc_measure(&adcSignal);
+		
+		regulator_increment(&pi_state,dist_data.pos_ref,&joyPos,joySpeed);
+		//printf("%i \r",dist_data.pos_ref/20);
 		motorbox_set_percent(pi_state.u);
+		//motorbox_set_percent(dist_data.pos_ref/20);
+		
 	}
 	return 0;
 }
