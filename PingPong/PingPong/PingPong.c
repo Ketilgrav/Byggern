@@ -38,6 +38,8 @@ int main(void){
 	//Tillstandsvariabler
 	Controls controls;
 	joystick_calibrate(&controls.jsX,&controls.jsY);
+	controls.btnR.edge = 0;
+	controls.btnR.state = 0;
 	
 	menyNode* menu = menu_init();
 	menyNode* mainMenu = menu;	
@@ -48,15 +50,24 @@ int main(void){
 	
 	GameState gameState;
 	gameState.useJSnotSENS = 1;
-	
+	gameState.points = 0;
 	
 	//Testing variabler	
 	interrupt test;
 	
 	CAN_message canMsgMotor;
 	canMsgMotor.length = 0;
-	CAN_message canMsg;
-	canMsg.length = 0;
+	canMsgMotor.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_MOTORSIGNALS;
+	canMsgMotor.data[CANMSG_BTNR_BYTE] = 0;
+	canMsgMotor.data[CANMSG_SLIDERR_BYTE] = 0;
+	canMsgMotor.data[CANMSG_JSX_BYTE] = 0;
+	canMsgMotor.id = NODE2_CANID_0;
+	
+	CAN_message canMsgGameMode;
+	canMsgGameMode.length = 0;
+	canMsgGameMode.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_GAMEMODE;
+	canMsgGameMode.id = NODE2_CANID_HIGHPRIO_0;
+	
 	CAN_message canMsgInn;
 	canMsgInn.length = 0;
 	
@@ -77,10 +88,21 @@ int main(void){
 			case MENU:
 				//printf("MENU");
 				menu_go(&menu, &controls);
+				if(canMsgGameMode.data[GAMEMODE_MODE_BYTE] != GAMEMODE_OFF){
+					canMsgGameMode.length = GAMEMODE_MSGLEN;
+					canMsgGameMode.data[GAMEMODE_MODE_BYTE] = GAMEMODE_OFF;	
+				}
 				break;
 			case RUN_GAME:
-				//printf("RUN_GAME");
-				if(runGame(&gameState,&controls,&canMsgMotor)){
+				if(gameState.useJSnotSENS == 1 && canMsgGameMode.data[GAMEMODE_MODE_BYTE] != GAMEMODE_JS){
+					canMsgGameMode.length = GAMEMODE_MSGLEN;
+					canMsgGameMode.data[GAMEMODE_MODE_BYTE] = GAMEMODE_JS;
+				}
+				else if(gameState.useJSnotSENS == 0 && canMsgGameMode.data[GAMEMODE_MODE_BYTE] != GAMEMODE_SENS){
+					canMsgGameMode.length = GAMEMODE_MSGLEN;
+					canMsgGameMode.data[GAMEMODE_MODE_BYTE] = GAMEMODE_SENS;
+				}
+				if(runGame(&gameState,&controls,&canMsgMotor,&canMsgInn)){
 					menu = mainMenu;
 				}
 				break;
@@ -101,11 +123,15 @@ int main(void){
 				oled_print("Unused", 0, 0);
 				break;
 			case CNTRL_JS:
+				//printf("ho\n");
 				gameState.useJSnotSENS = 1;
 				menu = mainMenu;
+				break;
 			case CNTRL_SENS:		
+				//printf("ho\n");
 				gameState.useJSnotSENS = 0;
 				menu = mainMenu;
+				break;
 		}
 		
 		
@@ -135,17 +161,18 @@ int main(void){
 			if(!(mainLoopCounter%60)){
 				toggle_bit(PORTB, PB0);
 			}
+			if(canMsgGameMode.length){
+				CAN_message_send(&canMsgGameMode);
+				canMsgGameMode.length = 0;
+			}
 			if(canMsgMotor.length){
 				CAN_message_send(&canMsgMotor);
 				canMsgMotor.length = 0;
 			}
-			if(canMsg.length){
-				CAN_message_send(&canMsg);
-				canMsg.length = 0;
-			}
 			
 			oled_update_screen();
 			TCNT3 = 0;	//Reset timer
+			printf("%i \r",gameState.useJSnotSENS);
 		}
     }
 }

@@ -26,6 +26,8 @@
 #define wait_until_bit_is_cleared(reg, bit) while( test_bit(reg, bit))
 
 #include "Drivers/OLED.h"
+#include "../../InterNodeHeaders/CanMessageFormat.h"
+#include "../../InterNodeHeaders/canID.h"
 #include <stdio.h>
 #include <string.h>
 

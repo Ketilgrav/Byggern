@@ -11,16 +11,15 @@
 #include "../MainInclude.h"
 #include "../Drivers/Controllers.h"
 #include "../Communication_drivers/can.h"
-#include "../../../InterNodeHeaders/CanMessageFormat.h"
 #include "../Communication drivers/can.h"
 
 
 typedef struct GameState{
 	uint8_t useJSnotSENS;
-	
+	int16_t points;
 } GameState;
 
-uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgOut);
+uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgOut, CAN_message* msgPoint);
 
 
 #endif /* GAME_H_ */

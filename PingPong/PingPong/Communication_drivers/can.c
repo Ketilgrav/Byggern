@@ -6,7 +6,6 @@
  */ 
 
 #include "can.h"
-#include "canID.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -46,36 +45,36 @@ void CAN_init(){
 	
 	//Filtere:
 	//Masken til RX0
-	mcp2515_write(MCP_RXM0SIDH, CANID_MCUH_mask >> 3);
-	mcp2515_bit_modify(MCP_RXM0SIDL, 0b11100000U, CANID_MCUH_mask << 5);
+	mcp2515_write(MCP_RXM0SIDH, NODE1_CANID_H_mask >> 3);
+	mcp2515_bit_modify(MCP_RXM0SIDL, 0b11100000U, NODE1_CANID_H_mask << 5);
 	
 	//Masken til RX1
-	mcp2515_write(MCP_RXM1SIDH, CANID_MCUL_mask >> 3);
-	mcp2515_bit_modify(MCP_RXM1SIDL, 0b11100000U, CANID_MCUL_mask << 5);
+	mcp2515_write(MCP_RXM1SIDH, NODE1_CANID_L_mask >> 3);
+	mcp2515_bit_modify(MCP_RXM1SIDL, 0b11100000U, NODE1_CANID_L_mask << 5);
 	
 	//Filter 0 (RX0, går til RX1 om  RX0 er full)
-	mcp2515_write(MCP_RXF0SIDH, CANID_MCU_HIGHPRIO_0 >> 3);
-	mcp2515_bit_modify(MCP_RXF0SIDL, 0b11100000U, CANID_MCU_HIGHPRIO_0 << 5);
+	mcp2515_write(MCP_RXF0SIDH, NODE1_CANID_HIGHPRIO_0 >> 3);
+	mcp2515_bit_modify(MCP_RXF0SIDL, 0b11100000U, NODE1_CANID_HIGHPRIO_0 << 5);
 	
 	//Filter 1 (RX0, går til RX1 om  RX0 er full)
-	mcp2515_write(MCP_RXF1SIDH, CANID_MCU_HIGHPRIO_1 >> 3);
-	mcp2515_bit_modify(MCP_RXF1SIDL, 0b11100000U, CANID_MCU_HIGHPRIO_1 << 5);
+	mcp2515_write(MCP_RXF1SIDH, NODE1_CANID_HIGHPRIO_1 >> 3);
+	mcp2515_bit_modify(MCP_RXF1SIDL, 0b11100000U, NODE1_CANID_HIGHPRIO_1 << 5);
 	
 	//Filter 2 (RX1)
-	mcp2515_write(MCP_RXF2SIDH, CANID_MCU_0 >> 3);
-	mcp2515_bit_modify(MCP_RXF2SIDL, 0b11100000U, CANID_MCU_0 << 5);
+	mcp2515_write(MCP_RXF2SIDH, NODE1_CANID_0 >> 3);
+	mcp2515_bit_modify(MCP_RXF2SIDL, 0b11100000U, NODE1_CANID_0 << 5);
 	
 	//Filter 3 (RX1)
-	mcp2515_write(MCP_RXF3SIDH, CANID_MCU_1 >> 3);
-	mcp2515_bit_modify(MCP_RXF3SIDL, 0b11100000U, CANID_MCU_1 << 5);
+	mcp2515_write(MCP_RXF3SIDH, NODE1_CANID_1 >> 3);
+	mcp2515_bit_modify(MCP_RXF3SIDL, 0b11100000U, NODE1_CANID_1 << 5);
 	
 	//Filter 4 (RX1)
-	mcp2515_write(MCP_RXF4SIDH, CANID_MCU_2 >> 3);
-	mcp2515_bit_modify(MCP_RXF4SIDL, 0b11100000U, CANID_MCU_2 << 5);
+	mcp2515_write(MCP_RXF4SIDH, NODE1_CANID_2 >> 3);
+	mcp2515_bit_modify(MCP_RXF4SIDL, 0b11100000U, NODE1_CANID_2 << 5);
 	
 	//Filter 5 (RX1)
-	mcp2515_write(MCP_RXF5SIDH, CANID_MCU_3 >> 3);
-	mcp2515_bit_modify(MCP_RXF5SIDL, 0b11100000U, CANID_MCU_3 << 5);
+	mcp2515_write(MCP_RXF5SIDH, NODE1_CANID_3 >> 3);
+	mcp2515_bit_modify(MCP_RXF5SIDL, 0b11100000U, NODE1_CANID_3 << 5);
 	
 	CAN_all_int_clear();
 	mcp2515_bit_modify(MCP_CANCTRL, MODE_MASK, MODE_NORMAL);
@@ -108,7 +107,7 @@ uint8_t CAN_message_send(CAN_message const * const msg){
 }
 
 void CAN_message_send_to_reg(CAN_message const * const msg, uint8_t reg){
-	mcp2515_bit_modify(reg, TXP_MASK, msg->priority); //Setter prio
+	//mcp2515_bit_modify(reg, TXP_MASK, msg->priority); //Setter prio
 	mcp2515_write(reg + 1, msg->id>>3); //Setter de 8 msb av id
 	mcp2515_write(reg + 2, msg->id<<5);	//De 3 lsb av id
 	mcp2515_write(reg + 5, msg->length);	//Data length. Kan sette RTR ved å | med 0b01000000

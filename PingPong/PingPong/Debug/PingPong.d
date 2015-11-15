@@ -19,6 +19,8 @@ PingPong.d PingPong.o: .././PingPong.c .././MainInclude.h \
  .././Drivers/OLED.h .././Drivers/../MainInclude.h \
  .././Drivers/../Etc/Font.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
+ .././../../InterNodeHeaders/CanMessageFormat.h \
+ .././../../InterNodeHeaders/canID.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h \
@@ -33,7 +35,6 @@ PingPong.d PingPong.o: .././PingPong.c .././MainInclude.h \
  .././Game/../Communication_drivers/../MainInclude.h \
  .././Game/../Communication_drivers/spi.h \
  .././Game/../Communication_drivers/MCP2515_register.h \
- .././Game/../../../InterNodeHeaders/CanMessageFormat.h \
  .././Game/../Communication\ drivers/can.h .././UI/HighScore.h \
  .././Communication_drivers/can.h
 
@@ -81,6 +82,10 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
 
+.././../../InterNodeHeaders/CanMessageFormat.h:
+
+.././../../InterNodeHeaders/canID.h:
+
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h:
@@ -118,8 +123,6 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 .././Game/../Communication_drivers/spi.h:
 
 .././Game/../Communication_drivers/MCP2515_register.h:
-
-.././Game/../../../InterNodeHeaders/CanMessageFormat.h:
 
 .././Game/../Communication\ drivers/can.h:
 

@@ -21,6 +21,8 @@ UI/Menu.d UI/Menu.o: ../UI/Menu.c ../UI/../Drivers/Controllers.h \
  ../UI/../Drivers/../Drivers/../MainInclude.h \
  ../UI/../Drivers/../Drivers/../Etc/Font.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
+ ../UI/../Drivers/../../../InterNodeHeaders/CanMessageFormat.h \
+ ../UI/../Drivers/../../../InterNodeHeaders/canID.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h \
@@ -78,6 +80,10 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 ../UI/../Drivers/../Drivers/../Etc/Font.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
+
+../UI/../Drivers/../../../InterNodeHeaders/CanMessageFormat.h:
+
+../UI/../Drivers/../../../InterNodeHeaders/canID.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h:
 

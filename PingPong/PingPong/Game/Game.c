@@ -6,7 +6,7 @@
  */ 
 
 #include "Game.h"
-uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgOut){
+uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgMtor, CAN_message* msgPoint){
 	oled_clear();
 	oled_print("SPILLET KJORER", 3, 0);
 	char a[5];
@@ -16,21 +16,23 @@ uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgOut){
 	oled_print(a, 4, 0);
 	oled_print(b, 5, 0);
 	
-	if(msgOut->length == 0){
-		msgOut->data[CANMSG_PUSH_BYTE] = 0;
+	if(msgMtor->length == 0){
+		msgMtor->data[CANMSG_BTNR_BYTE] &= ~(1<<CANMSG_BTNR_BIT);
 	}
-	
-	msgOut->data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_MOTORSIGNALS;
 	if(controls->btnR.edge){
-		msgOut->data[CANMSG_PUSH_BYTE] = 0xFF;	
+		msgMtor->data[CANMSG_BTNR_BYTE] |= 1<<CANMSG_BTNR_BIT;
 	}
-	msgOut->data[CANMSG_SERVO] = controls->sliderR.percent;
-	msgOut->data[CANMSG_MOTOR] = controls->jsX.percent;
-	char c[5];
+	msgMtor->data[CANMSG_SLIDERR_BYTE] = controls->sliderR.percent;
+	msgMtor->data[CANMSG_JSX_BYTE] = controls->jsX.percent;
+	msgMtor->length = CANMSG_MOTORSIGNAL_LEN;
 	
+	if(msgPoint->length && msgPoint->data[CANMSG_PACKAGESPECIFIER] == PACKAGESPECIFIER_GAMEPOINT){
+		gameState->points++;
+		msgPoint->length = 0;
+	}
+	char c[5];
+	sprintf(c, "%u", gameState->points);
 	oled_print(c, 6, 0);
-	msgOut->length = CANMSG_LEN;
-	msgOut->id = 0b00100000001;
-	msgOut->priority = 2;
+	
 	return 0;
 }
