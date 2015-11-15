@@ -11,14 +11,16 @@
 #include "MotorDrivers/MotorBox.h"
 #include "MainInclude.h"
 
-#define CONTROLLER_GAIN 1
-
+#define CONTROLLER_GAIN 2
+#define DERIVATIVE_SAMPLES 10
 typedef struct Regulator{
 	float P;
 	float I;
 	float D;
 	int16_t u;
 	float integralValue;
+	float derivativeHistory[DERIVATIVE_SAMPLES];
+	uint8_t derivativePointer;
 	int8_t prevVal;
 	float dt;
 } Regulator;

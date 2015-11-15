@@ -16,7 +16,7 @@
 #define MYUBRR FOSC/16/BAUD-1
 
 void USART_init();
-void USART_Transmit( unsigned char data );
-unsigned char USART_Receive(void);
+void USART_transmit( unsigned char data );
+unsigned char USART_receive(void);
 
 #endif /* USARTDRIVER_H_ */

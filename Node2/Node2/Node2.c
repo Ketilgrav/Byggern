@@ -35,12 +35,14 @@ int main(){
 	Regulator regulator;
 	regulator_init(&regulator);
 	
+	//BURDE KJØØRE HCSR04_init(&S0_data) sånn som regulator_init
 	HCSR04_data S0_data;
 	HCSR04_data S1_data;
 	S0_data.queuePointer = 0;
 	S1_data.queuePointer = 0;
 	for(uint8_t i=0;i<HCSR04_averagingPeriod;++i){
 		S0_data.mesurements[i] = 0;
+		// WTF SKJER HER????
 		S0_data.mesurements[i] = 100;
 	}
 	
@@ -97,7 +99,7 @@ int main(){
 				//printf("JS  \r");
 				joySpeed = msgInn0.data[CANMSG_JSX_BYTE];
 				joyPos += get_pos_from_percent(joySpeed)* regulator.dt * CONTROLLER_GAIN;
-				printf("%i\r",joyPos);
+				//printf("%i\r",joyPos);
 				regulator_increment(&regulator,joyPos);
 				push = msgInn0.data[CANMSG_BTNR_BYTE] & (1<<CANMSG_BTNR_BIT);
 			}

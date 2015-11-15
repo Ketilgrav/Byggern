@@ -11,7 +11,7 @@
 #include <string.h>
 
 void CAN_init(){
-	clear_bit(interrupt_DDR, interrupt_bit); //Input på interrupt pinen
+	clear_bit(interrupt_DDR, interrupt_bit); //Input on the interrupt pin
 	
 	uint8_t value;
 	SPI_init(); // Initialize SPI
@@ -23,7 +23,7 @@ void CAN_init(){
 		puts("MCP2515 is NOT in configuration mode after reset!\n");
 	}
 		
-	//Setter opp RXBOCTRL
+	//Sets up RXBOCTRL
 		//RXM = 01, aktiv filter, kun kort id. 
 	mcp2515_bit_modify(MCP_RXB0CTRL, MCP_RXB0RXM_MASK, 1 << 5);
 		//BUKT: 1 -> ting går til RXB1 når denne er full
