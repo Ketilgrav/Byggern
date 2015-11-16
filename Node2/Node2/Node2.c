@@ -18,6 +18,7 @@ int main(){
 	motorbox_init();
 	HCSR04_inti();
 	SOLENOID_DDR |= 1<<SOLENOID_BIT;
+	set_bit(SOLENOID_PORT,SOLENOID_BIT);
 	
 	/*Tillstandsvariable*/
 	interrupt CAN_interrupt;
@@ -42,8 +43,7 @@ int main(){
 	S1_data.queuePointer = 0;
 	for(uint8_t i=0;i<HCSR04_averagingPeriod;++i){
 		S0_data.mesurements[i] = 0;
-		// WTF SKJER HER????
-		S0_data.mesurements[i] = 100;
+		S1_data.mesurements[i] = 65000;
 	}
 	
 	int16_t joySpeed = 0;
@@ -90,8 +90,9 @@ int main(){
 			
 		}
 		
-		//printf("%i\r\n",msgInn0.data[CANMSG_SLIDERR_BYTE]);
+		
 		if(gameMode != GAMEMODE_OFF){
+			//printf("%i\r\n",msgInn0.data[CANMSG_SLIDERR_BYTE]);
 			servo_set(msgInn0.data[CANMSG_SLIDERR_BYTE]);
 			regulator.dt = TCNT3*1.0/((F_CPU/64)*1.0);
 			TCNT3 = 0;	
@@ -105,10 +106,9 @@ int main(){
 			}
 			else if(gameMode == GAMEMODE_SENS){
 				//printf("SENS  \r");
-				//printf("Yo");
 				HCSR04_update_ref(&S0_data,SENSOR0);
 				//HCSR04_update_ref(&S1_data,SENSOR1);
-				//printf("%i\r",S0_data.pos_ref);
+				printf("%i\r",S0_data.pos_ref);
 				regulator_increment(&regulator,S0_data.pos_ref);
 				if(S1_data.time < S1_ACTIVATION_POINT){
 					push = 0;
@@ -126,7 +126,7 @@ int main(){
 			}
 		}
 		else{
-			printf("OFF  \r");
+			//printf("OFF  \r");
 			TCNT3 = 0;
 			motorbox_set_percent(0);
 			motorbox_reset_encoder();

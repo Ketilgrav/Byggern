@@ -7,9 +7,9 @@
 #include "regulator.h"
 
 void regulator_init(Regulator* regulator){
-	regulator->P = 25;
-	regulator->I = 15;
-	regulator->D = 0.4;
+	regulator->P = 20;
+	regulator->I = 10;
+	regulator->D = 0.3;
 	regulator->u= 0;
 	regulator->integralValue = 0.0f;
 	for(uint8_t i=0;i<DERIVATIVE_SAMPLES;++i){

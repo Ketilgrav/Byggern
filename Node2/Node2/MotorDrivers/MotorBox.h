@@ -13,6 +13,8 @@
 #include "../CommunicationDrivers/I2C.h"
 
 #define board_size 8800
+#define BOARD_SIZE 8800
+#define BOARD_SIZE_CM 40
 
 #define MOTORBOX_CONTROLL_REG PORTF //MJ1
 #define MOTORBOX_CONTROLL_DDR DDRF

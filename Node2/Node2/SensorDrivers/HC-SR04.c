@@ -19,7 +19,7 @@ void HCSR04_inti(){
 }
 
 //Returnerer 58*cm
-uint16_t HCSR04_measure(uint8_t sensorID){
+uint8_t HCSR04_measure(uint8_t sensorID){
 	//if timer < 40ms return.
 	if(TCNT0 < 16000/(64*40) && !(TIFR0 & TOV0)){
 		//printf("Too fast");
@@ -71,24 +71,49 @@ uint16_t HCSR04_measure(uint8_t sensorID){
 			}
 		}
 		
-		return TCNT0* (HCSR04_PRESCALER/16);
+		return TCNT0;
 	}
 }
 
 void HCSR04_update_ref(HCSR04_data* data, uint8_t sensorId){
-	uint16_t time = HCSR04_measure(sensorId);
-	if(time > HCSR04_MAX_TIME || time<HCSR04_MIN_TIME){
+	uint8_t time = HCSR04_measure(sensorId);
+	int16_t encoderDist = echo_time_to_encoder_val(time);
+	
+	//Verdien er utenfor bordet, da ignoreres den
+	if(encoderDist>BOARD_SIZE/2 || encoderDist<-BOARD_SIZE/2){
+		puts("too far\r\n");
 		return;
 	}
-	uint16_t sum = 0;
+	
+	//Verdien er utenfor standardavviket, da anntaes at det er en feilmåling og den ignoreres.
+	if(encoderDist > data->pos_ref+HCSR04_MAX_DEVIATION_ENCODER_DIST || encoderDist < data->pos_ref+HCSR04_MAX_DEVIATION_ENCODER_DIST){
+		puts("deviation\r\n");
+		return;
+	}
+		
 	data->mesurements[data->queuePointer] = time;
+	data->queuePointer++;
+	if(data->queuePointer >= HCSR04_averagingPeriod) data->queuePointer = 0;
+	
+	uint16_t sum = 0;
 	for(uint8_t i = 0; i < HCSR04_averagingPeriod; ++i){
 		sum += data->mesurements[i];
 	}
+	
 	data->time = sum/HCSR04_averagingPeriod;
-	data->pos_ref = (sum * HCSR04_SCALER / HCSR04_averagingPeriod) - HCSR04_ZERO_POINT;
-	data->queuePointer++;
-	if(data->queuePointer >= HCSR04_averagingPeriod){
-		data->queuePointer = 0;
+	data->pos_ref = echo_time_to_encoder_val(data->time);
+	
+}
+
+int16_t echo_time_to_encoder_val(uint8_t time){
+	uint16_t distanceTime = (time * (HCSR04_PRESCALER/16))	//Avstanden i uS fra sensoren
+	uint16_t motorDistanceTime;								//Avstanden i uS fra startpossisjonen til motoren	
+	if(distanceTime  <= HCSR04_DIST_FROM_MOTOR0){
+		motorDistanceTime = 0;								//Om denne er til venstre for boksen settes den til 0 for å unngå negative verdier, som uansett burde ignoreres siden motoren ikke kan dra hit.
 	}
+	else{
+		motorDistanceTime = (distanceTime - HCSR04_DIST_FROM_MOTOR0 * uS_PER_CM);
+	}
+	float encoderValPeruS = BOARD_SIZE / (BOARD_SIZE_CM * uS_PER_CM);
+	return motorDistanceTime * encoderValPeruS - BOARD_SIZE/2;
 }

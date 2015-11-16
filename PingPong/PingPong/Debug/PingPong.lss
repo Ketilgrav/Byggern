@@ -817,7 +817,7 @@ void CAN_all_int_clear(){
 #include <string.h>
 
 void CAN_init(){
-	clear_bit(interrupt_DDR, interrupt_bit); //Input på interrupt pinen
+	clear_bit(interrupt_DDR, interrupt_bit); //Input on the interrupt pin
      572:	8b 98       	cbi	0x11, 3	; 17
 	
 	uint8_t value;
@@ -840,7 +840,7 @@ void CAN_init(){
      58c:	0e 94 b1 0c 	call	0x1962	; 0x1962 <puts>
 	}
 		
-	//Setter opp RXBOCTRL
+	//Sets up RXBOCTRL
 		//RXM = 01, aktiv filter, kun kort id. 
 	mcp2515_bit_modify(MCP_RXB0CTRL, MCP_RXB0RXM_MASK, 1 << 5);
      590:	40 e2       	ldi	r20, 0x20	; 32
@@ -1035,18 +1035,18 @@ void CAN_int_clear(interrupt CAN_interrupt){
 uint8_t mcp2515_read(uint8_t addr){
      686:	cf 93       	push	r28
      688:	c8 2f       	mov	r28, r24
-	clear_bit(slave_cs_reg, slave_cs_bit);	//Aktiverer can controller
+	clear_bit(slave_cs_reg, slave_cs_bit);	//Activates CAN controller
      68a:	c4 98       	cbi	0x18, 4	; 24
-	SPI_communicate(MCP_READ);				//Sender instruksjon
+	SPI_communicate(MCP_READ);				//Sends instruction
      68c:	83 e0       	ldi	r24, 0x03	; 3
      68e:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
-	SPI_communicate(addr);					//Sender adressen
+	SPI_communicate(addr);					//Sends the address
      692:	8c 2f       	mov	r24, r28
      694:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
-	uint8_t val = SPI_communicate(0x00);	//Tar imot data
+	uint8_t val = SPI_communicate(0x00);	//Receives data
      698:	80 e0       	ldi	r24, 0x00	; 0
      69a:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
-	set_bit(slave_cs_reg, slave_cs_bit);	//deaktiverer.
+	set_bit(slave_cs_reg, slave_cs_bit);	//Deactivates.
      69e:	c4 9a       	sbi	0x18, 4	; 24
 	return val;
 }
@@ -1060,18 +1060,18 @@ void mcp2515_write(uint8_t addr, uint8_t data){
      6a6:	df 93       	push	r29
      6a8:	d8 2f       	mov	r29, r24
      6aa:	c6 2f       	mov	r28, r22
-	clear_bit(slave_cs_reg, slave_cs_bit);	//Aktiverer can controller
+	clear_bit(slave_cs_reg, slave_cs_bit);	//Activates CAN controller
      6ac:	c4 98       	cbi	0x18, 4	; 24
-	SPI_communicate(MCP_WRITE);				//Sender instruksjon
+	SPI_communicate(MCP_WRITE);				//Sends instruction
      6ae:	82 e0       	ldi	r24, 0x02	; 2
      6b0:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
-	SPI_communicate(addr);					//Sender adressen
+	SPI_communicate(addr);					//Sends the address
      6b4:	8d 2f       	mov	r24, r29
      6b6:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
-	SPI_communicate(data);					//Sender data
+	SPI_communicate(data);					//Sends data
      6ba:	8c 2f       	mov	r24, r28
      6bc:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
-	set_bit(slave_cs_reg, slave_cs_bit);	//deaktiverer.
+	set_bit(slave_cs_reg, slave_cs_bit);	//Deactivates.
      6c0:	c4 9a       	sbi	0x18, 4	; 24
 }
      6c2:	df 91       	pop	r29
@@ -1081,15 +1081,15 @@ void mcp2515_write(uint8_t addr, uint8_t data){
 000006c8 <mcp2515_read_status>:
 
 uint8_t mcp2515_read_status(){
-	clear_bit(slave_cs_reg, slave_cs_bit);	//Aktiverer can controller
+	clear_bit(slave_cs_reg, slave_cs_bit);	//Activates CAN controller
      6c8:	c4 98       	cbi	0x18, 4	; 24
-	SPI_communicate(MCP_READ_STATUS);		//Sender instruksjon
+	SPI_communicate(MCP_READ_STATUS);		//Sends instruction
      6ca:	80 ea       	ldi	r24, 0xA0	; 160
      6cc:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
 	uint8_t val = SPI_communicate(0x00);
      6d0:	80 e0       	ldi	r24, 0x00	; 0
      6d2:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
-	set_bit(slave_cs_reg, slave_cs_bit);	//deaktiverer.
+	set_bit(slave_cs_reg, slave_cs_bit);	//Deactivates
      6d6:	c4 9a       	sbi	0x18, 4	; 24
 	return val;
 }
@@ -1099,11 +1099,11 @@ uint8_t mcp2515_read_status(){
 
 
 void mcp2515_request_to_send(uint8_t reg){
-	clear_bit(slave_cs_reg, slave_cs_bit);	//Aktiverer can controller
+	clear_bit(slave_cs_reg, slave_cs_bit);	//Activates CAN controller
      6da:	c4 98       	cbi	0x18, 4	; 24
-	SPI_communicate(reg);					//Sender instruksjon
+	SPI_communicate(reg);					//Sends instruction
      6dc:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
-	set_bit(slave_cs_reg, slave_cs_bit);	//deaktiverer.
+	set_bit(slave_cs_reg, slave_cs_bit);	//Deactivates
      6e0:	c4 9a       	sbi	0x18, 4	; 24
      6e2:	08 95       	ret
 
@@ -1117,9 +1117,9 @@ void mcp2515_bit_modify(uint8_t addr, uint8_t mask, uint8_t data){
      6ea:	18 2f       	mov	r17, r24
      6ec:	d6 2f       	mov	r29, r22
      6ee:	c4 2f       	mov	r28, r20
-	clear_bit(slave_cs_reg, slave_cs_bit);	//Aktiverer can controller
+	clear_bit(slave_cs_reg, slave_cs_bit);	//Activates CAN controller
      6f0:	c4 98       	cbi	0x18, 4	; 24
-	SPI_communicate(MCP_BITMOD);			//Sender instruksjon
+	SPI_communicate(MCP_BITMOD);			//Sends instruction
      6f2:	85 e0       	ldi	r24, 0x05	; 5
      6f4:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
 	SPI_communicate(addr);
@@ -1131,7 +1131,7 @@ void mcp2515_bit_modify(uint8_t addr, uint8_t mask, uint8_t data){
 	SPI_communicate(data);
      704:	8c 2f       	mov	r24, r28
      706:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
-	set_bit(slave_cs_reg, slave_cs_bit);	//deaktiverer.
+	set_bit(slave_cs_reg, slave_cs_bit);	//Deactivates
      70a:	c4 9a       	sbi	0x18, 4	; 24
 }
      70c:	df 91       	pop	r29
@@ -1144,10 +1144,10 @@ void mcp2515_bit_modify(uint8_t addr, uint8_t mask, uint8_t data){
 void mcp2515_reset(){
 	clear_bit(slave_cs_reg, slave_cs_bit);	//Aktiverer can controller
      714:	c4 98       	cbi	0x18, 4	; 24
-	SPI_communicate(MCP_RESET);				//Sender instruksjon
+	SPI_communicate(MCP_RESET);				//Sends instruction
      716:	80 ec       	ldi	r24, 0xC0	; 192
      718:	0e 94 98 03 	call	0x730	; 0x730 <SPI_communicate>
-	set_bit(slave_cs_reg, slave_cs_bit);	//deaktiverer.
+	set_bit(slave_cs_reg, slave_cs_bit);	//Deactivates
      71c:	c4 9a       	sbi	0x18, 4	; 24
      71e:	08 95       	ret
 
@@ -1183,7 +1183,7 @@ char SPI_communicate(char cData){
 	SPDR = cData;
      730:	8f b9       	out	0x0f, r24	; 15
 	/* Wait for transmission complete */
-	while(!(SPSR & (1<<SPIF)));
+	while( !(SPSR&(1<<SPIF)) );
      732:	77 9b       	sbis	0x0e, 7	; 14
      734:	fe cf       	rjmp	.-4      	; 0x732 <SPI_communicate+0x2>
 	return SPDR;
@@ -1193,38 +1193,36 @@ char SPI_communicate(char cData){
 0000073a <USART_Transmit>:
 }
 
-void USART_Transmit( unsigned char data ){
-
+void USART_transmit(unsigned char data){
 	//Wait for empty transmit buffer
-	while( !( UCSR0A & (1<<UDRE0)) );
+	while( !(UCSR0A&(1<<UDRE0)) );
+
      73a:	5d 9b       	sbis	0x0b, 5	; 11
      73c:	fe cf       	rjmp	.-4      	; 0x73a <USART_Transmit>
-
 	//Put data into buffer, sends the data
 	UDR0 = data;
+}
      73e:	8c b9       	out	0x0c, r24	; 12
      740:	08 95       	ret
 
 00000742 <USART_Receive>:
-}
 
-unsigned char USART_Receive(void){
-	
+unsigned char USART_receive(void){
 	//Wait for data to be received
-	while( !(UCSR0A & (1<<RXC0)) );
-     742:	5f 9b       	sbis	0x0b, 7	; 11
-     744:	fe cf       	rjmp	.-4      	; 0x742 <USART_Receive>
+	while( !(UCSR0A&(1<<RXC0)) );
 	//Get and return received data from buffer
 	return UDR0;
-     746:	8c b1       	in	r24, 0x0c	; 12
+     742:	5f 9b       	sbis	0x0b, 7	; 11
+     744:	fe cf       	rjmp	.-4      	; 0x742 <USART_Receive>
 }
+     746:	8c b1       	in	r24, 0x0c	; 12
      748:	08 95       	ret
 
 0000074a <USART_init>:
 void USART_init(){
 	//ubbr = F_CPU
-	int baudRate = BAUD;  //Burde vi bruke BAUD fra h fila her? og burde BAUD vÃ¦re 19200?
-	unsigned int ubrr = F_CPU/(16*baudRate) -1;
+	int baudRate = BAUD;
+	unsigned int ubrr = F_CPU/(16*baudRate) - 1;
 	//Set baud rate
 	UBRR0H = (unsigned char)(ubrr>>8);
      74a:	8f ef       	ldi	r24, 0xFF	; 255
@@ -1234,23 +1232,23 @@ void USART_init(){
      750:	89 b9       	out	0x09, r24	; 9
 	
 	//Enable receiver and transmitter
-	UCSR0B	 = (1<<RXEN0)|(1<<TXEN0);
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
      752:	88 e1       	ldi	r24, 0x18	; 24
      754:	8a b9       	out	0x0a, r24	; 10
-		//RXEN:  Aktiverer USART receiver
-		//TXEN: Aktiverer USART transmitter
+		//RXEN: Activates USART receiver
+		//TXEN: Activates USART transmitter
 		
 	
 	//Set frame format: 8data, 2stop bit
 	UCSR0C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
      756:	8e e8       	ldi	r24, 0x8E	; 142
      758:	80 bd       	out	0x20, r24	; 32
-		//URSEL: Skriver til UCSRC istedet for UBRRH, ved 1.
-		//USBS0: Antall stop bits, 0->1bit, 1->2bit
+		//URSEL: Writes to UCSRC instead of UBRRH, when 1.
+		//USBS0: Number of stop bits, 0->1bit, 1->2bit
 		//UCZ0/1/2: Character size 011->8bit. 
 		
-	//Slik at vi kan bruke printf;
-	fdevopen(USART_Transmit,USART_Receive);
+	//Enable printf;
+	fdevopen(USART_transmit, USART_receive);
      75a:	61 ea       	ldi	r22, 0xA1	; 161
      75c:	73 e0       	ldi	r23, 0x03	; 3
      75e:	8d e9       	ldi	r24, 0x9D	; 157

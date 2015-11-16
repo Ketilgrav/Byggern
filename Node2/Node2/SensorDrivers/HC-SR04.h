@@ -31,26 +31,17 @@
 
 #define S1_ACTIVATION_POINT 150
 
-#define HCSR04_MAX_TIME 2321
-#define HCSR04_MIN_TIME 174
-#define HCSR04_SCALER 3.8f
-#define HCSR04_ZERO_POINT 4400
-
-/*
-Boks 40cm
-40cm -> 2320us
-
-gang med 3,8 for verdier fra 0-8.800
-*/
+#define HCSR04_DIST_FROM_MOTOR0 4
+#define uS_PER_CM 58
 
 
-#define HCSR04_averagingPeriod 30
-//#define HCSR04_MAX_DEVIATION 500
+#define HCSR04_averagingPeriod 50
+#define HCSR04_MAX_DEVIATION_ENCODER_DIST 1000
 typedef struct HCSR04_data{
 	int16_t pos_ref;
-	uint16_t time;
+	uint8_t time;
 	uint8_t queuePointer;
-	uint16_t mesurements[HCSR04_averagingPeriod];
+	uint8_t mesurements[HCSR04_averagingPeriod];
 }HCSR04_data;
 
 void HCSR04_inti();

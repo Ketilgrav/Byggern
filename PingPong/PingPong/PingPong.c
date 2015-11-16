@@ -20,7 +20,12 @@
 
 #include <stdio.h>
 
+#include <avr/eeprom.h>
+
 int main(void){	
+	//EEPROM test
+	eeprom_write_byte((uint8_t*) )
+	
 	/*Initialization*/
 	USART_init();
 	SRAM_init();
