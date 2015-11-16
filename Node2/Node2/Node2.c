@@ -134,7 +134,7 @@ int main(){
 				}
 				else push = 0;
 				
-				printf("Sens: %i    \tEncod: %i    \r",S0_data.pos_ref,motorbox_get_encoder());
+				//printf("Sens: %i    \tEncod: %i    \r",S0_data.pos_ref,motorbox_get_encoder());
 			}
 			motorbox_set_percent(regulator.u);
 			

@@ -24,7 +24,7 @@
 
 int main(void){	
 	//EEPROM test
-	//eeprom_write_byte((uint8_t*) )
+	//eeprom_write_byte((uint8_t*),8,8)
 	
 	/*Initialization*/
 	USART_init();

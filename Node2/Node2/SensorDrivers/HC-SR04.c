@@ -41,8 +41,10 @@ void HCSR04_inti(){
 	TIMSK5 |= 1<<OCIE5A; //interrupt on compare match
 }
 
-ISR(TIMER3_OVF_vect){
+ISR(TIMER4_OVF_vect){
 	printf("OVERFLOW");
+	set_bit(EICRA,ISC20); //Change to interrupt on rising edge
+	TCCR4B &= ~(0b111 << CS40); //Turnes of the timer
 }
 
 ISR(INT2_vect){

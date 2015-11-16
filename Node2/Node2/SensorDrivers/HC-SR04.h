@@ -11,7 +11,7 @@
 #include "../MainInclude.h"
 #include "../MotorDrivers/MotorBox.h"
 
-#define HCSR04_MEASUREMENT_INTERVAL 0.06f
+#define HCSR04_MEASUREMENT_INTERVAL 0.002f
 #define HCSR04_PRESCALER 8
 
 #define HCSR04_TRIGGERPULSEWIDTH_us 10
