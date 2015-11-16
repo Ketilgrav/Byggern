@@ -22,8 +22,6 @@ void regulator_init(Regulator* regulator){
 	/* Setter opp klokken som beregner tiden mellom hver incrementering*/
 	//Bruker timer/counter 3 med normal opperation
 	TCCR3B |= (0<<CS32)|(1<<CS31)|(1<<CS30); //aktiverer, med clock/1 prescaler. Kan da telle i 4ms, dette er for lite?
-	//TIMSK3 = (1<<TOIE3); //Overflow interrupt enable
-	//TCNT3 holder verdien, resettes ved å sette den lik 0;	
 }
 
 void regulator_increment(Regulator* regulator, int16_t pos_ref){

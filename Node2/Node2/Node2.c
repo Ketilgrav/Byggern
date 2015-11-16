@@ -8,15 +8,27 @@
 #include "MotorDrivers/Solenoid.h"
 #include "SensorDrivers/HC-SR04.h"
 
+#include <avr/interrupt.h>
+
 int main(){
+	sei(); // Global interrupt enable
+	//cli(); // Global interrupt disable
+	
 	/*INITIALISATION*/
 	USART_init();
+	puts("Uart init done");
 	CAN_init();
+	puts("Can init done");
 	servo_init();
+	puts("Servo init done");
 	adc_init();
+	puts("ADC init done");
 	I2C_init();
+	puts("I2C init done");
 	motorbox_init();
+	puts("Motor init done");
 	HCSR04_inti();
+	puts("Distance sensor init done");
 	SOLENOID_DDR |= 1<<SOLENOID_BIT;
 	set_bit(SOLENOID_PORT,SOLENOID_BIT);
 	
@@ -35,16 +47,22 @@ int main(){
 	ADC_signal adcSignal;
 	Regulator regulator;
 	regulator_init(&regulator);
+	puts("Regulator init done");
 	
 	//BURDE KJØØRE HCSR04_init(&S0_data) sånn som regulator_init
 	HCSR04_data S0_data;
 	HCSR04_data S1_data;
-	S0_data.queuePointer = 0;
-	S1_data.queuePointer = 0;
-	for(uint8_t i=0;i<HCSR04_averagingPeriod;++i){
+	//S0_data.queuePointer = 0;
+	//S1_data.queuePointer = 0;
+	S0_data.time = 0;
+	S0_data.pos_ref = 0;
+	S1_data.time = 0;
+	S1_data.pos_ref = 0;
+	/*for(uint8_t i=0;i<HCSR04_averagingPeriod;++i){
 		S0_data.mesurements[i] = 0;
-		S1_data.mesurements[i] = 65000;
-	}
+		S1_data.mesurements[i] = 0;
+	}*/
+	
 	
 	int16_t joySpeed = 0;
 	int16_t joyPos = 0;
@@ -53,10 +71,12 @@ int main(){
 	uint8_t gameMode = GAMEMODE_OFF;
 	
 	uint8_t push = 0;
+	
+	puts("All init done");
 	while(1){
-		adc_measure(&adcSignal);
+		//adc_measure(&adcSignal);
 		//printf("%i   \r",dist_data.pos_ref);
-		
+		//puts("Adc measured");
 		CAN_interrupt = CAN_int();
 		switch(CAN_interrupt){
 			case NOINT:
@@ -76,7 +96,7 @@ int main(){
 				break;
 		}
 		CAN_int_clear(CAN_interrupt);
-		
+		//puts("Caned");
 		if(msgInn0.length){
 			switch(msgInn0.data[CANMSG_PACKAGESPECIFIER]){
 				case PACKAGESPECIFIER_MOTORSIGNALS:
@@ -108,12 +128,13 @@ int main(){
 				//printf("SENS  \r");
 				HCSR04_update_ref(&S0_data,SENSOR0);
 				//HCSR04_update_ref(&S1_data,SENSOR1);
-				printf("%i\r",S0_data.pos_ref);
 				regulator_increment(&regulator,S0_data.pos_ref);
 				if(S1_data.time < S1_ACTIVATION_POINT){
 					push = 0;
 				}
 				else push = 0;
+				
+				printf("Sens: %i    \tEncod: %i    \r",S0_data.pos_ref,motorbox_get_encoder());
 			}
 			motorbox_set_percent(regulator.u);
 			
@@ -131,11 +152,12 @@ int main(){
 			motorbox_set_percent(0);
 			motorbox_reset_encoder();
 		}
-		
+		//puts("Gamed");
 		//Retursignal
-		if(adcSignal.edge){
-			CAN_message_send(&msgPoint);
-		}
+		//if(adcSignal.edge){
+		//	CAN_message_send(&msgPoint);
+		//}
+		//puts("Can answered");
 		
 	}
 	return 0;

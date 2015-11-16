@@ -32,7 +32,8 @@ Node2.d Node2.o: .././Node2.c .././CommunicationDrivers/can.h \
  .././MotorDrivers/../MainInclude.h \
  .././MotorDrivers/../CommunicationDrivers/I2C.h \
  .././MotorDrivers/Solenoid.h .././SensorDrivers/HC-SR04.h \
- .././SensorDrivers/../MainInclude.h
+ .././SensorDrivers/../MainInclude.h \
+ .././SensorDrivers/../MotorDrivers/MotorBox.h
 
 .././CommunicationDrivers/can.h:
 
@@ -113,3 +114,5 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 .././SensorDrivers/HC-SR04.h:
 
 .././SensorDrivers/../MainInclude.h:
+
+.././SensorDrivers/../MotorDrivers/MotorBox.h:

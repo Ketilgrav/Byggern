@@ -6,114 +6,163 @@
  */ 
 
 #include "HC-SR04.h"
+volatile uint16_t sensor0Time = 0;
+volatile uint16_t sensor1Time = 0;
+volatile uint16_t doUpdate = 0;
+
+volatile uint16_t nextSensor = SENSOR0;
 
 void HCSR04_inti(){
+	
 	//porter
 	set_bit(S0_TRIG_DDR,S0_TRIG_BIT);
 	clear_bit(S0_ECHO_DDR,S0_ECHO_BIT);
 	set_bit(S1_TRIG_DDR,S1_TRIG_BIT);
 	clear_bit(S1_ECHO_DDR,S1_ECHO_BIT);
-	//trenger en timer
-	TCCR0B |= 0b100<<CS00;
-	TIMSK0 |= TOIE0; //Owerflow interupt enable
+	
+	//Echo intterupt
+	EICRA |= (1<<ISC21)|(1<<ISC20); //Set ISC20 to 0 to interrupt on falling edge
+	set_bit(EIMSK,INT2);	//Enables interrupt
+	EICRA |= (1<<ISC31)|(1<<ISC30);
+	set_bit(EIMSK,INT3);
+	
+	//Using timer 4 for both.
+	//TCCR4B |= 0b011<<CS40; //aktiver med 1/64 prescaler
+	//TCNT4 verdien
+	TIMSK4 |= 1<<TOIE4;
+	
+	//Using timer 5 to send trigger signals for both sensors, alternating.
+	//Activates every 60ms
+	//Set OC5A on compare match
+	TCCR5A |= 0b11<<COM5A0;
+	//Clocksclaer på 1/64, dette gjør 60ms til 15000
+	TCCR5B |= 0b011<<CS50;
+	OCR5A = HCSR04_MEASUREMENT_INTERVAL * F_CPU/ HCSR04_PRESCALER;
+	TIMSK5 |= 1<<OCIE5A; //interrupt on compare match
 }
 
-//Returnerer 58*cm
-uint8_t HCSR04_measure(uint8_t sensorID){
-	//if timer < 40ms return.
-	if(TCNT0 < 16000/(64*40) && !(TIFR0 & TOV0)){
-		//printf("Too fast");
-		return 0;
-	}
-	if (sensorID == SENSOR0){
-		set_bit(S0_TRIG_PORT,S0_TRIG_BIT);
-		_delay_us(HCSR04_TRIGGERPULSEWIDTH_us);
-		clear_bit(S0_TRIG_PORT,S0_TRIG_BIT);
-		
-		TCNT0 = 0;		//resetter timer
-		TIFR0 |= TOV0;	//resetter overlow interupt
-		while(!read_bit(S0_ECHO_PIN,S0_ECHO_BIT)){
-			if(TIFR0 & TOV0){ //if overflow
-				printf("Overflow");
-				return 0;
-			}
+ISR(TIMER3_OVF_vect){
+	printf("OVERFLOW");
+}
+
+ISR(INT2_vect){
+	handleInterrupt(SENSOR0);	
+}
+
+ISR(INT3_vect){
+	handleInterrupt(SENSOR1);	
+}
+
+ISR(BADISR_vect, ISR_NAKED)
+{
+	puts("Bad interrupt");
+	asm volatile ( "ret" ); //Er dette rett, anders skrev iret
+	//while(1){}
+}
+
+void handleInterrupt(uint8_t timerId){
+	//puts("b");
+	//If we interrupted on rising
+	if( EICRA & (1<<ISC20)){
+		//if the timer is not turned off, meaning that another sensor is using it, then this interrupt is ignored
+		if(TCCR4B & (0b111<<CS40)){
+			return;
 		}
 		
-		TCNT0 = 0;		//resetter timer
-		while (read_bit(S0_ECHO_PIN,S0_ECHO_BIT)){
-			if(TIFR0 & TOV0){ //if overflow
-				printf("Overflow");
-				return 0;
+		clear_bit(EICRA,ISC20); //Change to interrupt on falling edge
+		//Starts the timer:
+		TCNT4 = 0;
+		TCCR4B |= 0b010 << CS40; //1/8 prescaler
+	}
+	//If we interrupted on falling
+	else if(!(EICRA & (1<<ISC20))){		
+		set_bit(EICRA,ISC20); //Change to interrupt on rising edge
+		//stops the timer and records the value.
+		TCCR4B &= ~(0b111 << CS40);
+		//Ignoring the timer value if an overflow occured
+		if(!read_bit(TIFR4, TOV4)){
+			if(timerId == SENSOR0){
+				sensor0Time = TCNT4;
+			}
+			else if(timerId == SENSOR1){
+				sensor1Time = TCNT4;
 			}
 		}
-		
-		return TCNT0* (HCSR04_PRESCALER/16);
+		else{
+			set_bit(TIFR4, TOV4); //Resets the flag
+		}		
 	}
-	else if(sensorID == SENSOR1){		
+	doUpdate = 1;
+}
+
+
+ISR(TIMER5_COMPA_vect){
+	//puts("a");
+	if(nextSensor == SENSOR1){
+		nextSensor = SENSOR0;
+		//Sends a 10us pulse on the trigger bit.
 		set_bit(S1_TRIG_PORT,S1_TRIG_BIT);
 		_delay_us(HCSR04_TRIGGERPULSEWIDTH_us);
 		clear_bit(S1_TRIG_PORT,S1_TRIG_BIT);
-		
-		TCNT0 = 0;		//resetter timer
-		TIFR0 |= TOV0;	//resetter overlow interupt
-		while(!read_bit(S1_ECHO_PIN,S1_ECHO_BIT)){
-			if(TIFR0 & TOV0){ //if overflow
-				printf("Overflow");
-				return 0;
-			}
-		}
-		
-		TCNT0 = 0;		//resetter timer
-		while (read_bit(S1_ECHO_PIN,S1_ECHO_BIT)){
-			if(TIFR0 & TOV0){ //if overflow
-				printf("Overflow");
-				return 0;
-			}
-		}
-		
-		return TCNT0;
+		TCNT5 = 0;
 	}
+	else if(nextSensor == SENSOR0){
+		nextSensor == SENSOR1;
+		set_bit(S0_TRIG_PORT,S0_TRIG_BIT);
+		_delay_us(HCSR04_TRIGGERPULSEWIDTH_us);
+		clear_bit(S0_TRIG_PORT,S0_TRIG_BIT);
+		TCNT5 = 0;
+	}
+	
 }
 
 void HCSR04_update_ref(HCSR04_data* data, uint8_t sensorId){
-	uint8_t time = HCSR04_measure(sensorId);
-	int16_t encoderDist = echo_time_to_encoder_val(time);
+	if(!doUpdate) return;
+	doUpdate = 0;
 	
+	uint16_t time;
+	if(sensorId == SENSOR0){
+		time = sensor0Time;
+	}
+	else if(sensorId == SENSOR1){
+		time = sensor1Time;
+	}
+	
+	int32_t encoderDist = echo_time_to_encoder_val(time);
 	//Verdien er utenfor bordet, da ignoreres den
 	if(encoderDist>BOARD_SIZE/2 || encoderDist<-BOARD_SIZE/2){
-		puts("too far\r\n");
+		//puts("too far\r\n");
 		return;
 	}
 	
 	//Verdien er utenfor standardavviket, da anntaes at det er en feilmåling og den ignoreres.
-	if(encoderDist > data->pos_ref+HCSR04_MAX_DEVIATION_ENCODER_DIST || encoderDist < data->pos_ref+HCSR04_MAX_DEVIATION_ENCODER_DIST){
+	/*if(encoderDist > data->pos_ref+HCSR04_MAX_DEVIATION_ENCODER_DIST || encoderDist < data->pos_ref+HCSR04_MAX_DEVIATION_ENCODER_DIST){
 		puts("deviation\r\n");
 		return;
-	}
+	}*/
 		
-	data->mesurements[data->queuePointer] = time;
-	data->queuePointer++;
-	if(data->queuePointer >= HCSR04_averagingPeriod) data->queuePointer = 0;
+	//data->mesurements[data->queuePointer] = time;
+	//data->queuePointer++;
+	//if(data->queuePointer >= HCSR04_averagingPeriod) data->queuePointer = 0;
 	
-	uint16_t sum = 0;
+	/*uint16_t sum = 0;
 	for(uint8_t i = 0; i < HCSR04_averagingPeriod; ++i){
 		sum += data->mesurements[i];
-	}
-	
-	data->time = sum/HCSR04_averagingPeriod;
-	data->pos_ref = echo_time_to_encoder_val(data->time);
-	
+	}*/
+	//data->time = sum/HCSR04_averagingPeriod;
+	data->time = time;
+	data->pos_ref = encoderDist;
 }
 
-int16_t echo_time_to_encoder_val(uint8_t time){
-	uint16_t distanceTime = (time * (HCSR04_PRESCALER/16))	//Avstanden i uS fra sensoren
-	uint16_t motorDistanceTime;								//Avstanden i uS fra startpossisjonen til motoren	
+int32_t echo_time_to_encoder_val(uint16_t time){
+	uint32_t distanceTime = (time * HCSR04_PRESCALER)/16;	//Avstanden i uS fra sensoren
+	uint32_t motorDistanceTime;								//Avstanden i uS fra startpossisjonen til motoren	
 	if(distanceTime  <= HCSR04_DIST_FROM_MOTOR0){
 		motorDistanceTime = 0;								//Om denne er til venstre for boksen settes den til 0 for å unngå negative verdier, som uansett burde ignoreres siden motoren ikke kan dra hit.
 	}
 	else{
 		motorDistanceTime = (distanceTime - HCSR04_DIST_FROM_MOTOR0 * uS_PER_CM);
 	}
-	float encoderValPeruS = BOARD_SIZE / (BOARD_SIZE_CM * uS_PER_CM);
-	return motorDistanceTime * encoderValPeruS - BOARD_SIZE/2;
+	float encoderValPeruS = BOARD_SIZE*1.0 / (BOARD_SIZE_CM * uS_PER_CM);
+	return (motorDistanceTime * encoderValPeruS - BOARD_SIZE/2);
 }

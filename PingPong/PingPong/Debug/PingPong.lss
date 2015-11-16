@@ -2671,10 +2671,10 @@ uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgMtor, 
      eca:	08 95       	ret
 
 00000ecc <main>:
-#include "UI/HighScore.h"
-#include "Communication_drivers/can.h"
 
 #include <stdio.h>
+
+#include <avr/eeprom.h>
 
 int main(void){	
      ecc:	cf 93       	push	r28
@@ -2687,6 +2687,9 @@ int main(void){
      eda:	de bf       	out	0x3e, r29	; 62
      edc:	0f be       	out	0x3f, r0	; 63
      ede:	cd bf       	out	0x3d, r28	; 61
+	//EEPROM test
+	//eeprom_write_byte((uint8_t*) )
+	
 	/*Initialization*/
 	USART_init();
      ee0:	0e 94 a5 03 	call	0x74a	; 0x74a <USART_init>
