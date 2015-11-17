@@ -11,7 +11,7 @@
 #include "../MainInclude.h"
 #include "../MotorDrivers/MotorBox.h"
 
-#define HCSR04_MEASUREMENT_INTERVAL 0.002f
+#define HCSR04_MEASUREMENT_INTERVAL 0.006f
 #define HCSR04_PRESCALER 8
 
 #define HCSR04_TRIGGERPULSEWIDTH_us 10
@@ -38,18 +38,18 @@
 #define uS_PER_CM 58
 
 
-#define HCSR04_averagingPeriod 0
-#define HCSR04_MAX_DEVIATION_ENCODER_DIST 1000
+#define HCSR04_averagingPeriod 3
+#define HCSR04_MAX_DEVIATION_ENCODER_DIST 3000
 typedef struct HCSR04_data{
 	int16_t pos_ref;
-	uint8_t time;
-	//uint8_t queuePointer;
-	//uint8_t mesurements[HCSR04_averagingPeriod];
+	uint8_t queuePointer;
+	uint32_t sum;
+	uint16_t mesurements[HCSR04_averagingPeriod];
 }HCSR04_data;
 
 void HCSR04_inti();
 uint8_t HCSR04_measure(uint8_t sensorID);
-void HCSR04_update_ref(HCSR04_data* data, uint8_t sensorId);
+void HCSR04_update_ref(HCSR04_data* data, uint8_t sensorId, uint8_t edgeBit);
 int32_t echo_time_to_encoder_val(uint16_t time);
-
+void handleInterrupt(uint8_t timerId, uint8_t edgeBit);
 #endif /* HC-SR04_H_ */

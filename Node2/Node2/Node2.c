@@ -52,16 +52,16 @@ int main(){
 	//BURDE KJØØRE HCSR04_init(&S0_data) sånn som regulator_init
 	HCSR04_data S0_data;
 	HCSR04_data S1_data;
-	//S0_data.queuePointer = 0;
-	//S1_data.queuePointer = 0;
-	S0_data.time = 0;
+	S0_data.queuePointer = 0;
+	S1_data.queuePointer = 0;
 	S0_data.pos_ref = 0;
-	S1_data.time = 0;
 	S1_data.pos_ref = 0;
-	/*for(uint8_t i=0;i<HCSR04_averagingPeriod;++i){
+	for(uint8_t i=0;i<HCSR04_averagingPeriod;++i){
 		S0_data.mesurements[i] = 0;
 		S1_data.mesurements[i] = 0;
-	}*/
+	}
+	S0_data.sum = 0;
+	S1_data.sum = 0;
 	
 	
 	int16_t joySpeed = 0;
@@ -74,9 +74,7 @@ int main(){
 	
 	puts("All init done");
 	while(1){
-		//adc_measure(&adcSignal);
-		//printf("%i   \r",dist_data.pos_ref);
-		//puts("Adc measured");
+		adc_measure(&adcSignal);
 		CAN_interrupt = CAN_int();
 		switch(CAN_interrupt){
 			case NOINT:
@@ -95,8 +93,9 @@ int main(){
 			default:
 				break;
 		}
-		CAN_int_clear(CAN_interrupt);
-		//puts("Caned");
+		//Resets the interrupt if there was one
+		if(CAN_interrupt != NOINT) CAN_int_clear(CAN_interrupt);
+		//if we got a message, then the length would be non 0
 		if(msgInn0.length){
 			switch(msgInn0.data[CANMSG_PACKAGESPECIFIER]){
 				case PACKAGESPECIFIER_MOTORSIGNALS:
@@ -112,25 +111,23 @@ int main(){
 		
 		
 		if(gameMode != GAMEMODE_OFF){
-			//printf("%i\r\n",msgInn0.data[CANMSG_SLIDERR_BYTE]);
 			servo_set(msgInn0.data[CANMSG_SLIDERR_BYTE]);
 			regulator.dt = TCNT3*1.0/((F_CPU/64)*1.0);
 			TCNT3 = 0;	
 			if(gameMode == GAMEMODE_JS){
-				//printf("JS  \r");
 				joySpeed = msgInn0.data[CANMSG_JSX_BYTE];
 				joyPos += get_pos_from_percent(joySpeed)* regulator.dt * CONTROLLER_GAIN;
-				//printf("%i\r",joyPos);
 				regulator_increment(&regulator,joyPos);
 				push = msgInn0.data[CANMSG_BTNR_BYTE] & (1<<CANMSG_BTNR_BIT);
 			}
 			else if(gameMode == GAMEMODE_SENS){
 				//printf("SENS  \r");
-				HCSR04_update_ref(&S0_data,SENSOR0);
-				//HCSR04_update_ref(&S1_data,SENSOR1);
-				regulator_increment(&regulator,S0_data.pos_ref);
-				if(S1_data.time < S1_ACTIVATION_POINT){
-					push = 0;
+				HCSR04_update_ref(&S0_data,SENSOR0, ISC20);
+				HCSR04_update_ref(&S1_data,SENSOR1, ISC30);
+				regulator_increment(&regulator, S0_data.pos_ref);
+				if(S1_data.pos_ref < BOARD_SIZE/4){
+					//puts("push");
+					push = 1;
 				}
 				else push = 0;
 				
@@ -140,23 +137,26 @@ int main(){
 			
 			if(push){
 				clear_bit(SOLENOID_PORT,SOLENOID_BIT);
-				_delay_ms(100);
+				//_delay_ms(100);
 			}
 			else{
 				set_bit(SOLENOID_PORT,SOLENOID_BIT);
 			}
 		}
+		//Gamemode off:
 		else{
 			//printf("OFF  \r");
 			TCNT3 = 0;
 			motorbox_set_percent(0);
 			motorbox_reset_encoder();
+			set_bit(SOLENOID_PORT,SOLENOID_BIT); //retract solenoid
 		}
 		//puts("Gamed");
 		//Retursignal
-		//if(adcSignal.edge){
-		//	CAN_message_send(&msgPoint);
-		//}
+		if(adcSignal.edge){
+			CAN_message_send(&msgPoint);
+			
+		}
 		//puts("Can answered");
 		
 	}

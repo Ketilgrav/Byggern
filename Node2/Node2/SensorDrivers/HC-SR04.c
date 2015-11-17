@@ -8,9 +8,9 @@
 #include "HC-SR04.h"
 volatile uint16_t sensor0Time = 0;
 volatile uint16_t sensor1Time = 0;
-volatile uint16_t doUpdate = 0;
+volatile uint8_t doUpdate = 0;
 
-volatile uint16_t nextSensor = SENSOR0;
+volatile uint16_t nextSensor = SENSOR1;
 
 void HCSR04_inti(){
 	
@@ -48,11 +48,11 @@ ISR(TIMER4_OVF_vect){
 }
 
 ISR(INT2_vect){
-	handleInterrupt(SENSOR0);	
+	handleInterrupt(SENSOR0, ISC20);	
 }
 
 ISR(INT3_vect){
-	handleInterrupt(SENSOR1);	
+	handleInterrupt(SENSOR1, ISC30);	
 }
 
 ISR(BADISR_vect, ISR_NAKED)
@@ -62,26 +62,27 @@ ISR(BADISR_vect, ISR_NAKED)
 	//while(1){}
 }
 
-void handleInterrupt(uint8_t timerId){
-	//puts("b");
+
+// LA TIL EDGEBIT HER!!! DEN RESETTA KUN INTERRUPT PIN 2 IKKE 3!!! edgeBit erstattet ISC20
+// LA OGSÅ DENNE FUNKSJONEN INN I H FILA! DEN VAR IKKE DEKLARERT!=?!?!??!?!?!
+void handleInterrupt(uint8_t timerId, uint8_t edgeBit){
 	//If we interrupted on rising
-	if( EICRA & (1<<ISC20)){
+	if( EICRA & (1<<edgeBit)){
 		//if the timer is not turned off, meaning that another sensor is using it, then this interrupt is ignored
 		if(TCCR4B & (0b111<<CS40)){
 			return;
 		}
-		
-		clear_bit(EICRA,ISC20); //Change to interrupt on falling edge
+		clear_bit(EICRA, edgeBit); //Change to interrupt on falling edge
 		//Starts the timer:
 		TCNT4 = 0;
-		TCCR4B |= 0b010 << CS40; //1/8 prescaler
+		TCCR4B |= 0b010 << CS40; // 1/8 pre scaler
 	}
 	//If we interrupted on falling
-	else if(!(EICRA & (1<<ISC20))){		
-		set_bit(EICRA,ISC20); //Change to interrupt on rising edge
+	else if(!(EICRA & (1<<edgeBit))){
+		set_bit(EICRA, edgeBit); //Change to interrupt on rising edge
 		//stops the timer and records the value.
 		TCCR4B &= ~(0b111 << CS40);
-		//Ignoring the timer value if an overflow occured
+		//Ignoring the timer value if an overflow occurred
 		if(!read_bit(TIFR4, TOV4)){
 			if(timerId == SENSOR0){
 				sensor0Time = TCNT4;
@@ -94,7 +95,7 @@ void handleInterrupt(uint8_t timerId){
 			set_bit(TIFR4, TOV4); //Resets the flag
 		}		
 	}
-	doUpdate = 1;
+	doUpdate = (1<<edgeBit);
 }
 
 
@@ -109,7 +110,8 @@ ISR(TIMER5_COMPA_vect){
 		TCNT5 = 0;
 	}
 	else if(nextSensor == SENSOR0){
-		nextSensor == SENSOR1;
+		//printf("Bola");
+		nextSensor = SENSOR1;
 		set_bit(S0_TRIG_PORT,S0_TRIG_BIT);
 		_delay_us(HCSR04_TRIGGERPULSEWIDTH_us);
 		clear_bit(S0_TRIG_PORT,S0_TRIG_BIT);
@@ -118,16 +120,20 @@ ISR(TIMER5_COMPA_vect){
 	
 }
 
-void HCSR04_update_ref(HCSR04_data* data, uint8_t sensorId){
-	if(!doUpdate) return;
-	doUpdate = 0;
+
+// LA TIL EDGEBIT HER!!! DEN UPDATA KUN DEN FØRSTE
+void HCSR04_update_ref(HCSR04_data* data, uint8_t sensorId, uint8_t edgeBit){
+	if( !(doUpdate & (1<<edgeBit)) ) return;
+	doUpdate &= (0<<edgeBit);
 	
 	uint16_t time;
 	if(sensorId == SENSOR0){
 		time = sensor0Time;
+		//puts("S1");
 	}
 	else if(sensorId == SENSOR1){
 		time = sensor1Time;
+		//puts("S2");
 	}
 	
 	int32_t encoderDist = echo_time_to_encoder_val(time);
@@ -136,24 +142,15 @@ void HCSR04_update_ref(HCSR04_data* data, uint8_t sensorId){
 		//puts("too far\r\n");
 		return;
 	}
+
 	
-	//Verdien er utenfor standardavviket, da anntaes at det er en feilmåling og den ignoreres.
-	/*if(encoderDist > data->pos_ref+HCSR04_MAX_DEVIATION_ENCODER_DIST || encoderDist < data->pos_ref+HCSR04_MAX_DEVIATION_ENCODER_DIST){
-		puts("deviation\r\n");
-		return;
-	}*/
-		
-	//data->mesurements[data->queuePointer] = time;
-	//data->queuePointer++;
-	//if(data->queuePointer >= HCSR04_averagingPeriod) data->queuePointer = 0;
+	data->sum -= data->mesurements[data->queuePointer];
+	data->sum += time;
+	data->mesurements[data->queuePointer] = time;
+	data->queuePointer++;
+	if(data->queuePointer >= HCSR04_averagingPeriod) data->queuePointer = 0;
 	
-	/*uint16_t sum = 0;
-	for(uint8_t i = 0; i < HCSR04_averagingPeriod; ++i){
-		sum += data->mesurements[i];
-	}*/
-	//data->time = sum/HCSR04_averagingPeriod;
-	data->time = time;
-	data->pos_ref = encoderDist;
+	data->pos_ref = echo_time_to_encoder_val(data->sum/HCSR04_averagingPeriod);
 }
 
 int32_t echo_time_to_encoder_val(uint16_t time){

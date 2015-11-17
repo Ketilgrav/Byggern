@@ -1190,32 +1190,33 @@ char SPI_communicate(char cData){
      736:	8f b1       	in	r24, 0x0f	; 15
      738:	08 95       	ret
 
-0000073a <USART_Transmit>:
+0000073a <USART_transmit>:
+	fdevopen(USART_transmit, USART_receive);
 }
 
 void USART_transmit(unsigned char data){
 	//Wait for empty transmit buffer
 	while( !(UCSR0A&(1<<UDRE0)) );
-
      73a:	5d 9b       	sbis	0x0b, 5	; 11
-     73c:	fe cf       	rjmp	.-4      	; 0x73a <USART_Transmit>
+     73c:	fe cf       	rjmp	.-4      	; 0x73a <USART_transmit>
+
 	//Put data into buffer, sends the data
 	UDR0 = data;
-}
      73e:	8c b9       	out	0x0c, r24	; 12
      740:	08 95       	ret
 
-00000742 <USART_Receive>:
+00000742 <USART_receive>:
+}
 
 unsigned char USART_receive(void){
 	//Wait for data to be received
 	while( !(UCSR0A&(1<<RXC0)) );
+     742:	5f 9b       	sbis	0x0b, 7	; 11
+     744:	fe cf       	rjmp	.-4      	; 0x742 <USART_receive>
 	//Get and return received data from buffer
 	return UDR0;
-     742:	5f 9b       	sbis	0x0b, 7	; 11
-     744:	fe cf       	rjmp	.-4      	; 0x742 <USART_Receive>
-}
      746:	8c b1       	in	r24, 0x0c	; 12
+}
      748:	08 95       	ret
 
 0000074a <USART_init>:
@@ -2688,7 +2689,7 @@ int main(void){
      edc:	0f be       	out	0x3f, r0	; 63
      ede:	cd bf       	out	0x3d, r28	; 61
 	//EEPROM test
-	//eeprom_write_byte((uint8_t*) )
+	//eeprom_write_byte((uint8_t*),8,8)
 	
 	/*Initialization*/
 	USART_init();

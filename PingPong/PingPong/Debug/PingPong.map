@@ -703,12 +703,12 @@ END GROUP
  .text.SPI_communicate
                 0x00000730        0xa Communication_drivers/spi.o
                 0x00000730                SPI_communicate
- .text.USART_Transmit
+ .text.USART_transmit
                 0x0000073a        0x8 Communication_drivers/UsartDriver.o
-                0x0000073a                USART_Transmit
- .text.USART_Receive
+                0x0000073a                USART_transmit
+ .text.USART_receive
                 0x00000742        0x8 Communication_drivers/UsartDriver.o
-                0x00000742                USART_Receive
+                0x00000742                USART_receive
  .text.USART_init
                 0x0000074a       0x1e Communication_drivers/UsartDriver.o
                 0x0000074a                USART_init

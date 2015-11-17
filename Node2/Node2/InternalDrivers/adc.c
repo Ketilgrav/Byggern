@@ -7,9 +7,11 @@
 #include "../MainInclude.h"
 #include "adc.h"
 
+volatile uint16_t adcVal = 0;
+volatile uint8_t adcDoUpdate = 1;
+
 void adc_init(){
 	clear_bit(DDRF,PF0);
-	
 	
 	ADMUX |= (1<<MUX0); //Bruker ADC1
 	ADMUX |= (1<<REFS0); //Bruker AVCC som refferanse.
@@ -19,23 +21,26 @@ void adc_init(){
 	ADCSRB |= (0<<ADTS0); //Free running mode
 }
 
-uint16_t adc_getVal(){
-	//Starter konvertering
-	ADCSRA |= (1<<ADSC);
-	while(! (ADCSRA & ADIF)) //Så lenge konverteringa ikke er ferdig
-	ADCSRA |= ADIF; //Resetter interupten
-	return ADC;
+
+ISR(ADC_vect){
+	adcVal = ADC;
+	adcDoUpdate = 1;
 }
 
 
 uint16_t adc_measure(ADC_signal* signal){
+	if(!adcDoUpdate){
+		//If the adc convertion has not finished
+		return;
+	}
+	
 	signal->nrMeasurements ++;
-	signal->sumValue += adc_getVal();
+	signal->sumValue += adcVal;
 	signal->edge = 0;
 	
+	//Averages out averagingPeriod number of values
 	if(signal->nrMeasurements > averagingPeriod){
 		if(signal->sumValue / signal->nrMeasurements < boolValueBorder){
-			//printf("%u  \r",signal->sumValue / signal->nrMeasurements);
 			if(signal->boolState != 1){
 				signal->count++;
 			}
@@ -51,4 +56,8 @@ uint16_t adc_measure(ADC_signal* signal){
 		signal->nrMeasurements = 0;
 		signal->sumValue = 0;
 	}
+	
+	//Starting new convertion
+	ADCSRA |= (1<<ADSC);
+	adcDoUpdate = 0;
 }

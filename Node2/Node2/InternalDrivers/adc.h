@@ -10,7 +10,6 @@
 #define ADC_H_
 
 void adc_init();
-uint16_t adc_getVal();
 
 #define adc_DDR DDRF
 #define adc_BIT PF1
