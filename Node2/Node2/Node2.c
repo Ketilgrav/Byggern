@@ -39,10 +39,10 @@ int main(){
 	CAN_message msgInn0;
 	msgInn0.length = 0;
 	
-	CAN_message msgPoint;
-	msgPoint.length = 1;
+	CAN_message msgGameSignal;
+	msgPoint.length = GAMESIGNAL_MSGLEN;
 	msgPoint.id = NODE1_CANID_0;
-	msgPoint.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_GAMEPOINT;
+	msgPoint.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_GAMESIGNAL;
 	
 	ADC_signal adcSignal;
 	Regulator regulator;
@@ -69,12 +69,12 @@ int main(){
 	
 	
 	uint8_t gameMode = GAMEMODE_OFF;
+	uint8_t gameModeChanged = 0;
 	
 	uint8_t push = 0;
 	
 	puts("All init done");
 	while(1){
-		adc_measure(&adcSignal);
 		CAN_interrupt = CAN_int();
 		switch(CAN_interrupt){
 			case NOINT:
@@ -84,11 +84,9 @@ int main(){
 				break;
 			case RX0:
 				CAN_data_receive(&msgInn0, MCP_RXB0CTRL);
-				//printf("RX0: %i\t%i   \t%i   \t%i   \r",msgInn0.data[CANMSG_PACKAGESPECIFIER],msgInn0.data[CANMSG_BTNR_BYTE],msgInn0.data[CANMSG_SLIDERR_BYTE],msgInn0.data[CANMSG_JSX_BYTE]);
 				break;
 			case RX1:
 				CAN_data_receive(&msgInn0, MCP_RXB1CTRL);
-				//printf("RX0: %i\t%i   \t%i   \t%i   \r",msgInn0.data[CANMSG_PACKAGESPECIFIER],msgInn0.data[CANMSG_BTNR_BYTE],msgInn0.data[CANMSG_SLIDERR_BYTE],msgInn0.data[CANMSG_JSX_BYTE]);
 				break;
 			default:
 				break;
@@ -99,11 +97,12 @@ int main(){
 		if(msgInn0.length){
 			switch(msgInn0.data[CANMSG_PACKAGESPECIFIER]){
 				case PACKAGESPECIFIER_MOTORSIGNALS:
-					msgInn0.length = 0;
+					msgInn0.length = 0; //Indicates that the message is read
 				break;
 				case PACKAGESPECIFIER_GAMEMODE:
 					gameMode = msgInn0.data[GAMEMODE_MODE_BYTE];
-					msgInn0.length = 0;
+					gameModeChanged = 1;
+					msgInn0.length = 0; //Indicates that the message is read
 				break;
 			}
 			
@@ -111,54 +110,84 @@ int main(){
 		
 		
 		if(gameMode != GAMEMODE_OFF){
-			servo_set(msgInn0.data[CANMSG_SLIDERR_BYTE]);
+			//if the gamemode changed to this state, then things need to be activated
+			if(gameModeChanged){
+				REGULATOR_TIMER_ACTIVATE;
+			}
+			
+						
+			//Measures if the led i blocked
+			adc_measure(&adcSignal);
+			
+			//Writes down the time interval since last round.
+			//Used in the regulator, and other integral action
 			regulator.dt = TCNT3*1.0/((F_CPU/64)*1.0);
-			TCNT3 = 0;	
+			TCNT3 = 0;	//Resets the timer.
+			
+			//Sets the servo accorging to the slider from node1
+			servo_set(msgInn0.data[CANMSG_SLIDERR_BYTE]);
+			
 			if(gameMode == GAMEMODE_JS){
+				//The joystick indicates the movement speed of the motor
 				joySpeed = msgInn0.data[CANMSG_JSX_BYTE];
+				//We integrate up the joystick signal to get a position reference. 
 				joyPos += get_pos_from_percent(joySpeed)* regulator.dt * CONTROLLER_GAIN;
+				//Runs the regulator with the integrated joystick signal as position reference.
 				regulator_increment(&regulator,joyPos);
+				
+				//If button R is pressed, then the sollenoid is supposed to push.
 				push = msgInn0.data[CANMSG_BTNR_BYTE] & (1<<CANMSG_BTNR_BIT);
 			}
+			
 			else if(gameMode == GAMEMODE_SENS){
-				//printf("SENS  \r");
+				//The echo sensor indicates the motor possition.
 				HCSR04_update_ref(&S0_data,SENSOR0, ISC20);
+				//Echo sensor 1 is used to activated the solenoid
 				HCSR04_update_ref(&S1_data,SENSOR1, ISC30);
+				//Runs the regulator with echo sensor possition reference.
 				regulator_increment(&regulator, S0_data.pos_ref);
-				if(S1_data.pos_ref < BOARD_SIZE/4){
-					//puts("push");
+				
+				//Echo sensor 1 will measure the distance to the other side of the box most of the time
+				//If it measures a suffitently lower value, then the player is blocing it
+				if(S1_data.pos_ref < BOARD_SIZE/2 - S1_ACTIVATION_DISTANCE){
 					push = 1;
 				}
 				else push = 0;
 				
-				//printf("Sens: %i    \tEncod: %i    \r",S0_data.pos_ref,motorbox_get_encoder());
 			}
+			
+			//Set the motorpower acording to the regulator.
 			motorbox_set_percent(regulator.u);
 			
-			if(push){
+			//Activates or deactivates the solenoid
+			//If the solenoid was previously deactive and we want to activate it
+			if(push && read_bit(SOLENOID_PORT,SOLENOID_BIT)){				
+				//Activates
 				clear_bit(SOLENOID_PORT,SOLENOID_BIT);
-				//_delay_ms(100);
+				//Sends a signal indicating that the player pushed the solenoid
+				//This is going to start the game, if it has not allready started.
+				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_START;
+				CAN_message_send(&msgPoint);
 			}
-			else{
+			//If the solenoid was previusly active and we want to deactivate it
+			else if(!push && !read_bit(SOLENOID_PORT,SOLENOID_BIT)){
 				set_bit(SOLENOID_PORT,SOLENOID_BIT);
 			}
+			
+			//if there was a rising edge on the adcSignal, then the game is lost
+			if(adcSignal.edge){
+				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_STOP;
+				CAN_message_send(&msgPoint);
+			}
 		}
-		//Gamemode off:
 		else{
-			//printf("OFF  \r");
-			TCNT3 = 0;
+			REGULATOR_TIMER_DEACTIVATE;
+			//Stops the motor
 			motorbox_set_percent(0);
+			//Resets the encoder. (Burde skje ved gamestart)
 			motorbox_reset_encoder();
 			set_bit(SOLENOID_PORT,SOLENOID_BIT); //retract solenoid
-		}
-		//puts("Gamed");
-		//Retursignal
-		if(adcSignal.edge){
-			CAN_message_send(&msgPoint);
-			
-		}
-		//puts("Can answered");
-		
+		}		
 	}
 	return 0;
 }

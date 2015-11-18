@@ -25,6 +25,13 @@ typedef struct Regulator{
 	float dt;
 } Regulator;
 
+#define REGULATOR_TIMER 
+#define REGULATOR_TIMER_PRESCALER TCCR3B
+#define REGULATOR_TIMER_PRESCALER_VAL (0<<CS32)|(1<<CS31)|(1<<CS30)
+#define REGULATOR_TIMER_ACTIVATE (REGULATOR_TIMER_PRESCALER |= REGULATOR_TIMER_PRESCALER_VAL)
+#define REGULATOR_TIMER_DEACTIVATE (REGULATOR_TIMER_PRESCALER &= ~(0b111))
+
+
 void regulator_init(Regulator* pi_state);
 void regulator_increment(Regulator* pi_state, int16_t pos_ref);
 int16_t get_pos_from_percent(int8_t percent);

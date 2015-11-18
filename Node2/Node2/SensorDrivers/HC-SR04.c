@@ -13,7 +13,6 @@ volatile uint8_t doUpdate = 0;
 volatile uint16_t nextSensor = SENSOR1;
 
 void HCSR04_inti(){
-	
 	//porter
 	set_bit(S0_TRIG_DDR,S0_TRIG_BIT);
 	clear_bit(S0_ECHO_DDR,S0_ECHO_BIT);
