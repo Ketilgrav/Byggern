@@ -25,7 +25,7 @@ void regulator_init(Regulator* regulator){
 
 void regulator_increment(Regulator* regulator, int16_t pos_ref){
 	int16_t encoderPos = motorbox_get_encoder();
-	int16_t avvik = (pos_ref-encoderPos)/(board_size/100); //I prosent, -100er motor helt til høyre, mens vi vil helt til venstre
+	int16_t avvik = (pos_ref-encoderPos)/(BOARD_SIZE/100); //I prosent, -100er motor helt til høyre, mens vi vil helt til venstre
 	regulator->integralValue+=avvik*regulator->dt;
 	float derivatLedd = 0;
 	float sum = 0;
@@ -44,5 +44,5 @@ void regulator_increment(Regulator* regulator, int16_t pos_ref){
 	regulator->prevVal = avvik;
 }
 int16_t get_pos_from_percent(int8_t percent){
-	return (board_size/200) * percent;
+	return (BOARD_SIZE/200) * percent;
 }

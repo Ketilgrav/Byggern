@@ -10,7 +10,7 @@
 void servo_init(){
 	set_bit(PWM_DDR, PWM_bit);
 	
-	//Setter fast PWM 9 bit, 0110, WGM10. MAX = 0x01FF
+	//Activating fast PWM
 	TCCR1A |= (1<<WGM11);
 	TCCR1B |= (1<<WGM12)|(1<<WGM13);
 	
@@ -23,8 +23,7 @@ void servo_init(){
 	//TOP signalet
 	ICR1 = duty_cycle_ms * F_CPU / clock_scaler_val;
 	
-	//OC1A er pwm signalet	går ut på PB5
-	//OCR1A nivået for sette lav. 
+	//Timer is compared to this value
 	OCR1A = pulse_width_min * F_CPU / clock_scaler_val;
 }
 

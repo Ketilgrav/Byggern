@@ -35,7 +35,6 @@ LINKER_SCRIPT_DEP:=
 SUBDIRS :=  \
 ../CommunicationDrivers \
 ../MotorDrivers \
-../InternalDrivers \
 ../SensorDrivers
 
 
@@ -46,11 +45,11 @@ C_SRCS +=  \
 ../CommunicationDrivers/mcp2515.c \
 ../CommunicationDrivers/spi.c \
 ../CommunicationDrivers/UsartDriver.c \
-../InternalDrivers/adc.c \
 ../MotorDrivers/MotorBox.c \
 ../MotorDrivers/servo.c \
 ../Node2.c \
 ../regulator.c \
+../SensorDrivers/adc.c \
 ../SensorDrivers/HC-SR04.c
 
 
@@ -66,11 +65,11 @@ CommunicationDrivers/I2C.o \
 CommunicationDrivers/mcp2515.o \
 CommunicationDrivers/spi.o \
 CommunicationDrivers/UsartDriver.o \
-InternalDrivers/adc.o \
 MotorDrivers/MotorBox.o \
 MotorDrivers/servo.o \
 Node2.o \
 regulator.o \
+SensorDrivers/adc.o \
 SensorDrivers/HC-SR04.o
 
 OBJS_AS_ARGS +=  \
@@ -79,11 +78,11 @@ CommunicationDrivers/I2C.o \
 CommunicationDrivers/mcp2515.o \
 CommunicationDrivers/spi.o \
 CommunicationDrivers/UsartDriver.o \
-InternalDrivers/adc.o \
 MotorDrivers/MotorBox.o \
 MotorDrivers/servo.o \
 Node2.o \
 regulator.o \
+SensorDrivers/adc.o \
 SensorDrivers/HC-SR04.o
 
 C_DEPS +=  \
@@ -92,11 +91,11 @@ CommunicationDrivers/I2C.d \
 CommunicationDrivers/mcp2515.d \
 CommunicationDrivers/spi.d \
 CommunicationDrivers/UsartDriver.d \
-InternalDrivers/adc.d \
 MotorDrivers/MotorBox.d \
 MotorDrivers/servo.d \
 Node2.d \
 regulator.d \
+SensorDrivers/adc.d \
 SensorDrivers/HC-SR04.d
 
 C_DEPS_AS_ARGS +=  \
@@ -105,11 +104,11 @@ CommunicationDrivers/I2C.d \
 CommunicationDrivers/mcp2515.d \
 CommunicationDrivers/spi.d \
 CommunicationDrivers/UsartDriver.d \
-InternalDrivers/adc.d \
 MotorDrivers/MotorBox.d \
 MotorDrivers/servo.d \
 Node2.d \
 regulator.d \
+SensorDrivers/adc.d \
 SensorDrivers/HC-SR04.d
 
 OUTPUT_FILE_PATH +=Node2.elf
@@ -150,13 +149,6 @@ LINKER_SCRIPT_DEP+=
 
 
 CommunicationDrivers/%.o: ../CommunicationDrivers/%.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 4.8.1
-	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-InternalDrivers/%.o: ../InternalDrivers/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.8.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

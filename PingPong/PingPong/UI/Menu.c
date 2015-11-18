@@ -11,127 +11,127 @@
 #include "../../../InterNodeHeaders/CanMessageFormat.h"
 #include "../Communication_drivers/can.h"
 
-//Genererer manytillstandene, uten å alokere minnet manuelt. 
-menyNode mainMenu;
-menyNode options;
-menyNode reCalibrateJs;
-menyNode chooseController;
-menyNode controllerJoystick;
-menyNode controllerSensor;
-menyNode newGame;
-menyNode highScore;
-menyNode canMsg;
+//Generating the menu states, without allocating memory manually. 
+menuNode mainMenu;
+menuNode options;
+menuNode reCalibrateJs;
+menuNode chooseController;
+menuNode controllerJoystick;
+menuNode controllerSensor;
+menuNode newGame;
+menuNode highScore;
+menuNode canMsg;
 
-menyNode* menu_init(){
-	strcpy(options.tekst,			"Options       ");
-	strcpy(newGame.tekst,			"New Game      ");
-	strcpy(highScore.tekst,			"High scores   ");
-	strcpy(mainMenu.tekst,			"Main menu!    ");
-	strcpy(reCalibrateJs.tekst,		"Re calib. js. ");
-	strcpy(canMsg.tekst,			"Disp. CAN msg.");
-	strcpy(chooseController.tekst,	"Choose cntrlr.");
-	strcpy(controllerJoystick.tekst,"Joystick      ");
-	strcpy(controllerSensor.tekst,	"Sensor        ");
+menuNode* menu_init(){
+	strcpy(options.text,			"Options       ");
+	strcpy(newGame.text,			"New Game      ");
+	strcpy(highScore.text,			"High scores   ");
+	strcpy(mainMenu.text,			"Main menu!    ");
+	strcpy(reCalibrateJs.text,		"Re calib. js. ");
+	strcpy(canMsg.text,				"Disp. CAN msg.");
+	strcpy(chooseController.text,	"Choose cntrlr.");
+	strcpy(controllerJoystick.text,	"Joystick      ");
+	strcpy(controllerSensor.text,	"Sensor        ");
 	
-	mainMenu.forelder = NULL;
-	mainMenu.nBarn = 4;
-	mainMenu.barn[0] = &options;
-	mainMenu.barn[1] = &newGame;
-	mainMenu.barn[2] = &highScore;
-	mainMenu.barn[3] = &canMsg;
-	mainMenu.pilNivaa = 1;
-	mainMenu.tilstand = MENU;
+	mainMenu.parent = NULL;
+	mainMenu.nChildren = 4;
+	mainMenu.child[0] = &options;
+	mainMenu.child[1] = &newGame;
+	mainMenu.child[2] = &highScore;
+	mainMenu.child[3] = &canMsg;
+	mainMenu.arrowLevel = 1;
+	mainMenu.currentState = MENU;
 	
-	options.forelder = &mainMenu;
-	options.nBarn = 2;
-	options.barn[0] = &reCalibrateJs;
-	options.barn[1] = &chooseController;
-	options.pilNivaa = 1;
-	options.tilstand = MENU;
+	options.parent = &mainMenu;
+	options.nChildren = 2;
+	options.child[0] = &reCalibrateJs;
+	options.child[1] = &chooseController;
+	options.arrowLevel = 1;
+	options.currentState = MENU;
 	
-	reCalibrateJs.forelder = &options;
-	reCalibrateJs.nBarn = 0;
-	reCalibrateJs.pilNivaa = 1;
-	reCalibrateJs.tilstand = CALIBRATE_JS;
+	reCalibrateJs.parent = &options;
+	reCalibrateJs.nChildren = 0;
+	reCalibrateJs.arrowLevel = 1;
+	reCalibrateJs.currentState = CALIBRATE_JS;
 	
-	chooseController.forelder = &options;
-	chooseController.nBarn = 2;
-	chooseController.barn[0] = &controllerJoystick;
-	chooseController.barn[1] = &controllerSensor;
-	chooseController.pilNivaa = 1;
-	chooseController.tilstand = MENU;
+	chooseController.parent = &options;
+	chooseController.nChildren = 2;
+	chooseController.child[0] = &controllerJoystick;
+	chooseController.child[1] = &controllerSensor;
+	chooseController.arrowLevel = 1;
+	chooseController.currentState = MENU;
 	
-	controllerJoystick.forelder = &chooseController;
-	controllerJoystick.nBarn = 0;
-	controllerJoystick.pilNivaa = 1;
-	controllerJoystick.tilstand = CNTRL_JS;
+	controllerJoystick.parent = &chooseController;
+	controllerJoystick.nChildren = 0;
+	controllerJoystick.arrowLevel = 1;
+	controllerJoystick.currentState = CNTRL_JS;
 	
-	controllerSensor.forelder = &chooseController;
-	controllerSensor.nBarn = 0;
-	controllerSensor.pilNivaa = 1;
-	controllerSensor.tilstand = CNTRL_SENS;
+	controllerSensor.parent = &chooseController;
+	controllerSensor.nChildren = 0;
+	controllerSensor.arrowLevel = 1;
+	controllerSensor.currentState = CNTRL_SENS;
 	
-	newGame.forelder = &mainMenu;
-	newGame.nBarn = 0;
-	newGame.pilNivaa = 1;
-	newGame.tilstand = RUN_GAME;
+	newGame.parent = &mainMenu;
+	newGame.nChildren = 0;
+	newGame.arrowLevel = 1;
+	newGame.currentState = RUN_GAME;
 	
-	highScore.forelder = &mainMenu;
-	highScore.nBarn = 0;
-	highScore.pilNivaa = 1;
-	highScore.tilstand = HIGH_SCORE;
+	highScore.parent = &mainMenu;
+	highScore.nChildren = 0;
+	highScore.arrowLevel = 1;
+	highScore.currentState = HIGH_SCORE;
 	
-	canMsg.forelder = &mainMenu;
-	canMsg.nBarn = 0;
-	canMsg.pilNivaa = 1;
-	canMsg.tilstand = SHOW_CAN_MSG;
+	canMsg.parent = &mainMenu;
+	canMsg.nChildren = 0;
+	canMsg.arrowLevel = 1;
+	canMsg.currentState = SHOW_CAN_MSG;
 	
 	return &mainMenu;
 	
 }
 
-void menu_go(menyNode** meny, Controls* control){
-	//Flytter pilen ihht joystick
-	flyttPil(&((*meny)->pilNivaa), &control->jsY, (*meny)->nBarn);
+void menu_go(menuNode** menu, Controls* control){
+	//moves the arrow according to joystick
+	flyttPil(&((*menu)->arrowLevel), &control->jsY, (*menu)->nChildren);
 	
 	oled_clear();
-	//Skriver ut tittelen
-	oled_print((*meny)->tekst,0,0);
+	//Prints the title
+	oled_print((*menu)->text,0,0);
 	
-	//Går gjennom alle undermenyene og skriver dem ut.
-	for(int i=1; i<=(*meny)->nBarn; ++i){
-		//skriver ut spaceinvader for å vise nivået brukeren peker på
-		if((*meny)->pilNivaa == i){
+	//Iterates through submenus and prints them
+	for(int i=1; i<=(*menu)->nChildren; ++i){
+		//Prints a spaceinvader at the current arrow level.
+		if((*menu)->arrowLevel == i){
 			oled_print("-s",i,0);
 		}
 		else{
 			oled_print("  ",i,0);
 		}
-		oled_print((*meny)->barn[i-1]->tekst,i,2);
+		oled_print((*menu)->child[i-1]->text,i,2);
 	}
 	
-	//Høyre/venstre på joystick endrer menynivå. 
-	//gå til barnet vi peker på
+	//Left/right joystick changes the menu level. 
+	//Go to the child currently pointed at
 	if(control->jsX.descreet_edge > 0){
-		if((*meny)->pilNivaa !=0  &&((*meny)->pilNivaa <= (*meny)->nBarn)){
-			*meny = (*meny)->barn[((*meny)->pilNivaa)-1];
+		if((*menu)->arrowLevel !=0  &&((*menu)->arrowLevel <= (*menu)->nChildren)){
+			*menu = (*menu)->child[((*menu)->arrowLevel)-1];
 		}
 	}
-	//Gå til forelderen
+	//Go to parent
 	else if(control->jsX.descreet_edge < 0){
-		if((*meny)->forelder != NULL){
-			*meny = (*meny)->forelder;
+		if((*menu)->parent != NULL){
+			*menu = (*menu)->parent;
 		}
 	}
 }
 
-void flyttPil(uint8_t* nivaa, JoyStick* jsY, uint8_t nBarn){
+void flyttPil(uint8_t* level, JoyStick* jsY, uint8_t nChildren){
 	if(jsY->descreet_edge == 0){
-		//Har ikke trykket, da skal den ikke flyttes
+		//Nothing has been pressed, do nothing
 		return;
 	}
-	//Flytter utifra joystick
-	(*nivaa) -= jsY->descreet;
-	if((*nivaa) <1) *nivaa = nBarn;			//Om vi er før første element underflower vi til siste
-	else if((*nivaa) > nBarn) *nivaa = 1;	//etter siste overflower vi til første.
+	//Moves according to joystick
+	(*level) -= jsY->descreet;
+	if((*level) <1) *level = nChildren;			//If we are at the last element, go to first.
+	else if((*level) > nChildren) *level = 1;	//If we are at the first element, go to last.
 }

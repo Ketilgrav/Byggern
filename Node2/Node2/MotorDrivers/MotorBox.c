@@ -9,9 +9,10 @@
 
 void motorbox_init(){
 	MOTORBOX_CONTROLL_DDR |= (1<<ENCODER_OUTPUTENABLE_NOT)|(1<<ENCODER_RESET_NOT)|(1<<ENCODER_SELECTHIGHBIT)|(1<<MOTOR_ENABLE)|(1<<MOTOR_DIRECTION);
-	clear_bit(MOTORBOX_CONTROLL_REG,ENCODER_RESET_NOT);
-	//Velger å ikke resette, skrur på motor
-	MOTORBOX_CONTROLL_REG |= (1<<ENCODER_RESET_NOT)|(1<<MOTOR_ENABLE);
+	
+	//Srkur på motoren
+	set_bit(MOTORBOX_CONTROLL_REG, MOTOR_ENABLE);
+	
 	//Enabler output, velger lowbit, setter direction til -1
 	MOTORBOX_CONTROLL_REG &= ~((1<<ENCODER_OUTPUTENABLE_NOT)|(1<<ENCODER_SELECTHIGHBIT)|(1<<MOTOR_DIRECTION));
 	motorbox_reset_encoder();
@@ -25,14 +26,14 @@ void motorbox_set_percent(int16_t percent){
 	else if(percent < -100){
 		percent = -100;
 	}
-	if(percent<10 && percent>-10){
+	if(percent<MOTOR_SLACK_TURNOFF && percent>-MOTOR_SLACK_TURNOFF){
 		motorbox_set_power(!POS_DIR, 0);
 	}
 	else if(percent < 0){
-		motorbox_set_power(!POS_DIR, -percent +40);
+		motorbox_set_power(!POS_DIR, -percent +MOTOR_SLACK_OFFSET);
 	}
 	else{
-		motorbox_set_power(POS_DIR, percent +40);
+		motorbox_set_power(POS_DIR, percent +MOTOR_SLACK_OFFSET);
 	}
 }
 
@@ -43,7 +44,6 @@ void motorbox_set_power(uint8_t dir, uint8_t power){
 	else{
 		clear_bit(MOTORBOX_CONTROLL_REG,MOTOR_DIRECTION);
 	}
-	//printf("%u \r",power);
 	I2C_transmit(power,DAC_ADRESS);	
 }
 
@@ -53,8 +53,8 @@ int16_t motorbox_get_encoder(){
 	uint16_t encoder_data = reverse_byte(MOTORBOX_DATA_PIN);;
 	clear_bit(MOTORBOX_CONTROLL_REG,ENCODER_SELECTHIGHBIT);
 	_delay_us(20);
-	encoder_data |= (reverse_byte(MOTORBOX_DATA_PIN)<<8);
-	return -board_size/2-encoder_data;
+	encoder_data |= (reverse_byte(MOTORBOX_DATA_PIN)<<8); //The encoder data is inverted, so we have to deinvert
+	return -BOARD_SIZE/2-encoder_data;	//The motor is going to start in the left corner, we want the middle of the board to be 0
 }
 
 void motorbox_reset_encoder(){
@@ -64,8 +64,8 @@ void motorbox_reset_encoder(){
 }
 
 uint8_t reverse_byte(uint8_t b) {
-	b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-	b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-	b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+	b = (b & 0b11110000) >> 4 | (b & 0b00001111) << 4; //Swaps the 4msb and 4lsb
+	b = (b & 0b11001100) >> 2 | (b & 0b00110011) << 2; //Of the 4msb, the 2msb and 2lsb are swapped, same with the 4lsb
+	b = (b & 0b10101010) >> 1 | (b & 0b01010101) << 1; //Of the 2msb the msb and lsb are swapped, same with all the other pairs
 	return b;
 }

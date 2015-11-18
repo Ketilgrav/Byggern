@@ -12,19 +12,19 @@
 #include "../Drivers/Controllers.h"
 #include "../MainInclude.h"
 
-enum Tilstand {MENU = 0, RUN_GAME = 1, HIGH_SCORE = 2, CALIBRATE_JS=3, SHOW_CAN_MSG=4, CNTRL_JS=5, CNTRL_SENS=6};
+enum state { menu = 0, runGame = 1, highScore = 2, calibrateJS = 3, showCanMessage = 4, controllerJS = 5, controllerSens = 6 };
 
-typedef struct menyNode{
-	enum Tilstand tilstand;
-	uint8_t nBarn;
-	uint8_t pilNivaa;
-	char tekst[16];
-	struct menyNode* forelder;
-	struct menyNode* barn[7];
-}menyNode;
+typedef struct menuNode{
+	enum state currentState;
+	uint8_t nChildren;
+	uint8_t arrowLevel;
+	char text[16];
+	struct menuNode* parent;
+	struct menuNode* child[7];
+}menuNode;
 
-menyNode* menu_init();
-void menu_go(menyNode** meny, Controls* controls);
-void flyttPil(uint8_t* nivaa, JoyStick* js, uint8_t nBarn);
+menuNode* menu_init();
+void menu_go(menuNode** menu, Controls* controls);
+void move_arrow(uint8_t* level, JoyStick* js, uint8_t nChildren);
 
 #endif /* MENU_H_ */

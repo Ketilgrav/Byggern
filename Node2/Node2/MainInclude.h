@@ -24,11 +24,12 @@
 #define read_bit( reg, bit ) (reg & (1<<bit))
 #define wait_until_bit_is_set( reg, bit) while( !read_bit(reg, bit))
 #define wait_until_bit_is_cleared(reg, bit) while( read_bit(reg, bit))
+
 #include "../../InterNodeHeaders/CanMessageFormat.h"
 #include "../../InterNodeHeaders/canID.h"
 #include <stdio.h>
 #include <string.h>
 
-typedef enum { false, true} bool;
+typedef enum bool { false=0, true=1} bool;
 
 #endif /* MAININCLUDE_H_ */

@@ -12,7 +12,6 @@
 #include "../MainInclude.h"
 #include "../CommunicationDrivers/I2C.h"
 
-#define board_size 8800
 #define BOARD_SIZE 8800
 #define BOARD_SIZE_CM 40
 
@@ -23,10 +22,14 @@
 #define ENCODER_SELECTHIGHBIT PF5
 #define MOTOR_ENABLE PF4
 #define MOTOR_DIRECTION PF3
+#define MOTOR_SLACK_OFFSET 40
+#define MOTOR_SLACK_TURNOFF 10
+
 
 #define MOTORBOX_DATA_REG PORTK
 #define MOTORBOX_DATA_PIN PINK
 #define MOTORBOX_DATA_DDR DDRK
+
 
 #define POS_DIR 1
 

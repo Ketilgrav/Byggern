@@ -135,12 +135,6 @@
     <Compile Include="CommunicationDrivers\UsartDriver.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="InternalDrivers\adc.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="InternalDrivers\adc.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="MainInclude.h">
       <SubType>compile</SubType>
     </Compile>
@@ -168,6 +162,12 @@
     <Compile Include="regulator.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="SensorDrivers\adc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SensorDrivers\adc.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="SensorDrivers\HC-SR04.c">
       <SubType>compile</SubType>
     </Compile>
@@ -178,7 +178,6 @@
   <ItemGroup>
     <Folder Include="CommunicationDrivers" />
     <Folder Include="MotorDrivers" />
-    <Folder Include="InternalDrivers" />
     <Folder Include="SensorDrivers" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />

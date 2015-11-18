@@ -11,10 +11,34 @@
 #include "../MainInclude.h"
 #include "../MotorDrivers/MotorBox.h"
 
-#define HCSR04_MEASUREMENT_INTERVAL 0.006f
-#define HCSR04_PRESCALER 8
+#define S0_ECHO_INTERRUPT_BIT ISC20
+#define S1_ECHO_INTERRUPT_BIT ISC30
 
-#define HCSR04_TRIGGERPULSEWIDTH_us 10
+#define ETIMER_MEASURE TCNT4
+#define ETIMER_MEASURE_PRESCALER_VAL 8
+#define ETIMER_MEASURE_PRESCALER_BIT 0b010
+#define ETIMER_MEASURE_DISABLE (TCCR4B &= ~(0b111 << CS40))
+#define ETIMER_MEASURE_ENABLE (TCCR4B |= ETIMER_MEASURE_PRESCALER_BIT << CS40)
+#define ETIMER_MEASURE_ENABLE_READ (TCCR4B & (0b111<<CS40))
+#define ETIMER_MEASURE_RESET (TCNT4 = 0)
+
+#define ETIMER_TRIGGER TCNT5
+#define ETIMER_TRIGGER_PRESCALER_VAL 64
+#define ETIMER_TRIGGER_PRESCALER_BIT 0b011
+#define ETIMER_TRIGGER_DISABLE (TCCR5B &= ~(0b111 << CS50))
+#define ETIMER_TRIGGER_ENABLE (TCCR5B |= ETIMER_MEASURE_PRESCALER_BIT << CS50)
+#define ETIMER_TRIGGER_ENABLE_READ (TCCR5B & (0b111<<CS50))
+#define ETIMER_TRIGGER_RESET (TCNT5 = 0)
+
+#define ECHO_INTERRUPT_FALLING(edgeBit) clear_bit(EICRA, edgeBit)
+#define ECHO_INTERRUPT_FALLING_READ(edgeBit) !(EICRA & (1<<edgeBit))
+#define ECHO_INTERRUPT_RISING(edgeBit) clear_bit(EICRA, edgeBit)
+#define ECHO_INTERRUPT_RISING_READ(edgeBit) EICRA & (1<<edgeBit)
+
+#define ECHO_MEASUREMENT_INTERVAL 0.006f
+#define ECHO_PRESCALER 8
+
+#define ECHO_TRIGGERPULSEWIDTH_us 10
 
 #define SENSOR0 0
 #define S0_TRIG_DDR DDRC
@@ -34,22 +58,23 @@
 
 #define S1_ACTIVATION_DISTANCE 500
 
-#define HCSR04_DIST_FROM_MOTOR0 4
+#define ECHO_DIST_FROM_MOTOR0 4
 #define uS_PER_CM 58
 
 
-#define HCSR04_averagingPeriod 3
-#define HCSR04_MAX_DEVIATION_ENCODER_DIST 3000
-typedef struct HCSR04_data{
+#define ECHO_averagingPeriod 3
+#define ECHO_MAX_DEVIATION_ENCODER_DIST 3000
+typedef struct ECHO_data{
 	int16_t pos_ref;
 	uint8_t queuePointer;
 	uint32_t sum;
-	uint16_t mesurements[HCSR04_averagingPeriod];
-}HCSR04_data;
+	uint16_t mesurements[ECHO_averagingPeriod];
+}ECHO_data;
 
-void HCSR04_inti();
-uint8_t HCSR04_measure(uint8_t sensorID);
-void HCSR04_update_ref(HCSR04_data* data, uint8_t sensorId, uint8_t edgeBit);
+void echo_inti();
+void echo_data_inti(ECHO_data* data);
+uint8_t echo_measure(uint8_t sensorID);
+void echo_update_ref(ECHO_data* data, uint8_t sensorId, uint8_t edgeBit);
 int32_t echo_time_to_encoder_val(uint16_t time);
 void handleInterrupt(uint8_t timerId, uint8_t edgeBit);
 #endif /* HC-SR04_H_ */
