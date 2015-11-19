@@ -21,9 +21,9 @@ typedef struct CAN_message{
 
 typedef enum {noInt = 0b000, err = 0b001, rx0 = 0b110, rx1 = 0b111 } interrupt;
 
-#define INTERRUPT_DDR DDRD
-#define INTERRUPT_PIN PIND
-#define INTERRUPT_BIT PD3
+#define INTERRUPT_DDR DDRF
+#define INTERRUPT_PIN PINF
+#define INTERRUPT_BIT PF7
 
 void CAN_init();
 //void CAN_error();

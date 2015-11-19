@@ -12,7 +12,7 @@
 void adc_init();
 
 #define ADC_DDR DDRF
-#define SDC_BIT PF1
+#define ADC_BIT PF1
 
 #define ADC_AVERAGING_PERIOD 50
 #define ADC_BOOL_BORDER_VAL 50
@@ -28,7 +28,8 @@ typedef struct ADC_signal{
 	uint8_t boolState;
 	uint8_t edge;
 	uint8_t count;
+	uint8_t val;
 }ADC_signal;
 
-uint16_t adc_measure(ADC_signal* signal);
+void adc_measure(ADC_signal* signal);
 #endif /* ADC_H_ */

@@ -36,7 +36,7 @@ UI/HighScore.d UI/HighScore.o: ../UI/HighScore.c ../UI/HighScore.h \
  ../UI/../Game/../CommunicationDrivers/../MainInclude.h \
  ../UI/../Game/../CommunicationDrivers/spi.h \
  ../UI/../Game/../CommunicationDrivers/MCP2515_register.h \
- ../UI/../Drivers/Controllers.h
+ ../UI/../Game/../Drivers/OLED.h ../UI/../Drivers/Controllers.h
 
 ../UI/HighScore.h:
 
@@ -117,5 +117,7 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 ../UI/../Game/../CommunicationDrivers/spi.h:
 
 ../UI/../Game/../CommunicationDrivers/MCP2515_register.h:
+
+../UI/../Game/../Drivers/OLED.h:
 
 ../UI/../Drivers/Controllers.h:

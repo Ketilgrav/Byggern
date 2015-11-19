@@ -11,8 +11,8 @@
 
 #include "../MainInclude.h"
 
-#define BAUD 19200
-#define UBRR F_CPU/(16*BAUD) - 1
+#define BAUD 19200UL
+#define UBRR (F_CPU/(16UL*BAUD) - 1)
 
 void USART_init();
 void USART_transmit( unsigned char data );

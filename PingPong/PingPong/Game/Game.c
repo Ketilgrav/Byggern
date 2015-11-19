@@ -7,6 +7,7 @@
 
 #include "Game.h"
 uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor, CAN_message* msgGame){
+	//printf("WTF MOTHERFUCKER?");
 	//TRANSMITTING
 	//Clear the solenoid push bit if message has been sent.
 	if (msgMtor->length == 0){
@@ -33,99 +34,81 @@ uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor,
 		msgGame->length = 0;
 	}
 
-
-	OLED_clear();
+ 	OLED_clear();
 	switch (gameState->currentStatus){
-	//Waiting to start game
-	case pause:
-		OLED_print("NYTT SPILL", 1, 0);
-		OLED_print("DIN KONTROLLER:", 3, 0);
-		if (gameState->useJSnotSENS){
-			OLED_print("JOYSTICK", 4, 0);
-		}
-		else{
-			OLED_print("SENSOR", 4, 0);
-		}
-		OLED_print("START SPILL VED", 6, 0);
-		OLED_print("   AA SKYTE", 7, 0);
-		break;
-	
-	//Running game
-	case play:
-		OLED_print("SPILLET KJØRER", 1, 0);
-
-		OLED_print("POENG:", 3, 0);
-		char currentPoints[5];
-		sprintf(currentPoints, "%u", gameState->points);
-		OLED_print(currentPoints, 3, 9);
-
-		OLED_print("REKORD:", 5, 0);
-		char recordPoints[5];
-		sprintf(recordPoints, "%u", gameState->record);
-		OLED_print(recordPoints, 5, 9);
-		break;
-
-	//Game over
-	case gameOver:
-		if (gameState->points > gameState->record){
-			gameState->record = gameState->points;
-		}
-		if (gameState->points >= gameState->record){
-			OLED_print("NY REKORD!", 0, 0);
-			OLED_print("GRATULERER!", 1, 0);
-		}
-		else{
-			OLED_print("DU TAPTE!", 1, 0);
-		}
-
-		OLED_print("POENG:", 3, 0);
-		char pointString[5];
-		sprintf(pointString, "%u", gameState->points);
-		OLED_print(pointString, 3, 9);
-
-		OLED_print("REKORD:", 5, 0);
-		char recordString[5];
-		sprintf(recordString, "%u", gameState->record);
-		OLED_print(recordString, 5, 9);
-
-		OLED_print("RESTART MED A", 7, 0);
-
-		//Updates and writes name.
-		void update_name(GameState* gameState, Controls* controlls);
-		OLED_print(gameState->name,2,0);
-
-		//Restart, and save highscore and name if this was a new highscore
-		if (controls->btnR.edge){
-			//If highscore:
-			if(gameState->points >= gameState->record){
-				eeprom_write_byte(EEPROM_HIGHSCOREBYTE,gameState->record);
-				for(uint8_t i= 0; i<NAME_LEN;++i){
-					eeprom_write_byte(EEPROM_HIGHSCORENAME+i,gameState->name[i]);
-				}
+		//Waiting to start game
+		case pause:
+			OLED_print("NYTT SPILL", 1, 0);
+			OLED_print("DIN KONTROLLER:", 3, 0);
+			if (gameState->useJSnotSENS){
+				OLED_print("JOYSTICK", 4, 0);
 			}
-			gameState->currentStatus= pause;
-		}
-		break;
-	default:
-		break;
+			else{
+				OLED_print("SENSOR", 4, 0);
+			}
+			OLED_print("START SPILL VED", 6, 0);
+			OLED_print("   AA SKYTE", 7, 0);
+			break;
+	
+		//Running game
+		case play:
+			OLED_print("SPILLET KJORER", 1, 0);
+
+			OLED_print("POENG:", 3, 0);
+			char currentPoints[5];
+			sprintf(currentPoints, "%u", gameState->points);
+			OLED_print(currentPoints, 3, 9);
+
+			OLED_print("REKORD:", 5, 0);
+			char recordPoints[5];
+			sprintf(recordPoints, "%u", gameState->record);
+			OLED_print(recordPoints, 5, 9);
+			break;
+
+		//Game over
+		case gameOver:
+			if (gameState->points > gameState->record){
+				gameState->record = gameState->points;
+				OLED_print("GRARER!", 4, 0);
+			}
+			if (gameState->points >= gameState->record){
+ 				OLED_print("NY REKORD!", 0, 0);
+ 				OLED_print("GRATULERER!", 1, 0);
+			}
+			else{
+ 				OLED_print("DU TAPTE!", 1, 0);
+ 			}
+
+			OLED_print("POINTS:", 3, 0);
+			char pointString[5];
+			sprintf(pointString, "%u", gameState->points);
+			OLED_print(pointString, 3, 9);
+
+			OLED_print("RECorD:", 5, 0);
+			char recordString[5];
+			sprintf(recordString, "%u", gameState->record);
+			OLED_print(recordString, 5, 9);
+ 			OLED_print("RESTART MED A", 7, 0);
+
+			//Updates and writes name.
+			update_name(gameState, controls);
+			OLED_print(gameState->name,2,0);
+
+			//Restart, and save highscore and name if this was a new highscore
+			if (controls->btnR.edge){
+	// 			//If highscore:
+	// 			if(gameState->points >= gameState->record){
+	// 				eeprom_write_byte(EEPROM_HIGHSCOREBYTE,gameState->record);
+	// 				for(uint8_t i= 0; i<NAME_LEN;++i){
+	// 					eeprom_write_byte(EEPROM_HIGHSCORENAME+i,gameState->name[i]);
+	// 				}
+	// 			}
+				gameState->currentStatus= pause;
+			}
+			break;
+		default:
+			break;
 	}
-
-
-	
-	
-
-	char c[5];
-	sprintf(c, "%u", gameState->points);
-	OLED_print(c, 6, 0);
-	
-	OLED_clear();
-	OLED_print("SPILLET KJORER", 3, 0);
-	char a[5];
-	sprintf(a, "%i", controls->jsX.percent);
-	char b[5];
-	sprintf(b, "%i", controls->jsY.percent);
-	OLED_print(a, 4, 0);
-	OLED_print(b, 5, 0);
 
 	return 0;
 }
@@ -140,7 +123,7 @@ void update_name(GameState* gameState, Controls* controls){
 	}
 	
 	//IF we moved past the last character
-	if(gameState->namePointer = NAME_LEN){
+	if(gameState->namePointer == NAME_LEN){
 		gameState->namePointer = 0;
 	}
 	//If we moved previous to the first, so that an overflow occurred
@@ -156,7 +139,7 @@ void update_name(GameState* gameState, Controls* controls){
 		gameState->name[gameState->namePointer]--;
 	}
 	//If we moved past font length
-	if(gameState->name[gameState->namePointer]=FONT_SIZE){
+	if(gameState->name[gameState->namePointer] == FONT_SIZE){
 		gameState->name[gameState->namePointer] = 0;
 	}
 	//If we moved previous to the first font sign, so that an overflow occurred

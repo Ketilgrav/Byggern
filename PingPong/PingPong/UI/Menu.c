@@ -25,13 +25,13 @@ menuNode controllerSensor;
 menuNode* menu_init(){
 	strcpy(options.text,			"Options       ");
 	strcpy(newGame.text,			"New Game      ");
-	strcpy(dispHighScore.text,			"High scores   ");
+	strcpy(dispHighScore.text,		"High scores   ");
 	strcpy(mainMenu.text,			"Main menu!    ");
 	strcpy(reCalibrateJs.text,		"Re calib. js. ");
 	strcpy(chooseController.text,	"Choose cntrlr.");
 	strcpy(controllerJoystick.text,	"Joystick      ");
 	strcpy(controllerSensor.text,	"Sensor        ");
-	strcpy(deleteHighScore.text,			"Delete H.S.   ");
+	strcpy(deleteHighScore.text,	"Delete H.S.   ");
 	
 	mainMenu.parent = NULL;
 	mainMenu.nChildren = 3;

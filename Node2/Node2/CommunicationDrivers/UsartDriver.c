@@ -8,12 +8,9 @@
 #include "UsartDriver.h"
 
 void USART_init(){
-	//ubbr = F_CPU
-	int8_t baudRate = BAUD;
-	uint8_t ubrr = UBRR;
 	//Set baud rate
-	UBRR0H = (unsigned char)(ubrr>>8);
-	UBRR0L = (unsigned char)ubrr;
+	UBRR0H = (unsigned char)(UBRR>>8);
+	UBRR0L = (unsigned char)UBRR;
 	
 	//Enable receiver and transmitter
 	UCSR0B = (1<<RXEN0)|(1<<TXEN0);

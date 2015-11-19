@@ -11,14 +11,13 @@ volatile uint16_t adcVal = 0;
 volatile uint8_t adcDoUpdate = 1;
 
 void adc_init(){
-	clear_bit(DDRF,PF0);
+	clear_bit(ADC_DDR,ADC_BIT);
 	
 	set_bit(ADMUX, MUX0); //Using ADC1
 	set_bit(ADMUX, REFS0); //using AVCC as referanse.
 	
 	//ADC enable. //Prescaler //Aktiverer interupt
 	ADCSRA |= (1<<ADEN) | (ADC_PRESCALER<<ADPS0) | (1<<ADIE);
-	ADCSRB |= (0<<ADTS0); //Free running mode
 }
 
 
@@ -28,12 +27,12 @@ ISR(ADC_vect){
 }
 
 
-uint16_t adc_measure(ADC_signal* signal){
+void adc_measure(ADC_signal* signal){
 	if(!adcDoUpdate){
 		//If the adc convertion has not finished
 		return;
 	}
-	
+	printf("%u\n",adcVal);
 	signal->nrMeasurements ++;
 	signal->sumValue += adcVal;
 	signal->edge = 0;
@@ -53,6 +52,7 @@ uint16_t adc_measure(ADC_signal* signal){
 			signal->boolState = 0;
 		}
 		
+		signal->val = signal->sumValue / signal->nrMeasurements;
 		signal->nrMeasurements = 0;
 		signal->sumValue = 0;
 	}

@@ -30,12 +30,13 @@
 #define ETIMER_TRIGGER_ENABLE_READ (TCCR5B & (0b111<<CS50))
 #define ETIMER_TRIGGER_RESET (TCNT5 = 0)
 
+#define ECHO_INTERRUPT_INIT(edgeBit) (EICRA |= (0b11<<edgeBit))
 #define ECHO_INTERRUPT_FALLING(edgeBit) clear_bit(EICRA, edgeBit)
 #define ECHO_INTERRUPT_FALLING_READ(edgeBit) !(EICRA & (1<<edgeBit))
-#define ECHO_INTERRUPT_RISING(edgeBit) clear_bit(EICRA, edgeBit)
-#define ECHO_INTERRUPT_RISING_READ(edgeBit) EICRA & (1<<edgeBit)
+#define ECHO_INTERRUPT_RISING(edgeBit) set_bit(EICRA, edgeBit)
+#define ECHO_INTERRUPT_RISING_READ(edgeBit) (EICRA & (1<<edgeBit))
 
-#define ECHO_MEASUREMENT_INTERVAL 0.006f
+#define ECHO_MEASUREMENT_INTERVAL 0.01f
 #define ECHO_PRESCALER 8
 
 #define ECHO_TRIGGERPULSEWIDTH_us 10
@@ -56,7 +57,7 @@
 #define S1_TRIG_BIT PC6
 #define S1_ECHO_BIT PD3
 
-#define S1_ACTIVATION_DISTANCE 500
+#define S1_ACTIVATION_DISTANCE 2200
 
 #define ECHO_DIST_FROM_MOTOR0 4
 #define uS_PER_CM 58

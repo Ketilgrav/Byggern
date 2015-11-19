@@ -4,17 +4,14 @@
  * Created: 28.08.2015 15:43:58
  *  Author: ketilgs
  */ 
-#include "../MainInclude.h"
 #include "UsartDriver.h"
 
 void USART_init(){
-	//ubbr = F_CPU
-	int8_t baudRate = BAUD;
-	uint8_t ubrr = UBRR;
-	//Set baud rate
-	UBRR0H = (unsigned char)(ubrr>>8);
-	UBRR0L = (unsigned char)ubrr;
-	
+
+ 	//Set baud rate
+	UBRR0H = (unsigned char)(UBRR>>8);
+	UBRR0L = (unsigned char)UBRR;
+	 	
 	//Enable receiver and transmitter
 	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
 		//RXEN: Activates USART receiver
@@ -26,9 +23,8 @@ void USART_init(){
 		//URSEL: Writes to UCSRC instead of UBRRH, when 1.
 		//USBS0: Number of stop bits, 0->1bit, 1->2bit
 		//UCZ0/1/2: Character size 011->8bit. 
-		
 	//Enable printf;
-	fdevopen(USART_transmit, USART_receive);
+	fdevopen(&USART_transmit, &USART_receive);
 }
 
 void USART_transmit(unsigned char data){

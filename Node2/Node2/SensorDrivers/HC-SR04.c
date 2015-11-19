@@ -23,10 +23,12 @@ ISR(TIMER4_OVF_vect){
 }
 
 ISR(INT2_vect){
+	//puts("ECH0");
 	handleInterrupt(SENSOR0, S0_ECHO_INTERRUPT_BIT);
 }
 
 ISR(INT3_vect){
+	//puts("ECH1");
 	handleInterrupt(SENSOR1, S1_ECHO_INTERRUPT_BIT);
 }
 
@@ -59,9 +61,15 @@ void handleInterrupt(uint8_t timerId, uint8_t edgeBit){
 }
 
 
-ISR(ETIMER5_COMPA_vect){
+ISR(TIMER5_COMPA_vect){
+	//puts("ECHOOOO");
 	if(nextSensor == SENSOR1){
 		nextSensor = SENSOR0;
+		
+		ECHO_INTERRUPT_RISING(S0_ECHO_INTERRUPT_BIT);
+		ECHO_INTERRUPT_RISING(S1_ECHO_INTERRUPT_BIT);
+		ETIMER_MEASURE_DISABLE;
+		
 		//Sends a 10us pulse on the trigger bit.
 		set_bit(S1_TRIG_PORT,S1_TRIG_BIT);
 		_delay_us(ECHO_TRIGGERPULSEWIDTH_us);
@@ -70,6 +78,11 @@ ISR(ETIMER5_COMPA_vect){
 	}
 	else if(nextSensor == SENSOR0){
 		nextSensor = SENSOR1;
+		
+		ECHO_INTERRUPT_RISING(S0_ECHO_INTERRUPT_BIT);
+		ECHO_INTERRUPT_RISING(S1_ECHO_INTERRUPT_BIT);
+		ETIMER_MEASURE_DISABLE;
+		
 		set_bit(S0_TRIG_PORT,S0_TRIG_BIT);
 		_delay_us(ECHO_TRIGGERPULSEWIDTH_us);
 		clear_bit(S0_TRIG_PORT,S0_TRIG_BIT);
@@ -87,20 +100,21 @@ void echo_init(){
 	clear_bit(S1_ECHO_DDR,S1_ECHO_BIT);
 	
 	//Echo intterupt
-	ECHO_INTERRUPT_FALLING(S0_ECHO_INTERRUPT_BIT);
+	ECHO_INTERRUPT_INIT(S0_ECHO_INTERRUPT_BIT);
 	set_bit(EIMSK,INT2);			//Enables interrupt
-	ECHO_INTERRUPT_FALLING(S0_ECHO_INTERRUPT_BIT);
+	ECHO_INTERRUPT_INIT(S1_ECHO_INTERRUPT_BIT);
 	set_bit(EIMSK,INT3);
 	
 	//Using timer 4 for both.
-	set_bit(TIMSK4, 1<<TOIE4); //Activates overflow interrupt
+	set_bit(TIMSK4, TOIE4); //Activates overflow interrupt
+	ETIMER_MEASURE_DISABLE;
 	
 	//Using timer 5 to send trigger signals for both sensors, alternating.
 	//Set OC5A on compare match
 	TCCR5A |= 0b11<<COM5A0;
 	//Compare match on OC5A
 	OCR5A = ECHO_MEASUREMENT_INTERVAL * F_CPU/ ECHO_PRESCALER;
-	set_bit(TIMSK5, 1<<OCIE5A); //interrupt on compare match
+	set_bit(TIMSK5, OCIE5A); //interrupt on compare match
 }
 void echo_data_init(ECHO_data* data){
 	data->queuePointer = 0;
@@ -115,9 +129,9 @@ void echo_data_init(ECHO_data* data){
 
 void echo_update_ref(ECHO_data* data, uint8_t sensorId, uint8_t edgeBit){
 	if( !(doUpdate & (1<<edgeBit)) ) return;
-	doUpdate &= (0<<edgeBit);
+	doUpdate &= ~(1<<edgeBit);
 	
-	uint16_t time;
+	volatile uint16_t time;
 	if(sensorId == SENSOR0){
 		time = sensor0Time;
 	}

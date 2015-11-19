@@ -20,26 +20,28 @@
 #include "Game/EEPROM.h"
 #include "main.h"
 
-int main(void){		
+int main(void){	
+	//x_delay_ms(10);
+	set_bit(LED_DDR, LED_BIT);
 	/*Initialization*/
 	USART_init();
-	puts("USART init done");
+	//puts("USART init done");
+	
 	SRAM_init();
-	puts("SRAM init done");
+	//puts("SRAM init done");
 	ADC_init();
-	puts("ADC init done");
+	//puts("ADC init done");
+	set_bit(PORTB, 0);
 	OLED_init();
-	puts("OLED inti done");
+	//puts("OLED init done");
 	CAN_init();
-	puts("CAN inti done");
+	//puts("CAN inti done");
 	controllers_init();
-	puts("Controller init done");
+	//puts("Controller init done");
 	
 	set_bit(LED_DDR, LED_BIT);
 	TIMER_60HZ_ACTIVATE;
-	puts("Timer init done");
-	printf("\n\n\n");
-
+	//puts("Timer init done");
 
 	//Tillstandsvariabler
 	Controls controls;
@@ -56,6 +58,8 @@ int main(void){
 	
 	GameState gameState;
 	gameState.useJSnotSENS = 1;
+	gameState.points = 0;
+	gameState.currentStatus = pause;
 	EEPROM_read_gamestate(&gameState);
 	
 	
@@ -85,7 +89,8 @@ int main(void){
 	CAN_message canMsgInn;
 	canMsgInn.length = 0; //Also indicates new message
 	
-	
+	printf("ALL INIT complete");
+	//printf("\n\n\n");
     while(1){
 		/*State update*/
 		controllers_update(&controls);
@@ -106,11 +111,9 @@ int main(void){
 				break;
 		}
 		CAN_int_clear(CAN_interrupt);
-		
-		
-		
-		/*Menu*/
-		//Each menu state function returns whether we want to return to main menu or not.
+
+ 		/*Menu*/
+ 		//Each menu state function returns whether we want to return to main menu or not.
 		if(controls.btnL.edge){
 			//BtnL will always take us back to the main menu
 			currentMenu = mainMenu;
@@ -189,6 +192,9 @@ int main(void){
 			mainLoopCounter++;
 			if(!(mainLoopCounter%60)){
 				toggle_bit(LED_PORT, LED_BIT);
+				if (gameState.currentStatus == play && currentMenu->currentState == runGame){
+					gameState.points++;
+				}
 			}
 			
 			//If the can message has a length, then it is requesting to be sent
@@ -199,9 +205,11 @@ int main(void){
 			if(canMsgMotor.length){
 				CAN_message_send(&canMsgMotor);
 				canMsgMotor.length = 0;
+				
+				if(canMsgMotor.data[CANMSG_BTNR_BYTE]){
+					puts("PUSH!");
+				}
 			}
-			
-			
 			OLED_update_screen();
 			TIMER_60HZ_RESET;
 		}

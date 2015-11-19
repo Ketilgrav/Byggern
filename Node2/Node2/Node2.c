@@ -11,6 +11,7 @@
 #include <avr/interrupt.h>
 
 int main(){
+	_delay_us(10);
 	sei(); // Global interrupt enable
 	//cli(); // Global interrupt disable
 	
@@ -72,6 +73,7 @@ int main(){
 	puts("All init done");
 	
 	while(1){
+		//puts("a");
 		/*Can message handeler*/
 		CAN_interrupt = CAN_int();
 		switch(CAN_interrupt){
@@ -89,8 +91,8 @@ int main(){
 			default:
 				break;
 		}
-		//Resets the interrupt if there was one
-		if(CAN_interrupt != noInt) CAN_int_clear(CAN_interrupt);
+		//Resets the interrupt
+		CAN_int_clear(CAN_interrupt);
 		
 		//if we got a message, then the length would be non 0
 		if(msgInn.length){
@@ -109,16 +111,7 @@ int main(){
 		
 		
 		/*Game controll system*/
-		if(gameMode != GAMEMODE_OFF){
-			//if the gamemode changed to this state, then things need to be activated
-			if(gameModeChanged){
-				REGULATOR_TIMER_ACTIVATE;
-				motorbox_reset_encoder();
-				ETIMER_TRIGGER_ENABLE;
-				gameModeChanged = 0;
-			}
-			
-						
+		if(gameMode != GAMEMODE_OFF){				
 			//Measures if the led i blocked
 			adc_measure(&adcSignal);
 			
@@ -131,6 +124,13 @@ int main(){
 			servo_set(msgInn.data[CANMSG_SLIDERR_BYTE]);
 			
 			if(gameMode == GAMEMODE_JS){
+				
+				if(gameModeChanged){
+					REGULATOR_TIMER_ACTIVATE;
+					motorbox_reset_encoder();
+					gameModeChanged = 0;
+				}
+				
 				//The joystick indicates the movement speed of the motor
 				joySpeed = msgInn.data[CANMSG_JSX_BYTE];
 				//We integrate up the joystick signal to get a position reference. 
@@ -143,6 +143,13 @@ int main(){
 			}
 			
 			else if(gameMode == GAMEMODE_SENS){
+				if(gameModeChanged){
+					REGULATOR_TIMER_ACTIVATE;
+					ETIMER_TRIGGER_ENABLE;
+					motorbox_reset_encoder();
+					gameModeChanged = 0;
+				}
+				
 				//The echo sensor indicates the motor possition.
 				echo_update_ref(&S0_data,SENSOR0, ISC20);
 				//Echo sensor 1 is used to activated the solenoid
@@ -178,6 +185,7 @@ int main(){
 			}
 			
 			//if there was a rising edge on the adcSignal, then the game is lost
+			//printf("%u",adcSignal.val);
 			if(adcSignal.edge){
 				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_STOP;
 				CAN_message_send(&msgGameSignal);

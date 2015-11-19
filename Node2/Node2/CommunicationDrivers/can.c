@@ -17,6 +17,7 @@ void CAN_init(){
 	SPI_init(); // Initialize SPI
 	mcp2515_reset(); // Send reset-command
 	
+	_delay_us(20);
 	// Self-test
 	value = mcp2515_read(MCP_CANSTAT);
 	if ((value & MODE_MASK) != MODE_CONFIG) {
@@ -41,40 +42,40 @@ void CAN_init(){
 	//TX0IE = 0 Transmit 0 empty interrupt
 	//RX1IE = 1 Interrupt when there is data RX1
 	//RX0IE = 1 Interrupt when there is data RX2
-	mcp2515_write(MCP_CANINTE, 0b00100011);
+	mcp2515_write(MCP_CANINTE, 0b00000011);
 	
 	//Filters:
 	//Mask for RX0
-	mcp2515_write(MCP_RXM0SIDH, NODE1_CANID_H_MASK >> 3);
-	mcp2515_bit_modify(MCP_RXM0SIDL, 0b11100000U, NODE1_CANID_H_MASK << 5);
+	mcp2515_write(MCP_RXM0SIDH, NODE2_CANID_H_MASK >> 3);
+	mcp2515_bit_modify(MCP_RXM0SIDL, 0b11100000U, NODE2_CANID_H_MASK << 5);
 	
 	//Mask for RX1
-	mcp2515_write(MCP_RXM1SIDH, NODE1_CANID_L_MASK >> 3);
-	mcp2515_bit_modify(MCP_RXM1SIDL, 0b11100000U, NODE1_CANID_L_MASK << 5);
+	mcp2515_write(MCP_RXM1SIDH, NODE2_CANID_L_MASK >> 3);
+	mcp2515_bit_modify(MCP_RXM1SIDL, 0b11100000U, NODE2_CANID_L_MASK << 5);
 	
 	//Filter 0 (RX0, goes to RX1 if RX0 is full)
-	mcp2515_write(MCP_RXF0SIDH, NODE1_CANID_HIGHPRIO_0 >> 3);
-	mcp2515_bit_modify(MCP_RXF0SIDL, 0b11100000U, NODE1_CANID_HIGHPRIO_0 << 5);
+	mcp2515_write(MCP_RXF0SIDH, NODE2_CANID_HIGHPRIO_0 >> 3);
+	mcp2515_bit_modify(MCP_RXF0SIDL, 0b11100000U, NODE2_CANID_HIGHPRIO_0 << 5);
 	
 	//Filter 1 (RX0, goes to RX1 if RX0 is full)
-	mcp2515_write(MCP_RXF1SIDH, NODE1_CANID_HIGHPRIO_1 >> 3);
-	mcp2515_bit_modify(MCP_RXF1SIDL, 0b11100000U, NODE1_CANID_HIGHPRIO_1 << 5);
+	mcp2515_write(MCP_RXF1SIDH, NODE2_CANID_HIGHPRIO_1 >> 3);
+	mcp2515_bit_modify(MCP_RXF1SIDL, 0b11100000U, NODE2_CANID_HIGHPRIO_1 << 5);
 	
 	//Filter 2 (RX1)
-	mcp2515_write(MCP_RXF2SIDH, NODE1_CANID_0 >> 3);
-	mcp2515_bit_modify(MCP_RXF2SIDL, 0b11100000U, NODE1_CANID_0 << 5);
+	mcp2515_write(MCP_RXF2SIDH, NODE2_CANID_0 >> 3);
+	mcp2515_bit_modify(MCP_RXF2SIDL, 0b11100000U, NODE2_CANID_0 << 5);
 	
 	//Filter 3 (RX1)
-	mcp2515_write(MCP_RXF3SIDH, NODE1_CANID_1 >> 3);
-	mcp2515_bit_modify(MCP_RXF3SIDL, 0b11100000U, NODE1_CANID_1 << 5);
+	mcp2515_write(MCP_RXF3SIDH, NODE2_CANID_1 >> 3);
+	mcp2515_bit_modify(MCP_RXF3SIDL, 0b11100000U, NODE2_CANID_1 << 5);
 	
 	//Filter 4 (RX1)
-	mcp2515_write(MCP_RXF4SIDH, NODE1_CANID_2 >> 3);
-	mcp2515_bit_modify(MCP_RXF4SIDL, 0b11100000U, NODE1_CANID_2 << 5);
+	mcp2515_write(MCP_RXF4SIDH, NODE2_CANID_2 >> 3);
+	mcp2515_bit_modify(MCP_RXF4SIDL, 0b11100000U, NODE2_CANID_2 << 5);
 	
 	//Filter 5 (RX1)
-	mcp2515_write(MCP_RXF5SIDH, NODE1_CANID_3 >> 3);
-	mcp2515_bit_modify(MCP_RXF5SIDL, 0b11100000U, NODE1_CANID_3 << 5);
+	mcp2515_write(MCP_RXF5SIDH, NODE2_CANID_3 >> 3);
+	mcp2515_bit_modify(MCP_RXF5SIDL, 0b11100000U, NODE2_CANID_3 << 5);
 	
 	CAN_all_int_clear();
 	mcp2515_bit_modify(MCP_CANCTRL, MODE_MASK, MODE_NORMAL);

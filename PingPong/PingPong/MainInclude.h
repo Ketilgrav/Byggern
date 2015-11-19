@@ -9,7 +9,7 @@
 #ifndef MAININCLUDE_H_
 #define MAININCLUDE_H_
 
-#define F_CPU 4915200
+#define F_CPU 4915200UL
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -29,7 +29,6 @@
 #include "Drivers/OLED.h"
 #include "../../InterNodeHeaders/CanMessageFormat.h"
 #include "../../InterNodeHeaders/canID.h"
-#include <stdio.h>
 #include <string.h>
 
 #define EEPROM_HIGHSCOREBYTE ((uint8_t*)32)

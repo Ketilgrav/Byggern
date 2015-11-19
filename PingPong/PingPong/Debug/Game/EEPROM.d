@@ -33,7 +33,8 @@ Game/EEPROM.d Game/EEPROM.o: ../Game/EEPROM.c ../Game/EEPROM.h \
  ../Game/../CommunicationDrivers/mcp2515.h \
  ../Game/../CommunicationDrivers/../MainInclude.h \
  ../Game/../CommunicationDrivers/spi.h \
- ../Game/../CommunicationDrivers/MCP2515_register.h
+ ../Game/../CommunicationDrivers/MCP2515_register.h \
+ ../Game/../Drivers/OLED.h
 
 ../Game/EEPROM.h:
 
@@ -110,3 +111,5 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 ../Game/../CommunicationDrivers/spi.h:
 
 ../Game/../CommunicationDrivers/MCP2515_register.h:
+
+../Game/../Drivers/OLED.h:

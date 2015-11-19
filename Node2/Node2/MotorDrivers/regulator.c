@@ -18,7 +18,7 @@ void regulator_init(Regulator* regulator){
 	regulator->derivativePointer = 0;
 	//regulator->refPosValue = 0.0f;
 	regulator->prevVal = 0;
-	float dt = 0;
+	regulator->dt = 0;
 	/* Setter opp klokken som beregner tiden mellom hver incrementering*/
 	//Bruker timer/counter 3 med normal opperation
 }

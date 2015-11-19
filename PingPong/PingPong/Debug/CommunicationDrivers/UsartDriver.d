@@ -1,5 +1,6 @@
 CommunicationDrivers/UsartDriver.d CommunicationDrivers/UsartDriver.o: \
  ../CommunicationDrivers/UsartDriver.c \
+ ../CommunicationDrivers/UsartDriver.h \
  ../CommunicationDrivers/../MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
@@ -27,8 +28,9 @@ CommunicationDrivers/UsartDriver.d CommunicationDrivers/UsartDriver.o: \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
  ../CommunicationDrivers/../../../InterNodeHeaders/CanMessageFormat.h \
  ../CommunicationDrivers/../../../InterNodeHeaders/canID.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h \
- ../CommunicationDrivers/UsartDriver.h
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h
+
+../CommunicationDrivers/UsartDriver.h:
 
 ../CommunicationDrivers/../MainInclude.h:
 
@@ -85,5 +87,3 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 ../CommunicationDrivers/../../../InterNodeHeaders/canID.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h:
-
-../CommunicationDrivers/UsartDriver.h:

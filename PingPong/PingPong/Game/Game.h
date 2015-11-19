@@ -11,6 +11,7 @@
 #include "../MainInclude.h"
 #include "../Drivers/Controllers.h"
 #include "../CommunicationDrivers/can.h"
+#include "../Drivers/OLED.h"
 
 typedef enum state { play = 0, gameOver = 1, pause = 2 } status;
 
@@ -25,6 +26,6 @@ typedef struct GameState{
 } GameState;
 
 uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor, CAN_message* msgGame);
-void update_name(GameState* gameState, Controls* controlls);
+void update_name(GameState* gameState, Controls* controls);
 
 #endif /* GAME_H_ */

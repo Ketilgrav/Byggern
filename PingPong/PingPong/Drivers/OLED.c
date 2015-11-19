@@ -64,9 +64,9 @@ void OLED_init(){
 	OLED_CONTROL = 0x00;	//LSB of startpoint
 	OLED_CONTROL = 0x10;	//MSB of startpoint (Can change last hex sign from 0 to F)
 	
-	OLED_clear();
-	OLED_update_screen();
-	
+//  	OLED_clear();
+// 	OLED_update_screen();
+ 	
 	OLED_CONTROL = 0xaf;    // display on
 }
 
@@ -103,46 +103,46 @@ void OLED_print(char tekst[], uint8_t lineNr, uint8_t charStartPoint){
 	if(lineNr > 7){
 		lineNr = 7;
 	}
-	for(uint8_t textLoc = 0, printLoc = 0; tekst[textLoc] != '\0' && printLoc < 16-charStartPoint; ++textLoc, ++printLoc){
-		if(tekst[printLoc] == '-'){
-			switch(tekst[printLoc+1]){
+	for(uint8_t textLoc = 0, printLoc = charStartPoint; tekst[textLoc] != '\0' && printLoc < 16; ++textLoc, ++printLoc){
+		if(tekst[textLoc] == '-'){
+			switch(tekst[textLoc+1]){
 				case '^':
-				OLED_print_char(127, lineNr, printLoc+charStartPoint);
+				OLED_print_char(127, lineNr, printLoc);
 				textLoc++;
 				break;
 				case 'v':
-				OLED_print_char(128, lineNr, printLoc+charStartPoint);
+				OLED_print_char(128, lineNr, printLoc);
 				textLoc++;
 				break;
 				case '<':
-				OLED_print_char(129, lineNr, printLoc+charStartPoint);
+				OLED_print_char(129, lineNr, printLoc);
 				textLoc++;
 				break;
 				case '>':
-				OLED_print_char(130, lineNr, printLoc+charStartPoint);
+				OLED_print_char(130, lineNr, printLoc);
 				textLoc++;
 				break;
 				case 's':
-				OLED_print_char(131, lineNr, printLoc+charStartPoint);
+				OLED_print_char(131, lineNr, printLoc);
 				printLoc++;
 				textLoc++;
-				OLED_print_char(132, lineNr, printLoc+charStartPoint);
+				OLED_print_char(132, lineNr, printLoc);
 				break;
 				default:
-				OLED_print_char('-', lineNr, printLoc+charStartPoint);
+				OLED_print_char('-', lineNr, printLoc);
 				break;
 				
 			}
 		}
 		else{
-			OLED_print_char(tekst[textLoc], lineNr, printLoc+charStartPoint);
+			OLED_print_char(tekst[textLoc], lineNr, printLoc);
 		}
 	}
 }
 
 
 void OLED_print_char(char ch, uint8_t line, uint8_t loc){
-	for(int j = 0; j<8; ++j){
+	for(uint8_t j = 0; j<8; ++j){
 		OLED_MEM_LINE_LOC(line, loc, j) = pgm_read_byte(&font[ch-asciiOffset][j]);
 	}
 }
@@ -150,7 +150,7 @@ void OLED_print_char(char ch, uint8_t line, uint8_t loc){
 /*Sets the value 0 at all memory locations used by the OLED*/
 void OLED_clear(){
 	volatile char* memBegin = OLED_MEM_BEGIN;
-	for(uint8_t i = 0; i < 1024; ++i){
+	for(uint16_t i = 0; i < 1024; ++i){
 		*(memBegin+i) = 0x00;
 	}
 }
@@ -159,7 +159,7 @@ void OLED_clear(){
 void OLED_update_screen(){
 	OLED_goto_line(0);
 	volatile char* memBegin = OLED_MEM_BEGIN;
-	for(uint8_t i = 0; i < 1024; ++i){
+	for(uint16_t i = 0; i < 1024; ++i){
 		OLED_DATA = *(memBegin+i);
 	}
 }

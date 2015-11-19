@@ -16,7 +16,7 @@ void CAN_init(){
 	uint8_t value;
 	SPI_init(); // Initialize SPI
 	mcp2515_reset(); // Send reset-command
-	
+	_delay_us(20);
 	// Self-test
 	value = mcp2515_read(MCP_CANSTAT);
 	if ((value & MODE_MASK) != MODE_CONFIG) {
