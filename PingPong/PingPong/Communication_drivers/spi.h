@@ -28,7 +28,7 @@
 #define MASTER_INN_PIN PINB
 #define MASTER_INN_DDR DDRB
 
-#define SPI_DELAY_TIME_uS
+//#define SPI_DELAY_TIME_uS
 
 char SPI_communicate(char cData);
 void SPI_init();
