@@ -48,7 +48,7 @@ int main(void){
 	
 	GameState gameState;
 	gameState.useJSnotSENS = 1;
-	gameState.points = eeprom_read_byte(EEPROM_HIGHSCOREBYTE);
+	gameState.record = eeprom_read_byte(EEPROM_HIGHSCOREBYTE);
 	
 	
 	/*Can variables*/

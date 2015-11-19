@@ -12,7 +12,7 @@
 #include "../MainInclude.h"
 #include "../Drivers/Controllers.h"
 
-uint8_t displayHighScore();
+uint8_t displayHighScore(GameState* gameState, Controls* controls);
 
 
 
