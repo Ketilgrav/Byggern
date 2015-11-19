@@ -14,9 +14,9 @@
 #define INTR_DDR DDRB
 #define INTR_PORT PORTB
 #define INTR_PIN PINB
-#define INTR_bit PB1
-#define ADC_memory ((volatile char*)0x1400)
-#define ADC_single_ended 0b0100
+#define INTR_BIT PB1
+#define ADC_MEMORY ((volatile char*)0x1400)
+#define ADC_SINGLE_ENDED 0b0100
 
 uint8_t ADC_convert(char channel);
 void ADC_init();
