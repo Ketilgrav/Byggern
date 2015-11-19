@@ -33,6 +33,8 @@
 #include <string.h>
 
 #define EEPROM_HIGHSCOREBYTE ((uint8_t*)32)
+//NB multible bytes are used for the name, see NAME_LEN to find size
+#define EEPROM_HIGHSCORENAME ((uint8_t*)33)
 
 typedef enum { false, true} bool;
 

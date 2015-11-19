@@ -11,12 +11,11 @@
 
 #include "../MainInclude.h"
 
-#define FOSC F_CPU// Clock Speed
-#define BAUD 9600
-#define MYUBRR FOSC/16/BAUD-1
+#define BAUD 19200
+#define UBRR F_CPU/(16*BAUD) - 1
 
 void USART_init();
-void USART_Transmit( unsigned char data );
-unsigned char USART_Receive(void);
+void USART_transmit( unsigned char data );
+unsigned char USART_receive(void);
 
 #endif /* USARTDRIVER_H_ */

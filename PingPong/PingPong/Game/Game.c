@@ -6,7 +6,7 @@
  */
 
 #include "Game.h"
-uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgMtor, CAN_message* msgGame){
+uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor, CAN_message* msgGame){
 	//TRANSMITTING
 	//Clear the solenoid push bit if message has been sent.
 	if (msgMtor->length == 0){
@@ -24,82 +24,91 @@ uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgMtor, 
 	//RECIEVEING
 	if (msgGame->length && msgGame->data[CANMSG_PACKAGESPECIFIER] == PACKAGESPECIFIER_GAMESIGNAL){
 		if (msgGame->data[GAMESIGNAL_SIGNAL_BYTE] == GAMESIGNAL_STOP){
-			gameState->status = gameOver;
+			gameState->currentStatus = gameOver;
 		}
-		else if (msgGame->data[GAMESIGNAL_SIGNAL_BYTE] == GAMESIGNAL_START && gameState->status == pause){
-			gameState->status = play;
+		else if (msgGame->data[GAMESIGNAL_SIGNAL_BYTE] == GAMESIGNAL_START && gameState->currentStatus == pause){
+			gameState->currentStatus = play;
 			gameState->points = 0;
 		}
 		msgGame->length = 0;
 	}
 
 
-	oled_clear();
-	switch (gameState->status){
-		//Waiting to start game
-		case pause:
-			oled_print("NYTT SPILL", 1, 0);
-			oled_print("DIN KONTROLLER:", 3, 0);
-			if (gameState.useJSnotSENS){
-				oled_print("JOYSTICK", 4, 0);
-			}
-			else{
-				oled_print("SENSOR", 4, 0);
-			}
-			oled_print("START SPILL VED", 6, 0);
-			oled_print("   AA SKYTE", 7, 0);
-			break
-	
-		//Running game
-		case play:
-			oled_print("SPILLET KJØRER", 1, 0);
-
-			oled_print("POENG:", 3, 0);
-			char currentPoints[5];
-			sprintf(currentPoints, "%u", gameState->points);
-			oled_print(currentPoints, 3, 9);
-
-			oled_print("REKORD:", 5, 0);
-			char recordPoints[5];
-			sprintf(recordPoints, "%u", gameState->record);
-			oled_print(recordPoints, 5, 9);
-			break
-
-		//Game over
-		case gameOver:
-			if (gameState->points > gameState->record){
-				gameState->record = gameState->points;
-				eeprom_write_byte(EEPROM_HIGHSCOREBYTE,gameState->record);
-			}
-			if (gameState->points >= gameState->record){
-				oled_print("NY REKORD!", 0, 0);
-				oled_print("GRATULERER!", 1, 0);
-			}
-			else{
-				oled_print("DU TAPTE!", 1, 0);
-			}
-
-			oled_print("POENG:", 3, 0);
-			char currentPoints[5];
-			sprintf(currentPoints, "%u", gameState->points);
-			oled_print(currentPoints, 3, 9);
-
-			oled_print("REKORD:", 5, 0);
-			char recordPoints[5];
-			sprintf(recordPoints, "%u", gameState->record);
-			oled_print(recordPoints, 5, 9);
-
-			oled_print("RESTART MED A", 7, 0);
-
-			//START PÅ NYTT
-			if (controls->btnR.edge){
-				gameState->status = pause;
-			}
-			
-			break
-		default:
-			break;
+	OLED_clear();
+	switch (gameState->currentStatus){
+	//Waiting to start game
+	case pause:
+		OLED_print("NYTT SPILL", 1, 0);
+		OLED_print("DIN KONTROLLER:", 3, 0);
+		if (gameState->useJSnotSENS){
+			OLED_print("JOYSTICK", 4, 0);
 		}
+		else{
+			OLED_print("SENSOR", 4, 0);
+		}
+		OLED_print("START SPILL VED", 6, 0);
+		OLED_print("   AA SKYTE", 7, 0);
+		break;
+	
+	//Running game
+	case play:
+		OLED_print("SPILLET KJØRER", 1, 0);
+
+		OLED_print("POENG:", 3, 0);
+		char currentPoints[5];
+		sprintf(currentPoints, "%u", gameState->points);
+		OLED_print(currentPoints, 3, 9);
+
+		OLED_print("REKORD:", 5, 0);
+		char recordPoints[5];
+		sprintf(recordPoints, "%u", gameState->record);
+		OLED_print(recordPoints, 5, 9);
+		break;
+
+	//Game over
+	case gameOver:
+		if (gameState->points > gameState->record){
+			gameState->record = gameState->points;
+		}
+		if (gameState->points >= gameState->record){
+			OLED_print("NY REKORD!", 0, 0);
+			OLED_print("GRATULERER!", 1, 0);
+		}
+		else{
+			OLED_print("DU TAPTE!", 1, 0);
+		}
+
+		OLED_print("POENG:", 3, 0);
+		char pointString[5];
+		sprintf(pointString, "%u", gameState->points);
+		OLED_print(pointString, 3, 9);
+
+		OLED_print("REKORD:", 5, 0);
+		char recordString[5];
+		sprintf(recordString, "%u", gameState->record);
+		OLED_print(recordString, 5, 9);
+
+		OLED_print("RESTART MED A", 7, 0);
+
+		//Updates and writes name.
+		void update_name(GameState* gameState, Controls* controlls);
+		OLED_print(gameState->name,2,0);
+
+		//Restart, and save highscore and name if this was a new highscore
+		if (controls->btnR.edge){
+			//If highscore:
+			if(gameState->points >= gameState->record){
+				eeprom_write_byte(EEPROM_HIGHSCOREBYTE,gameState->record);
+				for(uint8_t i= 0; i<NAME_LEN;++i){
+					eeprom_write_byte(EEPROM_HIGHSCORENAME+i,gameState->name[i]);
+				}
+			}
+			gameState->currentStatus= pause;
+		}
+		break;
+	default:
+		break;
+	}
 
 
 	
@@ -107,22 +116,51 @@ uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgMtor, 
 
 	char c[5];
 	sprintf(c, "%u", gameState->points);
-	oled_print(c, 6, 0);
+	OLED_print(c, 6, 0);
 	
-	oled_clear();
-	oled_print("SPILLET KJORER", 3, 0);
+	OLED_clear();
+	OLED_print("SPILLET KJORER", 3, 0);
 	char a[5];
 	sprintf(a, "%i", controls->jsX.percent);
 	char b[5];
 	sprintf(b, "%i", controls->jsY.percent);
-	oled_print(a, 4, 0);
-	oled_print(b, 5, 0);
-
-
+	OLED_print(a, 4, 0);
+	OLED_print(b, 5, 0);
 
 	return 0;
 }
 
-
-
-//TULLL
+void update_name(GameState* gameState, Controls* controls){
+	//Move cursor left/right
+	if(controls->jsX.descreet_edge > 0){
+		gameState->namePointer++;
+	}
+	else if(controls->jsX.descreet_edge < 0){
+		gameState->namePointer--;
+	}
+	
+	//IF we moved past the last character
+	if(gameState->namePointer = NAME_LEN){
+		gameState->namePointer = 0;
+	}
+	//If we moved previous to the first, so that an overflow occurred
+	else if(gameState->namePointer > NAME_LEN){
+		gameState->namePointer = NAME_LEN-1;
+	}
+	
+	//Change to next/previous char
+	if(controls->jsY.descreet_edge > 0){
+		gameState->name[gameState->namePointer]++;
+	}
+	else if(controls->jsY.descreet_edge < 0){
+		gameState->name[gameState->namePointer]--;
+	}
+	//If we moved past font length
+	if(gameState->name[gameState->namePointer]=FONT_SIZE){
+		gameState->name[gameState->namePointer] = 0;
+	}
+	//If we moved previous to the first font sign, so that an overflow occurred
+	else if(gameState->name[gameState->namePointer] > FONT_SIZE){
+		gameState->name[gameState->namePointer] = FONT_SIZE-1;
+	}
+}

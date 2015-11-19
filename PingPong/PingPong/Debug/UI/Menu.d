@@ -17,23 +17,24 @@ UI/Menu.d UI/Menu.o: ../UI/Menu.c ../UI/../Drivers/Controllers.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h \
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\eeprom.h \
  ../UI/../Drivers/../Drivers/OLED.h \
  ../UI/../Drivers/../Drivers/../MainInclude.h \
  ../UI/../Drivers/../Drivers/../Etc/Font.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
  ../UI/../Drivers/../../../InterNodeHeaders/CanMessageFormat.h \
  ../UI/../Drivers/../../../InterNodeHeaders/canID.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h \
  ../UI/../Drivers/../Drivers/ADC_Driver.h ../UI/../Drivers/OLED.h \
  ../UI/Menu.h ../UI/../MainInclude.h \
  ../UI/../../../InterNodeHeaders/CanMessageFormat.h \
- ../UI/../Communication_drivers/can.h \
- ../UI/../Communication_drivers/mcp2515.h \
- ../UI/../Communication_drivers/../MainInclude.h \
- ../UI/../Communication_drivers/spi.h \
- ../UI/../Communication_drivers/MCP2515_register.h
+ ../UI/../CommunicationDrivers/can.h \
+ ../UI/../CommunicationDrivers/mcp2515.h \
+ ../UI/../CommunicationDrivers/../MainInclude.h \
+ ../UI/../CommunicationDrivers/spi.h \
+ ../UI/../CommunicationDrivers/MCP2515_register.h
 
 ../UI/../Drivers/Controllers.h:
 
@@ -73,6 +74,12 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h:
 
+c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h:
+
+c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h:
+
+c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\eeprom.h:
+
 ../UI/../Drivers/../Drivers/OLED.h:
 
 ../UI/../Drivers/../Drivers/../MainInclude.h:
@@ -84,10 +91,6 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 ../UI/../Drivers/../../../InterNodeHeaders/CanMessageFormat.h:
 
 ../UI/../Drivers/../../../InterNodeHeaders/canID.h:
-
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h:
-
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h:
 
@@ -101,12 +104,12 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 ../UI/../../../InterNodeHeaders/CanMessageFormat.h:
 
-../UI/../Communication_drivers/can.h:
+../UI/../CommunicationDrivers/can.h:
 
-../UI/../Communication_drivers/mcp2515.h:
+../UI/../CommunicationDrivers/mcp2515.h:
 
-../UI/../Communication_drivers/../MainInclude.h:
+../UI/../CommunicationDrivers/../MainInclude.h:
 
-../UI/../Communication_drivers/spi.h:
+../UI/../CommunicationDrivers/spi.h:
 
-../UI/../Communication_drivers/MCP2515_register.h:
+../UI/../CommunicationDrivers/MCP2515_register.h:

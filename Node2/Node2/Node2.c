@@ -16,7 +16,7 @@ int main(){
 	
 	/*INITIALISATION*/
 	USART_init();
-	puts("Uart init done");
+	puts("Usart init done");
 	CAN_init();
 	puts("Can init done");
 	servo_init();
@@ -29,17 +29,17 @@ int main(){
 	puts("Motor init done");
 	SOLENOID_INIT;
 	SOLENOID_DEACTIVATE;
-	puts("Solenoid inti done");
+	puts("Solenoid init done");
 	
 	Regulator regulator;
 	regulator_init(&regulator);
 	puts("Regulator init done");
 	
-	echo_inti();
+	echo_init();
 	ECHO_data S0_data;
 	ECHO_data S1_data;
-	echo_data_inti(&S0_data);
-	echo_data_inti(&S1_data);
+	echo_data_init(&S0_data);
+	echo_data_init(&S1_data);
 	puts("Distance sensor init done");
 	
 	/*Tillstandsvariable*/
@@ -75,22 +75,22 @@ int main(){
 		/*Can message handeler*/
 		CAN_interrupt = CAN_int();
 		switch(CAN_interrupt){
-			case NOINT:
+			case noInt:
 				break;
-			case ERR:
+			case err:
 				printf("CAN ERROR");
 				break;
-			case RX0:
+			case rx0:
 				CAN_data_receive(&msgInn, MCP_RXB0CTRL);
 				break;
-			case RX1:
+			case rx1:
 				CAN_data_receive(&msgInn, MCP_RXB1CTRL);
 				break;
 			default:
 				break;
 		}
 		//Resets the interrupt if there was one
-		if(CAN_interrupt != NOINT) CAN_int_clear(CAN_interrupt);
+		if(CAN_interrupt != noInt) CAN_int_clear(CAN_interrupt);
 		
 		//if we got a message, then the length would be non 0
 		if(msgInn.length){

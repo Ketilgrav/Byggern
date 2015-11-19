@@ -10,19 +10,21 @@
 #define GAME_H_
 #include "../MainInclude.h"
 #include "../Drivers/Controllers.h"
-#include "../Communication_drivers/can.h"
-#include "../Communication drivers/can.h"
+#include "../CommunicationDrivers/can.h"
 
-enum status { play = 0, gameOver = 1, pause = 2 };
+typedef enum state { play = 0, gameOver = 1, pause = 2 } status;
 
+#define NAME_LEN 3
 typedef struct GameState{
 	uint8_t useJSnotSENS;
 	uint16_t points;
 	uint16_t record;
-	status status;
+	char name[NAME_LEN+1]; //+1 for '\0'
+	uint8_t namePointer;
+	status currentStatus;
 } GameState;
 
-uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgOut, CAN_message* msgGame);
-
+uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor, CAN_message* msgGame);
+void update_name(GameState* gameState, Controls* controlls);
 
 #endif /* GAME_H_ */

@@ -20,7 +20,7 @@ uint8_t ADC_convert(char channel){
 	*ADC_MEMORY = ADC_SINGLE_ENDED | channel;
 	
 	//Venter på svar
-	while(read_bit(INTR_PIN, INTR_bit));
+	while(read_bit(INTR_PIN, INTR_BIT));
 	
 	return *ADC_MEMORY;
 	

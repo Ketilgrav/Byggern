@@ -9,10 +9,10 @@
 
 void SPI_init(void){
 	/* Set MOSI and SCK output, all others input */
-	set_bit(master_out_ddr, master_out_bit);
-	clear_bit(master_inn_ddr, master_inn_bit);
-	set_bit(slave_clk_ddr, slave_clk_bit);
-	set_bit(slave_cs_ddr, slave_cs_bit);
+	set_bit(MASTER_OUT_DDR, MASTER_OUT_BIT);
+	clear_bit(MASTER_INN_DDR, MASTER_INN_BIT);
+	set_bit(SLAVE_CLK_DDR, SLAVE_CLK_BIT);
+	set_bit(SLAVE_CS_DDR, SLAVE_CS_BIT);
 	
 	
 	/* Enable SPI, Master, set clock rate fck/16 */
@@ -24,6 +24,6 @@ char SPI_communicate(char cData){
 	/* Start transmission */
 	SPDR = cData;
 	/* Wait for transmission complete */
-	while(!(SPSR & (1<<SPIF)));
+	while( !(SPSR&(1<<SPIF)) );
 	return SPDR;
 }

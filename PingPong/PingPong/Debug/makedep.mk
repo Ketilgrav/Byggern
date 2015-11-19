@@ -2,13 +2,13 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
-Communication_drivers\can.c
+CommunicationDrivers\can.c
 
-Communication_drivers\mcp2515.c
+CommunicationDrivers\mcp2515.c
 
-Communication_drivers\spi.c
+CommunicationDrivers\spi.c
 
-Communication_drivers\UsartDriver.c
+CommunicationDrivers\UsartDriver.c
 
 Drivers\ADC_Driver.c
 
@@ -17,6 +17,8 @@ Drivers\Controllers.c
 Drivers\external_SRAM.c
 
 Drivers\OLED.c
+
+EEPROM.c
 
 Etc\font.c
 

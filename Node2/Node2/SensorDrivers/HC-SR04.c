@@ -13,7 +13,7 @@ volatile uint8_t doUpdate = 0;
 volatile uint16_t nextSensor = SENSOR1;
 
 //If the timer that counts the distance overflows
-ISR(ETIMER4_OVF_vect){
+ISR(TIMER4_OVF_vect){
 	printf("OVERFLOW");
 	
 	//Resets the inpterupt and time.
@@ -93,7 +93,7 @@ void echo_init(){
 	set_bit(EIMSK,INT3);
 	
 	//Using timer 4 for both.
-	setbuf(TIMSK4, 1<<TOIE4); //Activates overflow interrupt
+	set_bit(TIMSK4, 1<<TOIE4); //Activates overflow interrupt
 	
 	//Using timer 5 to send trigger signals for both sensors, alternating.
 	//Set OC5A on compare match
@@ -102,7 +102,7 @@ void echo_init(){
 	OCR5A = ECHO_MEASUREMENT_INTERVAL * F_CPU/ ECHO_PRESCALER;
 	set_bit(TIMSK5, 1<<OCIE5A); //interrupt on compare match
 }
-void echo_data_inti(ECHO_data* data){
+void echo_data_init(ECHO_data* data){
 	data->queuePointer = 0;
 	data->pos_ref = 0;
 	for(uint8_t i=0;i<ECHO_averagingPeriod;++i){

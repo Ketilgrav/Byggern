@@ -12,31 +12,26 @@
 #include "../Etc/Font.h"
 
 void OLED_init();
-void oled_home();
-void oled_goto_line(uint8_t line);
-//void oled_clear_line(uint8_t line);
-void oled_pos(uint8_t row,uint8_t column);
-/*void oled_print(char tekst[]);
-void oled_print_char(char ch);
-void oled_clear_screen();*/
+void OLED_home();
+void OLED_goto_line(uint8_t line);
+void OLED_pos(uint8_t row,uint8_t column);
+
+#define OLED_DATA *((volatile char*)0x1200)
+#define OLED_CONTROL *((volatile char*)0x1000)
+
+#define OLED_MEM_BEGIN 0x1c00
+#define OLED_NEXT_LINE 128
+#define OLDE_MEM_END 0x1FFF
+
+#define FONT_WIDTH 8
+#define OLED_MEM_LINE(linenr) *((volatile char*)(OLED_MEM_BEGIN+linenr*OLED_NEXT_LINE))
+#define OLED_MEM_LINE_LOC(line, byte, bit) *((volatile char*)(OLED_MEM_BEGIN+line*OLED_NEXT_LINE+byte*FONT_WIDTH+bit))
 
 
-#define oled_data *((volatile char*)0x1200)
-#define oled_control *((volatile char*)0x1000)
-
-#define oled_mem_begin 0x1c00
-#define oled_next_line 128
-#define oled_mem_end 0x1FFF
-
-#define font_width 8
-#define oled_mem_line(linenr) *((volatile char*)(oled_mem_begin+linenr*oled_next_line))
-#define oled_mem_line_loc(line, byte, bit) *((volatile char*)(oled_mem_begin+line*oled_next_line+byte*font_width+bit))
-
-
-void oled_print_char(char ch, uint8_t line,uint8_t loc);
-void oled_print(char tekst[], uint8_t lineNr, uint8_t charStartPoint);
-void oled_clear();
-void oled_update_screen();
+void OLED_print_char(char ch, uint8_t line,uint8_t loc);
+void OLED_print(char tekst[], uint8_t lineNr, uint8_t charStartPoint);
+void OLED_clear();
+void OLED_update_screen();
 
 
 

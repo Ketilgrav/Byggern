@@ -8,12 +8,12 @@
 #include "HighScore.h"
 
 uint8_t displayHighScore(GameState* gameState, Controls* control){
-	oled_clear();
-	oled_print("Current         ")
-	oled_print("      High Score",0,0);
-	char pointsString[5]
-	sprintf(pointsString, "%u", gameState->points)
-	oled_print(pointsString,3,6);
+	OLED_clear();
+	OLED_print("Current         ",0,0);
+	OLED_print("      High Score",1,0);
+	char pointsString[5];
+	sprintf(pointsString, "%u", gameState->points);
+	OLED_print(pointsString,3,6);
 	
 	if(control->jsX.descreet_edge < 0){
 		return 1;

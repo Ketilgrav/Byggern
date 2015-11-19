@@ -19,10 +19,10 @@ void joystick_calibrate(JoyStick* jsX, JoyStick* jsY){
 }
 
 uint8_t joystick_user_calibrate(Controls* control){
-	oled_clear();
-	oled_print("Calibrating JS: ",0,0);
-	oled_print("Press R to      ",2,0);
-	oled_print("calibrate       ",3,0);
+	OLED_clear();
+	OLED_print("Calibrating JS: ",0,0);
+	OLED_print("Press R to      ",2,0);
+	OLED_print("calibrate       ",3,0);
 	
 	if(control->btnR.edge){
 		joystick_calibrate(&control->jsX,&control->jsY);		

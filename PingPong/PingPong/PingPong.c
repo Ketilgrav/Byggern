@@ -8,7 +8,7 @@
 //Bytt til den fancy screen moden, gir bonus.
 
 #include "MainInclude.h"
-#include "Drivers/UsartDriver.h"
+#include "CommunicationDrivers/UsartDriver.h"
 #include "Drivers/external_SRAM.h"
 #include "Drivers/ADC_Driver.h"
 #include "Drivers/Controllers.h"
@@ -16,20 +16,28 @@
 #include "UI/Menu.h"
 #include "Game/Game.h"
 #include "UI/HighScore.h"
-#include "Communication_drivers/can.h"
+#include "CommunicationDrivers/can.h"
+#include "EEPROM.h"
+#include "main.h"
 
 int main(void){		
 	/*Initialization*/
 	USART_init();
+	puts("USART init done");
 	SRAM_init();
+	puts("SRAM init done");
 	ADC_init();
+	puts("ADC init done");
 	OLED_init();
+	puts("OLED inti done");
 	CAN_init();
+	puts("CAN inti done");
 	controllers_init();
+	puts("Controller init done");
 	
 	set_bit(LED_DDR, LED_BIT);
 	TIMER_60HZ_ACTIVATE;
-	
+	puts("Timer init done");
 	printf("\n\n\n");
 
 
@@ -42,13 +50,13 @@ int main(void){
 	menuNode* currentMenu = menu_init();
 	menuNode* mainMenu = currentMenu;
 	
-	interrupt CAN_interrupt = NOINT;
+	interrupt CAN_interrupt = noInt;
 	
 	uint8_t mainLoopCounter = 0;
 	
 	GameState gameState;
 	gameState.useJSnotSENS = 1;
-	gameState.record = eeprom_read_byte(EEPROM_HIGHSCOREBYTE);
+	EEPROM_read_gamestate(&gameState);
 	
 	
 	/*Can variables*/
@@ -85,15 +93,15 @@ int main(void){
 		
 		/*Can message handling*/
 		switch(CAN_interrupt){
-			case NOINT:
+			case noInt:
 				break;
-			case ERR:
+			case err:
 				printf("CAN error");
 				break;
-			case RX0:
+			case rx0:
 				CAN_data_receive(&canMsgInn, MCP_RXB0CTRL);
 				break;
-			case RX1:
+			case rx1:
 				CAN_data_receive(&canMsgInn, MCP_RXB1CTRL);
 				break;
 		}
@@ -107,7 +115,7 @@ int main(void){
 			//BtnL will always take us back to the main menu
 			currentMenu = mainMenu;
 		}
-		switch (currentMenu->tilstand){
+		switch (currentMenu->currentState){
 			case menu:
 				menu_go(&currentMenu, &controls);
 				//If we have not sent a message requesting node 2 to turn of the game
@@ -128,12 +136,12 @@ int main(void){
 					canMsgGameMode.data[GAMEMODE_MODE_BYTE] = GAMEMODE_SENS;
 				}
 				//Runs the game which also sends motor signals
-				if(runGame(&gameState,&controls,&canMsgMotor,&canMsgInn)){
+				if(run_game(&gameState,&controls,&canMsgMotor,&canMsgInn)){
 					currentMenu = mainMenu;
 				}
 				break;
 			case highScore:
-				if(displayHighScore(gameState,&controls)){
+				if(displayHighScore(&gameState,&controls)){
 					currentMenu = mainMenu;
 				}
 				break;
@@ -151,7 +159,24 @@ int main(void){
 				currentMenu = mainMenu;
 				break;
 			case deleteHS:
+				//Resets eeprom
 				eeprom_write_byte(EEPROM_HIGHSCOREBYTE,0);
+				if(NAME_LEN > 3){
+					eeprom_write_byte(EEPROM_HIGHSCORENAME+0,'N'-asciiOffset);
+					eeprom_write_byte(EEPROM_HIGHSCORENAME+1,'A'-asciiOffset);
+					eeprom_write_byte(EEPROM_HIGHSCORENAME+2,'N'-asciiOffset);
+					for(uint8_t i=3;i<NAME_LEN;++i){
+						eeprom_write_byte(EEPROM_HIGHSCORENAME+i,0);
+					}
+				}
+				else{
+					for(uint8_t i=3;i<NAME_LEN;++i){
+						eeprom_write_byte(EEPROM_HIGHSCORENAME+i,0);
+					}
+				}
+				//Realods eeprom from highscore
+				EEPROM_read_gamestate(&gameState);
+
 				currentMenu = mainMenu;
 				break;
 		}
@@ -177,7 +202,7 @@ int main(void){
 			}
 			
 			
-			oled_update_screen();
+			OLED_update_screen();
 			TIMER_60HZ_RESET;
 		}
     }

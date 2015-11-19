@@ -11,7 +11,8 @@
 
 #include <avr/pgmspace.h>
 #define asciiOffset ' '
-extern const unsigned char PROGMEM font[101][8];
+#define FONT_SIZE 101
+extern const unsigned char PROGMEM font[FONT_SIZE][8];
 
 
 #endif /* FONT_H_ */

@@ -71,8 +71,8 @@ typedef struct ECHO_data{
 	uint16_t mesurements[ECHO_averagingPeriod];
 }ECHO_data;
 
-void echo_inti();
-void echo_data_inti(ECHO_data* data);
+void echo_init();
+void echo_data_init(ECHO_data* data);
 uint8_t echo_measure(uint8_t sensorID);
 void echo_update_ref(ECHO_data* data, uint8_t sensorId, uint8_t edgeBit);
 int32_t echo_time_to_encoder_val(uint16_t time);

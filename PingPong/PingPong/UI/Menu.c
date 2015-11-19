@@ -9,7 +9,7 @@
 #include "../Drivers/OLED.h"
 #include "Menu.h"
 #include "../../../InterNodeHeaders/CanMessageFormat.h"
-#include "../Communication_drivers/can.h"
+#include "../CommunicationDrivers/can.h"
 
 //Generating the menu states, without allocating memory manually. 
 menuNode mainMenu;
@@ -31,7 +31,7 @@ menuNode* menu_init(){
 	strcpy(chooseController.text,	"Choose cntrlr.");
 	strcpy(controllerJoystick.text,	"Joystick      ");
 	strcpy(controllerSensor.text,	"Sensor        ");
-	strcpy(deleteHighScore,			"Delete H.S.   ");
+	strcpy(deleteHighScore.text,			"Delete H.S.   ");
 	
 	mainMenu.parent = NULL;
 	mainMenu.nChildren = 3;
@@ -93,20 +93,20 @@ menuNode* menu_init(){
 void menu_go(menuNode** menu, Controls* control){
 	move_arrow(&((*menu)->arrowLevel), &control->jsY, (*menu)->nChildren);
 	
-	oled_clear();
-	oled_print((*menu)->text,0,0);	//Prints the title
+	OLED_clear();
+	OLED_print((*menu)->text,0,0);	//Prints the title
 	
 	//Iterates through submenues and prints them
 	for(int i=1; i<=(*menu)->nChildren; ++i){
 		//Prints a spaceinvader at the current arrow level.
 		if((*menu)->arrowLevel == i){
-			oled_print("-s",i,0);
+			OLED_print("-s",i,0);
 		}
 		else{
-			oled_print("  ",i,0);
+			OLED_print("  ",i,0);
 		}
 		//The menu text is offset to the right by 2 to make room for the possible arrow
-		oled_print((*menu)->child[i-1]->text,i,2); 
+		OLED_print((*menu)->child[i-1]->text,i,2); 
 	}
 	
 	//Left/right joystick changes the menu level.

@@ -16,28 +16,29 @@ PingPong.d PingPong.o: .././PingPong.c .././MainInclude.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h \
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
+ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\eeprom.h \
  .././Drivers/OLED.h .././Drivers/../MainInclude.h \
  .././Drivers/../Etc/Font.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
  .././../../InterNodeHeaders/CanMessageFormat.h \
  .././../../InterNodeHeaders/canID.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h \
- .././Drivers/UsartDriver.h .././Drivers/external_SRAM.h \
+ .././CommunicationDrivers/UsartDriver.h \
+ .././CommunicationDrivers/../MainInclude.h .././Drivers/external_SRAM.h \
  .././Drivers/ADC_Driver.h .././Drivers/Controllers.h \
  .././Drivers/../Drivers/ADC_Driver.h .././UI/Menu.h \
  .././UI/../Drivers/Controllers.h .././UI/../MainInclude.h \
  .././Game/Game.h .././Game/../MainInclude.h \
  .././Game/../Drivers/Controllers.h \
- .././Game/../Communication_drivers/can.h \
- .././Game/../Communication_drivers/mcp2515.h \
- .././Game/../Communication_drivers/../MainInclude.h \
- .././Game/../Communication_drivers/spi.h \
- .././Game/../Communication_drivers/MCP2515_register.h \
- .././Game/../Communication\ drivers/can.h .././UI/HighScore.h \
- .././Communication_drivers/can.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\eeprom.h
+ .././Game/../CommunicationDrivers/can.h \
+ .././Game/../CommunicationDrivers/mcp2515.h \
+ .././Game/../CommunicationDrivers/../MainInclude.h \
+ .././Game/../CommunicationDrivers/spi.h \
+ .././Game/../CommunicationDrivers/MCP2515_register.h .././UI/HighScore.h \
+ .././UI/../Game/Game.h .././CommunicationDrivers/can.h .././EEPROM.h \
+ .././main.h
 
 .././MainInclude.h:
 
@@ -75,6 +76,12 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stddef.h:
 
+c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h:
+
+c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h:
+
+c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\eeprom.h:
+
 .././Drivers/OLED.h:
 
 .././Drivers/../MainInclude.h:
@@ -87,13 +94,11 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 .././../../InterNodeHeaders/canID.h:
 
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdio.h:
-
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\lib\gcc\avr\4.8.1\include\stdarg.h:
-
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\string.h:
 
-.././Drivers/UsartDriver.h:
+.././CommunicationDrivers/UsartDriver.h:
+
+.././CommunicationDrivers/../MainInclude.h:
 
 .././Drivers/external_SRAM.h:
 
@@ -115,20 +120,22 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 .././Game/../Drivers/Controllers.h:
 
-.././Game/../Communication_drivers/can.h:
+.././Game/../CommunicationDrivers/can.h:
 
-.././Game/../Communication_drivers/mcp2515.h:
+.././Game/../CommunicationDrivers/mcp2515.h:
 
-.././Game/../Communication_drivers/../MainInclude.h:
+.././Game/../CommunicationDrivers/../MainInclude.h:
 
-.././Game/../Communication_drivers/spi.h:
+.././Game/../CommunicationDrivers/spi.h:
 
-.././Game/../Communication_drivers/MCP2515_register.h:
-
-.././Game/../Communication\ drivers/can.h:
+.././Game/../CommunicationDrivers/MCP2515_register.h:
 
 .././UI/HighScore.h:
 
-.././Communication_drivers/can.h:
+.././UI/../Game/Game.h:
 
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\eeprom.h:
+.././CommunicationDrivers/can.h:
+
+.././EEPROM.h:
+
+.././main.h:
