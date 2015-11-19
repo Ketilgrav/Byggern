@@ -12,10 +12,10 @@
 #include "../Drivers/Controllers.h"
 #include "../MainInclude.h"
 
-enum state { menu = 0, runGame = 1, highScore = 2, calibrateJS = 3, showCanMessage = 4, controllerJS = 5, controllerSens = 6 };
+enum menuState { menu = 0, runGame = 1, highScore = 2, calibrateJS = 3, showCanMessage = 4, controllerJS = 5, controllerSens = 6, deleteHS =7};
 
 typedef struct menuNode{
-	enum state currentState;
+	enum menuState currentState;
 	uint8_t nChildren;
 	uint8_t arrowLevel;
 	char text[16];

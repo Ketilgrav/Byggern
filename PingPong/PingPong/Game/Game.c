@@ -69,6 +69,7 @@ uint8_t runGame(GameState* gameState, Controls* controls, CAN_message* msgMtor, 
 		case gameOver:
 			if (gameState->points > gameState->record){
 				gameState->record = gameState->points;
+				eeprom_write_byte(EEPROM_HIGHSCOREBYTE,gameState->record);
 			}
 			if (gameState->points >= gameState->record){
 				oled_print("NY REKORD!", 0, 0);

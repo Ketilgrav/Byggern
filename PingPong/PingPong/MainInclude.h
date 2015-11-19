@@ -9,13 +9,14 @@
 #ifndef MAININCLUDE_H_
 #define MAININCLUDE_H_
 
-//#define F_CPU 16000000 //16MHz
 #define F_CPU 4915200
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <avr/eeprom.h>
 
 //IO manipulering
 #define set_bit( reg, bit ) (reg |= (1<<bit))
@@ -30,6 +31,8 @@
 #include "../../InterNodeHeaders/canID.h"
 #include <stdio.h>
 #include <string.h>
+
+#define EEPROM_HIGHSCOREBYTE ((uint8_t*)32)
 
 typedef enum { false, true} bool;
 

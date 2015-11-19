@@ -13,92 +13,90 @@
 
 //Generating the menu states, without allocating memory manually. 
 menuNode mainMenu;
+menuNode dispHighScore;
+menuNode newGame;
 menuNode options;
 menuNode reCalibrateJs;
+menuNode deleteHighScore;
 menuNode chooseController;
 menuNode controllerJoystick;
 menuNode controllerSensor;
-menuNode newGame;
-menuNode highScore;
-menuNode canMsg;
 
 menuNode* menu_init(){
 	strcpy(options.text,			"Options       ");
 	strcpy(newGame.text,			"New Game      ");
-	strcpy(highScore.text,			"High scores   ");
+	strcpy(dispHighScore.text,			"High scores   ");
 	strcpy(mainMenu.text,			"Main menu!    ");
 	strcpy(reCalibrateJs.text,		"Re calib. js. ");
-	strcpy(canMsg.text,				"Disp. CAN msg.");
 	strcpy(chooseController.text,	"Choose cntrlr.");
 	strcpy(controllerJoystick.text,	"Joystick      ");
 	strcpy(controllerSensor.text,	"Sensor        ");
+	strcpy(deleteHighScore,			"Delete H.S.   ");
 	
 	mainMenu.parent = NULL;
-	mainMenu.nChildren = 4;
+	mainMenu.nChildren = 3;
 	mainMenu.child[0] = &options;
 	mainMenu.child[1] = &newGame;
-	mainMenu.child[2] = &highScore;
-	mainMenu.child[3] = &canMsg;
+	mainMenu.child[2] = &dispHighScore;
 	mainMenu.arrowLevel = 1;
-	mainMenu.currentState = MENU;
+	mainMenu.currentState = menu;
 	
 	options.parent = &mainMenu;
-	options.nChildren = 2;
+	options.nChildren = 3;
 	options.child[0] = &reCalibrateJs;
 	options.child[1] = &chooseController;
+	options.child[2] = &deleteHighScore;
 	options.arrowLevel = 1;
-	options.currentState = MENU;
+	options.currentState = menu;
 	
 	reCalibrateJs.parent = &options;
 	reCalibrateJs.nChildren = 0;
 	reCalibrateJs.arrowLevel = 1;
-	reCalibrateJs.currentState = CALIBRATE_JS;
+	reCalibrateJs.currentState = calibrateJS;
+	
+	deleteHighScore.parent = &options;
+	deleteHighScore.nChildren = 0;
+	deleteHighScore.arrowLevel = 1;
+	deleteHighScore.currentState = deleteHS;
 	
 	chooseController.parent = &options;
 	chooseController.nChildren = 2;
 	chooseController.child[0] = &controllerJoystick;
 	chooseController.child[1] = &controllerSensor;
 	chooseController.arrowLevel = 1;
-	chooseController.currentState = MENU;
+	chooseController.currentState = menu;
 	
 	controllerJoystick.parent = &chooseController;
 	controllerJoystick.nChildren = 0;
 	controllerJoystick.arrowLevel = 1;
-	controllerJoystick.currentState = CNTRL_JS;
+	controllerJoystick.currentState = controllerJS;
 	
 	controllerSensor.parent = &chooseController;
 	controllerSensor.nChildren = 0;
 	controllerSensor.arrowLevel = 1;
-	controllerSensor.currentState = CNTRL_SENS;
+	controllerSensor.currentState = controllerSens;
 	
 	newGame.parent = &mainMenu;
 	newGame.nChildren = 0;
 	newGame.arrowLevel = 1;
-	newGame.currentState = RUN_GAME;
+	newGame.currentState = runGame;
 	
-	highScore.parent = &mainMenu;
-	highScore.nChildren = 0;
-	highScore.arrowLevel = 1;
-	highScore.currentState = HIGH_SCORE;
-	
-	canMsg.parent = &mainMenu;
-	canMsg.nChildren = 0;
-	canMsg.arrowLevel = 1;
-	canMsg.currentState = SHOW_CAN_MSG;
+	dispHighScore.parent = &mainMenu;
+	dispHighScore.nChildren = 0;
+	dispHighScore.arrowLevel = 1;
+	dispHighScore.currentState = highScore;
 	
 	return &mainMenu;
 	
 }
 
 void menu_go(menuNode** menu, Controls* control){
-	//moves the arrow according to joystick
-	flyttPil(&((*menu)->arrowLevel), &control->jsY, (*menu)->nChildren);
+	move_arrow(&((*menu)->arrowLevel), &control->jsY, (*menu)->nChildren);
 	
 	oled_clear();
-	//Prints the title
-	oled_print((*menu)->text,0,0);
+	oled_print((*menu)->text,0,0);	//Prints the title
 	
-	//Iterates through submenus and prints them
+	//Iterates through submenues and prints them
 	for(int i=1; i<=(*menu)->nChildren; ++i){
 		//Prints a spaceinvader at the current arrow level.
 		if((*menu)->arrowLevel == i){
@@ -107,10 +105,11 @@ void menu_go(menuNode** menu, Controls* control){
 		else{
 			oled_print("  ",i,0);
 		}
-		oled_print((*menu)->child[i-1]->text,i,2);
+		//The menu text is offset to the right by 2 to make room for the possible arrow
+		oled_print((*menu)->child[i-1]->text,i,2); 
 	}
 	
-	//Left/right joystick changes the menu level. 
+	//Left/right joystick changes the menu level.
 	//Go to the child currently pointed at
 	if(control->jsX.descreet_edge > 0){
 		if((*menu)->arrowLevel !=0  &&((*menu)->arrowLevel <= (*menu)->nChildren)){
@@ -125,7 +124,9 @@ void menu_go(menuNode** menu, Controls* control){
 	}
 }
 
-void flyttPil(uint8_t* level, JoyStick* jsY, uint8_t nChildren){
+
+/*Moves the menu indicator arrow according to the joystick descreet position*/
+void move_arrow(uint8_t* level, JoyStick* jsY, uint8_t nChildren){
 	if(jsY->descreet_edge == 0){
 		//Nothing has been pressed, do nothing
 		return;
