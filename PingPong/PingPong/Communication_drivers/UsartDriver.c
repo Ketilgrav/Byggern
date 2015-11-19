@@ -9,8 +9,8 @@
 
 void USART_init(){
 	//ubbr = F_CPU
-	int baudRate = BAUD;
-	unsigned int ubrr = F_CPU/(16*baudRate) - 1;
+	int8_t baudRate = BAUD;
+	uint8_t ubrr = UBRR;
 	//Set baud rate
 	UBRR0H = (unsigned char)(ubrr>>8);
 	UBRR0L = (unsigned char)ubrr;

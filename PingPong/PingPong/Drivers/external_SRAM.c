@@ -8,15 +8,14 @@
 #include "external_SRAM.h"
 
 void SRAM_init(void){
-	set_bit(MCUCR, SRE);	//External ram endable
-	set_bit(SFIOR, XMM2);	//100 -> releaser pc7-pc4 fra minne opperasjoner, til å bli brukt i jtag.
+	set_bit(MCUCR, SRE);	//External ram enable
+	set_bit(SFIOR, XMM2);	//100 -> release pc7-pc4 from memory operations, for use in jtag.
 	SRAM_test();
 }
 
-
 void SRAM_test(void){
-	volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM
-	uint16_t ext_ram_size = 0x800; //0x800 = 2048 = 2^11. Vi har 11 adresselinjer, så vi klarer å snakke med 2048 minne plasseringer
+	volatile char *ext_ram = (char *) RAM_START_ADR; 
+	uint16_t ext_ram_size = EXT_RAM_SIZE; 
 	uint16_t write_errors = 0;
 	uint16_t retrieval_errors = 0;
 	printf("Starting SRAM test...\n\r");
@@ -25,11 +24,11 @@ void SRAM_test(void){
 	uint16_t seed = rand();
 	// Write phase: Immediately check that the correct value was stored
 	srand(seed);
-	for (uint16_t i = 0; i < ext_ram_size; i++) {	//Går gjennom hele det eksterne minnet vi har tillgang til
+	for (uint16_t i = 0; i < ext_ram_size; i++) {
 		uint8_t some_value = rand();
-		ext_ram[i] = some_value;					//Setter inn en tilfeldig verdi
-		uint8_t retreived_value = ext_ram[i];		//Måler den tilbake
-		if (retreived_value != some_value) {		//Registrerer om den ble rett.
+		ext_ram[i] = some_value;			//Set a random value
+		uint8_t retreived_value = ext_ram[i];		//Retrieve said value
+		if (retreived_value != some_value) {		//Compare set and retrieved
 			//printf("Write phase error: ext_ram[%4d] = %02X (should be %02X)\n\r", i,retreived_value, some_value);
 			write_errors++;
 		}
