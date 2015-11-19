@@ -202,7 +202,7 @@ int main(void){
 				CAN_message_send(&canMsgGameMode);
 				canMsgGameMode.length = 0;
 			}
-			if(canMsgMotor.length){
+			if(canMsgMotor.length && gameState.currentStatus != gameOver){
 				CAN_message_send(&canMsgMotor);
 				canMsgMotor.length = 0;
 				

@@ -7,8 +7,12 @@
 #include "MotorDrivers/regulator.h"
 #include "MotorDrivers/Solenoid.h"
 #include "SensorDrivers/HC-SR04.h"
+#include "main.h"
 
 #include <avr/interrupt.h>
+
+
+volatile bool canRetractSolenoid = 0;
 
 int main(){
 	_delay_us(10);
@@ -70,6 +74,15 @@ int main(){
 	
 	bool solenidPush = 0; //0=don't extend, 1=extend
 	
+	
+	
+	//Using clock 0 as solenoid active timer,
+	//Solenoid can only retract after the timer has overflown
+	//Meaning that 0.016s has passed with a 1/1024 prescaler
+	
+	TIMSK0 |= OCIE0A; //Activates overflow interrupt 
+	TCCR0A |= 0b10 <<WGM00;
+	OCR0A = 0xFF;
 	puts("All init done");
 	
 	while(1){
@@ -171,24 +184,35 @@ int main(){
 			
 			//Activates or deactivates the solenoid
 			//If the solenoid was previously deactive and we want to activate it
-			if(solenidPush && read_bit(SOLENOID_PORT,SOLENOID_BIT)){				
+			if(solenidPush){				
 				//Activates
-				clear_bit(SOLENOID_PORT,SOLENOID_BIT);
+				SOLENOID_ACTIVATE;
 				//Sends a signal indicating that the player solenidPushed the solenoid
 				//This is going to start the game, if it has not allready started.
-				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_START;
-				CAN_message_send(&msgGameSignal);
+				if(msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] != GAMESIGNAL_START){
+					msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_START;
+					CAN_message_send(&msgGameSignal);
+				}
+				
+				canRetractSolenoid = 0;
+				STIMER_RESET;
+				STIMER_ACTIVATE;
+				//puts("TA");
 			}
 			//If the solenoid was previusly active and we want to deactivate it
-			else if(!solenidPush && !read_bit(SOLENOID_PORT,SOLENOID_BIT)){
-				set_bit(SOLENOID_PORT,SOLENOID_BIT);
+			else if(canRetractSolenoid>5 && !solenidPush){
+				SOLENOID_DEACTIVATE;
+				STIMER_OVERFLOW_RESET;
+				STIMER_DEACTIVATE;
 			}
 			
 			//if there was a rising edge on the adcSignal, then the game is lost
 			//printf("%u",adcSignal.val);
 			if(adcSignal.edge){
-				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_STOP;
-				CAN_message_send(&msgGameSignal);
+				if(msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] != GAMESIGNAL_STOP){
+					msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_STOP;
+					CAN_message_send(&msgGameSignal);	
+				}
 			}
 		}
 		else{
@@ -210,4 +234,10 @@ int main(){
 ISR(BADISR_vect, ISR_NAKED){
 	puts("Bad interrupt");
 	asm volatile ( "ret" );
+}
+
+ISR(TIMER0_COMPA_vect){
+	//puts("CR");
+	STIMER_RESET;
+	canRetractSolenoid++;
 }

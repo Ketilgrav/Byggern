@@ -74,6 +74,10 @@ uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor,
 			if (gameState->points >= gameState->record){
  				OLED_print("NY REKORD!", 0, 0);
  				OLED_print("GRATULERER!", 1, 0);
+				 
+				//Updates and writes name.
+				update_name(gameState, controls);
+				OLED_print(gameState->name,2,0);
 			}
 			else{
  				OLED_print("DU TAPTE!", 1, 0);
@@ -90,19 +94,15 @@ uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor,
 			OLED_print(recordString, 5, 9);
  			OLED_print("RESTART MED A", 7, 0);
 
-			//Updates and writes name.
-			update_name(gameState, controls);
-			OLED_print(gameState->name,2,0);
-
 			//Restart, and save highscore and name if this was a new highscore
 			if (controls->btnR.edge){
-	// 			//If highscore:
-	// 			if(gameState->points >= gameState->record){
-	// 				eeprom_write_byte(EEPROM_HIGHSCOREBYTE,gameState->record);
-	// 				for(uint8_t i= 0; i<NAME_LEN;++i){
-	// 					eeprom_write_byte(EEPROM_HIGHSCORENAME+i,gameState->name[i]);
-	// 				}
-	// 			}
+	 			//If highscore:
+				if(gameState->points >= gameState->record){
+	 				eeprom_write_byte(EEPROM_HIGHSCOREBYTE,gameState->record);
+					for(uint8_t i= 0; i<NAME_LEN;++i){
+						eeprom_write_byte(EEPROM_HIGHSCORENAME+i,gameState->name[i]);
+	 				}
+	 			}
 				gameState->currentStatus= pause;
 			}
 			break;

@@ -135,6 +135,9 @@
     <Compile Include="CommunicationDrivers\UsartDriver.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="main.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="MainInclude.h">
       <SubType>compile</SubType>
     </Compile>

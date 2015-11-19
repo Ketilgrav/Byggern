@@ -28,7 +28,6 @@ typedef struct ADC_signal{
 	uint8_t boolState;
 	uint8_t edge;
 	uint8_t count;
-	uint8_t val;
 }ADC_signal;
 
 void adc_measure(ADC_signal* signal);

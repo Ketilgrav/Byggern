@@ -7,13 +7,13 @@
 #include "../MainInclude.h"
 #include "adc.h"
 
-volatile uint16_t adcVal = 0;
+uint16_t adcVal = 0;
 volatile uint8_t adcDoUpdate = 1;
 
 void adc_init(){
 	clear_bit(ADC_DDR,ADC_BIT);
 	
-	set_bit(ADMUX, MUX0); //Using ADC1
+	ADMUX |= 0b01<<MUX0; //Using ADC3
 	set_bit(ADMUX, REFS0); //using AVCC as referanse.
 	
 	//ADC enable. //Prescaler //Aktiverer interupt
@@ -32,7 +32,6 @@ void adc_measure(ADC_signal* signal){
 		//If the adc convertion has not finished
 		return;
 	}
-	printf("%u\n",adcVal);
 	signal->nrMeasurements ++;
 	signal->sumValue += adcVal;
 	signal->edge = 0;
@@ -52,7 +51,6 @@ void adc_measure(ADC_signal* signal){
 			signal->boolState = 0;
 		}
 		
-		signal->val = signal->sumValue / signal->nrMeasurements;
 		signal->nrMeasurements = 0;
 		signal->sumValue = 0;
 	}
