@@ -12,16 +12,21 @@
 #include "../MainInclude.h"
 #include "../Drivers/ADC_Driver.h"
 
-#define channelX 1
-#define channelY 0
-#define channel_R_slider 3
-#define channel_L_slider 2
-#define slack_js 50
-#define slack_slider 15
-#define slack_update_slider 11
+#define CHANNEL_X 1
+#define CHANNEL_Y 0
+#define CHANNEL_R_SLIDER 3
+#define CHANNEL_L_SLIDER 2
+#define SLACK_JS 50
+#define SLACK_SLIDER 15
+#define SLACK_UPDATE_SLIDER 11
 
-#define btn_A read_bit(PINB,PB2)
-#define btn_B read_bit(PINB,PB3)
+#define BTN_R_DDR DDRB
+#define BTN_R_BIT PB2
+#define BTN_L_DDR DDRB
+#define BTN_L_BIT PB3
+
+#define BTN_R read_bit(PINB, BTN_R_BIT)
+#define BTN_L read_bit(PINB, BTN_L_BIT)
 
 typedef struct JoyStick{
 	uint8_t voltage;
@@ -60,4 +65,5 @@ void slider_update(Slider* slL, Slider* slR);
 void controllers_init();
 void read_button(Button* btnL, Button* btnR);
 void controllers_update(Controls* controls);
+
 #endif /* JOYSTICK_H_ */
