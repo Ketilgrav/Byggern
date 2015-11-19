@@ -9,10 +9,10 @@
 #ifndef MCP2515_H_
 #define MCP2515_H_
 
-#define can_cs_bit
-#define can_cs_reg 
+#define CAN_CS_BIT
+#define CAN_CS_REG 
 
-#define usart_
+#define USART_
 
 #include "../MainInclude.h"
 #include "spi.h"
