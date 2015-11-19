@@ -19,11 +19,11 @@ typedef struct CAN_message{
 	int8_t data[8];
 } CAN_message;
 
-typedef enum {NOINT = 0b000, ERR = 0b001, RX0 = 0b110, RX1 = 0b111 } interrupt;
+typedef enum {no_int = 0b000, err = 0b001, rx0 = 0b110, rx1 = 0b111 } interrupt;
 
-#define interrupt_DDR DDRD
-#define interrupt_PIN PIND
-#define interrupt_bit PD3
+#define INTERRUPT_DDR DDRD
+#define INTERRUPT_PIN PIND
+#define INTERRUPT_BIT PD3
 
 void CAN_init();
 //void CAN_error();
@@ -34,7 +34,7 @@ void CAN_message_send_to_reg(CAN_message const * const msg, uint8_t reg);
 interrupt CAN_int();
 
 void CAN_int_clear(interrupt CAN_interrupt);
-uint8_t interruptToMask(interrupt CAN_interrrupt);
+uint8_t interrupt_to_mask(interrupt CAN_interrupt);
 void CAN_all_int_clear();
 
 
