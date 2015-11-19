@@ -93,55 +93,60 @@ void oled_pos(uint8_t row,uint8_t column){
 	oled_control = 0x10 | (column / 0x10);	//Sett msb col
 }
 
+
+/*Print a text string at specified line and byte starting point
+Line can be from 0 to 8, starting point from 0 to 16
+The character '-', followed by '<','V','^', '>' creates arrows
+The character '-' followed by 's' creates a 2byte long space invader.*/
 void oled_print(char tekst[], uint8_t lineNr, uint8_t charStartPoint){
 	if(lineNr > 7){
 		lineNr = 7;
 	}
-	
-	//Må trekke fra 32 for å slå opp i font.
-	for(uint8_t i = 0; tekst[i] != '\0' && i < 16-charStartPoint; ++i){
-		if(tekst[i] == '-'){
-			switch(tekst[i+1]){
+	for(uint8_t textLoc = 0, printLoc = 0; tekst[textLoc] != '\0' && printLoc < 16-charStartPoint; ++textLoc, ++printLoc){
+		if(tekst[printLoc] == '-'){
+			switch(tekst[printLoc+1]){
 				case '^':
-				oled_print_char(127, lineNr, i+charStartPoint);
-				i++;
+				oled_print_char(127, lineNr, printLoc+charStartPoint);
+				textLoc++;
 				break;
 				case 'v':
-				oled_print_char(128, lineNr, i+charStartPoint);
-				i++;
+				oled_print_char(128, lineNr, printLoc+charStartPoint);
+				textLoc++;
 				break;
 				case '<':
-				oled_print_char(129, lineNr, i+charStartPoint);
-				i++;
+				oled_print_char(129, lineNr, printLoc+charStartPoint);
+				textLoc++;
 				break;
 				case '>':
-				oled_print_char(130, lineNr, i+charStartPoint);
-				i++;
+				oled_print_char(130, lineNr, printLoc+charStartPoint);
+				textLoc++;
 				break;
 				case 's':
-				oled_print_char(131, lineNr, i+charStartPoint);
-				i++;
-				oled_print_char(132, lineNr, i+charStartPoint);
+				oled_print_char(131, lineNr, printLoc+charStartPoint);
+				printLoc++;
+				textLoc++;
+				oled_print_char(132, lineNr, printLoc+charStartPoint);
 				break;
 				default:
-				oled_print_char('-', lineNr, i+charStartPoint);
+				oled_print_char('-', lineNr, printLoc+charStartPoint);
 				break;
 				
 			}
 		}
 		else{
-			oled_print_char(tekst[i], lineNr, i+charStartPoint);
+			oled_print_char(tekst[textLoc], lineNr, printLoc+charStartPoint);
 		}
 	}
 }
 
+
 void oled_print_char(char ch, uint8_t line, uint8_t loc){
-	//Må trekke fra 32 for å slå opp i font.
 	for(int j = 0; j<8; ++j){
 		oled_mem_line_loc(line, loc, j) = pgm_read_byte(&font[ch-asciiOffset][j]);
 	}
 }
 
+/*Sets the value 0 at all memory locations used by the oled*/
 void oled_clear(){
 	volatile char* memBegin = oled_mem_begin;
 	for(unsigned int i = 0; i < 1024; ++i){
