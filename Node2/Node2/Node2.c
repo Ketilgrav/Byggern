@@ -4,7 +4,7 @@
 #include "MotorDrivers/servo.h"
 #include "SensorDrivers//adc.h"
 #include "CommunicationDrivers/I2C.h"
-#include "regulator.h"
+#include "MotorDrivers/regulator.h"
 #include "MotorDrivers/Solenoid.h"
 #include "SensorDrivers/HC-SR04.h"
 

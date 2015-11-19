@@ -14,11 +14,11 @@ CommunicationDrivers\UsartDriver.c
 
 MotorDrivers\MotorBox.c
 
+MotorDrivers\regulator.c
+
 MotorDrivers\servo.c
 
 Node2.c
-
-regulator.c
 
 SensorDrivers\adc.c
 

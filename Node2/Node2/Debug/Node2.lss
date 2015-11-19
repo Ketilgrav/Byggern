@@ -17,15 +17,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   6 .debug_abbrev 00000df2  00000000  00000000  000049ee  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00001725  00000000  00000000  000057e0  2**0
+  7 .debug_line   0000171e  00000000  00000000  000057e0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000005f0  00000000  00000000  00006f08  2**2
+  8 .debug_frame  000005f0  00000000  00000000  00006f00  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000007ea  00000000  00000000  000074f8  2**0
+  9 .debug_str    000007f5  00000000  00000000  000074f0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000011d7  00000000  00000000  00007ce2  2**0
+ 10 .debug_loc    000011d7  00000000  00000000  00007ce5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 000001e0  00000000  00000000  00008eb9  2**0
+ 11 .debug_ranges 000001e0  00000000  00000000  00008ebc  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -206,11 +206,11 @@ Disassembly of section .text:
      21a:	a5 31       	cpi	r26, 0x15	; 21
      21c:	b2 07       	cpc	r27, r18
      21e:	e1 f7       	brne	.-8      	; 0x218 <.do_clear_bss_loop>
-     220:	88 d2       	rcall	.+1296   	; 0x732 <main>
+     220:	94 d3       	rcall	.+1832   	; 0x94a <main>
      222:	0c 94 47 11 	jmp	0x228e	; 0x228e <_exit>
 
 00000226 <__bad_interrupt>:
-     226:	dd c3       	rjmp	.+1978   	; 0x9e2 <__vector_default>
+     226:	e9 c4       	rjmp	.+2514   	; 0xbfa <__vector_default>
 
 00000228 <CAN_message_send_to_reg>:
 		return 0;
@@ -1302,1042 +1302,1042 @@ int16_t motorbox_get_encoder(){
      696:	cf 91       	pop	r28
      698:	08 95       	ret
 
-0000069a <servo_init>:
- */ 
-#include "servo.h"
-#include "../MainInclude.h"
-
-void servo_init(){
-	set_bit(PWM_DDR, PWM_bit);
-     69a:	25 9a       	sbi	0x04, 5	; 4
-	
-	//Activating fast PWM
-	TCCR1A |= (1<<WGM11);
-     69c:	a0 e8       	ldi	r26, 0x80	; 128
-     69e:	b0 e0       	ldi	r27, 0x00	; 0
-     6a0:	8c 91       	ld	r24, X
-     6a2:	82 60       	ori	r24, 0x02	; 2
-     6a4:	8c 93       	st	X, r24
-	TCCR1B |= (1<<WGM12)|(1<<WGM13);
-     6a6:	e1 e8       	ldi	r30, 0x81	; 129
-     6a8:	f0 e0       	ldi	r31, 0x00	; 0
-     6aa:	80 81       	ld	r24, Z
-     6ac:	88 61       	ori	r24, 0x18	; 24
-     6ae:	80 83       	st	Z, r24
-	
-	//Clear OC1A on compare match, set OC1A at BOTTOM
-	TCCR1A |= (1<<COM1A1);
-     6b0:	8c 91       	ld	r24, X
-     6b2:	80 68       	ori	r24, 0x80	; 128
-     6b4:	8c 93       	st	X, r24
-	
-	//Clock prescaler
-	TCCR1B |= (clock_scaler << CS10);
-     6b6:	80 81       	ld	r24, Z
-     6b8:	82 60       	ori	r24, 0x02	; 2
-     6ba:	80 83       	st	Z, r24
-	
-	//TOP signalet
-	ICR1 = duty_cycle_ms * F_CPU / clock_scaler_val;
-     6bc:	80 e4       	ldi	r24, 0x40	; 64
-     6be:	9c e9       	ldi	r25, 0x9C	; 156
-     6c0:	90 93 87 00 	sts	0x0087, r25
-     6c4:	80 93 86 00 	sts	0x0086, r24
-	
-	//Timer is compared to this value
-	OCR1A = pulse_width_min * F_CPU / clock_scaler_val;
-     6c8:	88 e0       	ldi	r24, 0x08	; 8
-     6ca:	97 e0       	ldi	r25, 0x07	; 7
-     6cc:	90 93 89 00 	sts	0x0089, r25
-     6d0:	80 93 88 00 	sts	0x0088, r24
-     6d4:	08 95       	ret
-
-000006d6 <servo_set>:
-}
-
-void servo_set(int percent){
-     6d6:	8c 39       	cpi	r24, 0x9C	; 156
-     6d8:	2f ef       	ldi	r18, 0xFF	; 255
-     6da:	92 07       	cpc	r25, r18
-     6dc:	14 f4       	brge	.+4      	; 0x6e2 <servo_set+0xc>
-     6de:	8c e9       	ldi	r24, 0x9C	; 156
-     6e0:	9f ef       	ldi	r25, 0xFF	; 255
-     6e2:	85 36       	cpi	r24, 0x65	; 101
-     6e4:	91 05       	cpc	r25, r1
-     6e6:	14 f0       	brlt	.+4      	; 0x6ec <servo_set+0x16>
-     6e8:	84 e6       	ldi	r24, 0x64	; 100
-     6ea:	90 e0       	ldi	r25, 0x00	; 0
-		percent = 100;
-	}
-	else if(percent < -100){
-		percent = -100;		
-	}
-	OCR1A = (pulse_width_neutral + ((pulse_width_max-pulse_width_min)/200)*(-percent))* F_CPU / clock_scaler_val;
-     6ec:	66 27       	eor	r22, r22
-     6ee:	77 27       	eor	r23, r23
-     6f0:	68 1b       	sub	r22, r24
-     6f2:	79 0b       	sbc	r23, r25
-     6f4:	88 27       	eor	r24, r24
-     6f6:	77 fd       	sbrc	r23, 7
-     6f8:	80 95       	com	r24
-     6fa:	98 2f       	mov	r25, r24
-     6fc:	97 d5       	rcall	.+2862   	; 0x122c <__floatsisf>
-     6fe:	2b e9       	ldi	r18, 0x9B	; 155
-     700:	33 e5       	ldi	r19, 0x53	; 83
-     702:	49 ec       	ldi	r20, 0xC9	; 201
-     704:	56 e3       	ldi	r21, 0x36	; 54
-     706:	42 d6       	rcall	.+3204   	; 0x138c <__mulsf3>
-     708:	26 ea       	ldi	r18, 0xA6	; 166
-     70a:	3b e9       	ldi	r19, 0x9B	; 155
-     70c:	44 ec       	ldi	r20, 0xC4	; 196
-     70e:	5a e3       	ldi	r21, 0x3A	; 58
-     710:	8a d4       	rcall	.+2324   	; 0x1026 <__addsf3>
-     712:	20 e0       	ldi	r18, 0x00	; 0
-     714:	34 e2       	ldi	r19, 0x24	; 36
-     716:	44 e7       	ldi	r20, 0x74	; 116
-     718:	5b e4       	ldi	r21, 0x4B	; 75
-     71a:	38 d6       	rcall	.+3184   	; 0x138c <__mulsf3>
-     71c:	20 e0       	ldi	r18, 0x00	; 0
-     71e:	30 e0       	ldi	r19, 0x00	; 0
-     720:	40 e0       	ldi	r20, 0x00	; 0
-     722:	5e e3       	ldi	r21, 0x3E	; 62
-     724:	33 d6       	rcall	.+3174   	; 0x138c <__mulsf3>
-     726:	54 d5       	rcall	.+2728   	; 0x11d0 <__fixunssfsi>
-     728:	70 93 89 00 	sts	0x0089, r23
-     72c:	60 93 88 00 	sts	0x0088, r22
-     730:	08 95       	ret
-
-00000732 <main>:
-#include "MotorDrivers/Solenoid.h"
-#include "SensorDrivers/HC-SR04.h"
-
-#include <avr/interrupt.h>
-
-int main(){
-     732:	cf 93       	push	r28
-     734:	df 93       	push	r29
-     736:	cd b7       	in	r28, 0x3d	; 61
-     738:	de b7       	in	r29, 0x3e	; 62
-     73a:	c6 57       	subi	r28, 0x76	; 118
-     73c:	d1 09       	sbc	r29, r1
-     73e:	0f b6       	in	r0, 0x3f	; 63
-     740:	f8 94       	cli
-     742:	de bf       	out	0x3e, r29	; 62
-     744:	0f be       	out	0x3f, r0	; 63
-     746:	cd bf       	out	0x3d, r28	; 61
-	sei(); // Global interrupt enable
-     748:	78 94       	sei
-	//cli(); // Global interrupt disable
-	
-	/*INITIALISATION*/
-	USART_init();
-     74a:	2c df       	rcall	.-424    	; 0x5a4 <USART_init>
-	puts("Uart init done");
-     74c:	8a e3       	ldi	r24, 0x3A	; 58
-     74e:	92 e0       	ldi	r25, 0x02	; 2
-     750:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
-	CAN_init();
-     754:	1c de       	rcall	.-968    	; 0x38e <CAN_init>
-	puts("Can init done");
-     756:	89 e4       	ldi	r24, 0x49	; 73
-     758:	92 e0       	ldi	r25, 0x02	; 2
-     75a:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
-	servo_init();
-     75e:	9d df       	rcall	.-198    	; 0x69a <servo_init>
-	puts("Servo init done");
-     760:	87 e5       	ldi	r24, 0x57	; 87
-     762:	92 e0       	ldi	r25, 0x02	; 2
-     764:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
-	adc_init();
-     768:	4d d2       	rcall	.+1178   	; 0xc04 <adc_init>
-	puts("ADC init done");
-     76a:	87 e6       	ldi	r24, 0x67	; 103
-     76c:	92 e0       	ldi	r25, 0x02	; 2
-     76e:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
-	I2C_init();
-     772:	7c de       	rcall	.-776    	; 0x46c <I2C_init>
-	puts("I2C init done");
-     774:	85 e7       	ldi	r24, 0x75	; 117
-     776:	92 e0       	ldi	r25, 0x02	; 2
-     778:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
-	motorbox_init();
-     77c:	57 df       	rcall	.-338    	; 0x62c <motorbox_init>
-	puts("Motor init done");
-     77e:	83 e8       	ldi	r24, 0x83	; 131
-     780:	92 e0       	ldi	r25, 0x02	; 2
-     782:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
-	SOLENOID_INIT;
-     786:	82 9a       	sbi	0x10, 2	; 16
-	SOLENOID_DEACTIVATE;
-     788:	8a 9a       	sbi	0x11, 2	; 17
-	puts("Solenoid init done");
-     78a:	83 e9       	ldi	r24, 0x93	; 147
-     78c:	92 e0       	ldi	r25, 0x02	; 2
-     78e:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
-	
-	Regulator regulator;
-	regulator_init(&regulator);
-     792:	ce 01       	movw	r24, r28
-     794:	01 96       	adiw	r24, 0x01	; 1
-     796:	2a d1       	rcall	.+596    	; 0x9ec <regulator_init>
-	puts("Regulator init done");
-     798:	86 ea       	ldi	r24, 0xA6	; 166
-     79a:	92 e0       	ldi	r25, 0x02	; 2
-     79c:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
-	
-	echo_init();
-     7a0:	85 d3       	rcall	.+1802   	; 0xeac <echo_init>
-	ECHO_data S0_data;
-	ECHO_data S1_data;
-	echo_data_init(&S0_data);
-     7a2:	ce 01       	movw	r24, r28
-     7a4:	8f 5b       	subi	r24, 0xBF	; 191
-     7a6:	9f 4f       	sbci	r25, 0xFF	; 255
-     7a8:	a5 d3       	rcall	.+1866   	; 0xef4 <echo_data_init>
-	echo_data_init(&S1_data);
-     7aa:	ce 01       	movw	r24, r28
-     7ac:	82 5b       	subi	r24, 0xB2	; 178
-     7ae:	9f 4f       	sbci	r25, 0xFF	; 255
-     7b0:	a1 d3       	rcall	.+1858   	; 0xef4 <echo_data_init>
-	puts("Distance sensor init done");
-     7b2:	8a eb       	ldi	r24, 0xBA	; 186
-     7b4:	92 e0       	ldi	r25, 0x02	; 2
-     7b6:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
-	/*CAN message variables*/
-	interrupt CAN_interrupt;
-	
-	//Message holding the recieved message.
-	CAN_message msgInn;
-	msgInn.length = 0;
-     7ba:	6e 96       	adiw	r28, 0x1e	; 30
-     7bc:	1f ae       	std	Y+63, r1	; 0x3f
-     7be:	6e 97       	sbiw	r28, 0x1e	; 30
-	
-	//Holds a blueprint for gamesignal messages
-	//msgPoint.data[GAMESIGNAL_SIGNAL_BYTE] should be updated with 
-	//the correct information before sending
-	CAN_message msgGameSignal;
-	msgGameSignal.length = GAMESIGNAL_MSGLEN;
-     7c0:	22 e0       	ldi	r18, 0x02	; 2
-     7c2:	a9 96       	adiw	r28, 0x29	; 41
-     7c4:	2f af       	std	Y+63, r18	; 0x3f
-     7c6:	a9 97       	sbiw	r28, 0x29	; 41
-	msgGameSignal.id = NODE1_CANID_0;
-     7c8:	80 e0       	ldi	r24, 0x00	; 0
-     7ca:	96 e0       	ldi	r25, 0x06	; 6
-     7cc:	a8 96       	adiw	r28, 0x28	; 40
-     7ce:	9f af       	std	Y+63, r25	; 0x3f
-     7d0:	8e af       	std	Y+62, r24	; 0x3e
-     7d2:	a8 97       	sbiw	r28, 0x28	; 40
-	msgGameSignal.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_GAMESIGNAL;
-     7d4:	aa 96       	adiw	r28, 0x2a	; 42
-     7d6:	2f af       	std	Y+63, r18	; 0x3f
-     7d8:	aa 97       	sbiw	r28, 0x2a	; 42
-	int16_t joySpeed = 0;
-	int16_t joyPos = 0;
-	
-	bool solenidPush = 0; //0=don't extend, 1=extend
-	
-	puts("All init done");
-     7da:	84 ed       	ldi	r24, 0xD4	; 212
-     7dc:	92 e0       	ldi	r25, 0x02	; 2
-     7de:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
-	ADC_signal adcSignal;
-	
-	int16_t joySpeed = 0;
-	int16_t joyPos = 0;
-	
-	bool solenidPush = 0; //0=don't extend, 1=extend
-     7e2:	91 2c       	mov	r9, r1
-	bool gameModeChanged = false;
-	
-	ADC_signal adcSignal;
-	
-	int16_t joySpeed = 0;
-	int16_t joyPos = 0;
-     7e4:	61 2c       	mov	r6, r1
-     7e6:	71 2c       	mov	r7, r1
-	msgGameSignal.length = GAMESIGNAL_MSGLEN;
-	msgGameSignal.id = NODE1_CANID_0;
-	msgGameSignal.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_GAMESIGNAL;
-	
-	
-	uint8_t gameMode = GAMEMODE_OFF;
-     7e8:	51 2c       	mov	r5, r1
-		CAN_interrupt = CAN_int();
-		switch(CAN_interrupt){
-			case noInt:
-				break;
-			case err:
-				printf("CAN ERROR");
-     7ea:	0f 2e       	mov	r0, r31
-     7ec:	f2 ee       	ldi	r31, 0xE2	; 226
-     7ee:	ef 2e       	mov	r14, r31
-     7f0:	f2 e0       	ldi	r31, 0x02	; 2
-     7f2:	ff 2e       	mov	r15, r31
-     7f4:	f0 2d       	mov	r31, r0
-			//Measures if the led i blocked
-			adc_measure(&adcSignal);
-			
-			//Writes down the time interval since last round.
-			//Used in the regulator, and other integral action
-			regulator.dt = TCNT3*1.0/((F_CPU/64)*1.0);
-     7f6:	0f 2e       	mov	r0, r31
-     7f8:	f4 e9       	ldi	r31, 0x94	; 148
-     7fa:	2f 2e       	mov	r2, r31
-     7fc:	31 2c       	mov	r3, r1
-     7fe:	f0 2d       	mov	r31, r0
-				set_bit(SOLENOID_PORT,SOLENOID_BIT);
-			}
-			
-			//if there was a rising edge on the adcSignal, then the game is lost
-			if(adcSignal.edge){
-				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_STOP;
-     800:	44 24       	eor	r4, r4
-     802:	43 94       	inc	r4
-		
-		/*Game controll system*/
-		if(gameMode != GAMEMODE_OFF){
-			//if the gamemode changed to this state, then things need to be activated
-			if(gameModeChanged){
-				REGULATOR_TIMER_ACTIVATE;
-     804:	0f 2e       	mov	r0, r31
-     806:	f1 e9       	ldi	r31, 0x91	; 145
-     808:	af 2e       	mov	r10, r31
-     80a:	b1 2c       	mov	r11, r1
-     80c:	f0 2d       	mov	r31, r0
-				motorbox_reset_encoder();
-				ETIMER_TRIGGER_ENABLE;
-     80e:	0f 2e       	mov	r0, r31
-     810:	f1 e2       	ldi	r31, 0x21	; 33
-     812:	cf 2e       	mov	r12, r31
-     814:	dd 24       	eor	r13, r13
-     816:	d3 94       	inc	r13
-     818:	f0 2d       	mov	r31, r0
-	
-	puts("All init done");
-	
-	while(1){
-		/*Can message handeler*/
-		CAN_interrupt = CAN_int();
-     81a:	ac dd       	rcall	.-1192   	; 0x374 <CAN_int>
-     81c:	18 2f       	mov	r17, r24
-		switch(CAN_interrupt){
-     81e:	86 30       	cpi	r24, 0x06	; 6
-     820:	59 f0       	breq	.+22     	; 0x838 <main+0x106>
-     822:	87 30       	cpi	r24, 0x07	; 7
-     824:	79 f0       	breq	.+30     	; 0x844 <main+0x112>
-     826:	81 30       	cpi	r24, 0x01	; 1
-     828:	99 f4       	brne	.+38     	; 0x850 <main+0x11e>
-			case noInt:
-				break;
-			case err:
-				printf("CAN ERROR");
-     82a:	ff 92       	push	r15
-     82c:	ef 92       	push	r14
-     82e:	0e 94 63 0f 	call	0x1ec6	; 0x1ec6 <printf>
-				break;
-     832:	0f 90       	pop	r0
-     834:	0f 90       	pop	r0
-     836:	0e c0       	rjmp	.+28     	; 0x854 <main+0x122>
-			case rx0:
-				CAN_data_receive(&msgInn, MCP_RXB0CTRL);
-     838:	60 e6       	ldi	r22, 0x60	; 96
-     83a:	ce 01       	movw	r24, r28
-     83c:	85 5a       	subi	r24, 0xA5	; 165
-     83e:	9f 4f       	sbci	r25, 0xFF	; 255
-     840:	44 dd       	rcall	.-1400   	; 0x2ca <CAN_data_receive>
-				break;
-     842:	08 c0       	rjmp	.+16     	; 0x854 <main+0x122>
-			case rx1:
-				CAN_data_receive(&msgInn, MCP_RXB1CTRL);
-     844:	60 e7       	ldi	r22, 0x70	; 112
-     846:	ce 01       	movw	r24, r28
-     848:	85 5a       	subi	r24, 0xA5	; 165
-     84a:	9f 4f       	sbci	r25, 0xFF	; 255
-     84c:	3e dd       	rcall	.-1412   	; 0x2ca <CAN_data_receive>
-				break;
-     84e:	02 c0       	rjmp	.+4      	; 0x854 <main+0x122>
-			default:
-				break;
-		}
-		//Resets the interrupt if there was one
-		if(CAN_interrupt != noInt) CAN_int_clear(CAN_interrupt);
-     850:	88 23       	and	r24, r24
-     852:	11 f0       	breq	.+4      	; 0x858 <main+0x126>
-     854:	81 2f       	mov	r24, r17
-     856:	02 de       	rcall	.-1020   	; 0x45c <CAN_int_clear>
-		
-		//if we got a message, then the length would be non 0
-		if(msgInn.length){
-     858:	6e 96       	adiw	r28, 0x1e	; 30
-     85a:	8f ad       	ldd	r24, Y+63	; 0x3f
-     85c:	6e 97       	sbiw	r28, 0x1e	; 30
-     85e:	88 23       	and	r24, r24
-     860:	a9 f0       	breq	.+42     	; 0x88c <main+0x15a>
-			switch(msgInn.data[CANMSG_PACKAGESPECIFIER]){
-     862:	6f 96       	adiw	r28, 0x1f	; 31
-     864:	8f ad       	ldd	r24, Y+63	; 0x3f
-     866:	6f 97       	sbiw	r28, 0x1f	; 31
-     868:	88 23       	and	r24, r24
-     86a:	19 f0       	breq	.+6      	; 0x872 <main+0x140>
-     86c:	81 30       	cpi	r24, 0x01	; 1
-     86e:	29 f0       	breq	.+10     	; 0x87a <main+0x148>
-     870:	0d c0       	rjmp	.+26     	; 0x88c <main+0x15a>
-				case PACKAGESPECIFIER_MOTORSIGNALS:
-					msgInn.length = 0; //Indicates that the message is read
-     872:	6e 96       	adiw	r28, 0x1e	; 30
-     874:	1f ae       	std	Y+63, r1	; 0x3f
-     876:	6e 97       	sbiw	r28, 0x1e	; 30
-				break;
-     878:	09 c0       	rjmp	.+18     	; 0x88c <main+0x15a>
-				case PACKAGESPECIFIER_GAMEMODE:
-					gameMode = msgInn.data[GAMEMODE_MODE_BYTE];
-     87a:	a0 96       	adiw	r28, 0x20	; 32
-     87c:	5f ac       	ldd	r5, Y+63	; 0x3f
-     87e:	a0 97       	sbiw	r28, 0x20	; 32
-					gameModeChanged = 1;
-					msgInn.length = 0; //Indicates that the message is read
-     880:	6e 96       	adiw	r28, 0x1e	; 30
-     882:	1f ae       	std	Y+63, r1	; 0x3f
-     884:	6e 97       	sbiw	r28, 0x1e	; 30
-			
-		}
-		
-		
-		/*Game controll system*/
-		if(gameMode != GAMEMODE_OFF){
-     886:	51 10       	cpse	r5, r1
-     888:	a2 c0       	rjmp	.+324    	; 0x9ce <main+0x29c>
-     88a:	91 c0       	rjmp	.+290    	; 0x9ae <main+0x27c>
-     88c:	55 20       	and	r5, r5
-     88e:	09 f4       	brne	.+2      	; 0x892 <main+0x160>
-     890:	c4 cf       	rjmp	.-120    	; 0x81a <main+0xe8>
-				gameModeChanged = 0;
-			}
-			
-						
-			//Measures if the led i blocked
-			adc_measure(&adcSignal);
-     892:	ce 01       	movw	r24, r28
-     894:	8f 58       	subi	r24, 0x8F	; 143
-     896:	9f 4f       	sbci	r25, 0xFF	; 255
-     898:	e1 d1       	rcall	.+962    	; 0xc5c <adc_measure>
-			
-			//Writes down the time interval since last round.
-			//Used in the regulator, and other integral action
-			regulator.dt = TCNT3*1.0/((F_CPU/64)*1.0);
-     89a:	f1 01       	movw	r30, r2
-     89c:	60 81       	ld	r22, Z
-     89e:	71 81       	ldd	r23, Z+1	; 0x01
-     8a0:	80 e0       	ldi	r24, 0x00	; 0
-     8a2:	90 e0       	ldi	r25, 0x00	; 0
-     8a4:	c1 d4       	rcall	.+2434   	; 0x1228 <__floatunsisf>
-     8a6:	20 e0       	ldi	r18, 0x00	; 0
-     8a8:	34 e2       	ldi	r19, 0x24	; 36
-     8aa:	44 e7       	ldi	r20, 0x74	; 116
-     8ac:	58 e4       	ldi	r21, 0x48	; 72
-     8ae:	23 d4       	rcall	.+2118   	; 0x10f6 <__divsf3>
-     8b0:	21 96       	adiw	r28, 0x01	; 1
-     8b2:	6c af       	std	Y+60, r22	; 0x3c
-     8b4:	7d af       	std	Y+61, r23	; 0x3d
-     8b6:	8e af       	std	Y+62, r24	; 0x3e
-     8b8:	9f af       	std	Y+63, r25	; 0x3f
-     8ba:	21 97       	sbiw	r28, 0x01	; 1
-			TCNT3 = 0;	//Resets the timer.
-     8bc:	f1 01       	movw	r30, r2
-     8be:	11 82       	std	Z+1, r1	; 0x01
-     8c0:	10 82       	st	Z, r1
-			
-			//Sets the servo accorging to the slider from node1
-			servo_set(msgInn.data[CANMSG_SLIDERR_BYTE]);
-     8c2:	a1 96       	adiw	r28, 0x21	; 33
-     8c4:	8f ad       	ldd	r24, Y+63	; 0x3f
-     8c6:	a1 97       	sbiw	r28, 0x21	; 33
-     8c8:	99 27       	eor	r25, r25
-     8ca:	87 fd       	sbrc	r24, 7
-     8cc:	90 95       	com	r25
-     8ce:	03 df       	rcall	.-506    	; 0x6d6 <servo_set>
-			
-			if(gameMode == GAMEMODE_JS){
-     8d0:	f1 e0       	ldi	r31, 0x01	; 1
-     8d2:	5f 12       	cpse	r5, r31
-     8d4:	2d c0       	rjmp	.+90     	; 0x930 <main+0x1fe>
-				//The joystick indicates the movement speed of the motor
-				joySpeed = msgInn.data[CANMSG_JSX_BYTE];
-				//We integrate up the joystick signal to get a position reference. 
-				joyPos += get_pos_from_percent(joySpeed)* regulator.dt * CONTROLLER_GAIN;
-     8d6:	a2 96       	adiw	r28, 0x22	; 34
-     8d8:	8f ad       	ldd	r24, Y+63	; 0x3f
-     8da:	a2 97       	sbiw	r28, 0x22	; 34
-     8dc:	8e d1       	rcall	.+796    	; 0xbfa <get_pos_from_percent>
-     8de:	8c 01       	movw	r16, r24
-     8e0:	b3 01       	movw	r22, r6
-     8e2:	88 27       	eor	r24, r24
-     8e4:	77 fd       	sbrc	r23, 7
-     8e6:	80 95       	com	r24
-     8e8:	98 2f       	mov	r25, r24
-     8ea:	a0 d4       	rcall	.+2368   	; 0x122c <__floatsisf>
-     8ec:	3b 01       	movw	r6, r22
-     8ee:	4c 01       	movw	r8, r24
-     8f0:	b8 01       	movw	r22, r16
-     8f2:	88 27       	eor	r24, r24
-     8f4:	77 fd       	sbrc	r23, 7
-     8f6:	80 95       	com	r24
-     8f8:	98 2f       	mov	r25, r24
-     8fa:	98 d4       	rcall	.+2352   	; 0x122c <__floatsisf>
-     8fc:	21 96       	adiw	r28, 0x01	; 1
-     8fe:	2c ad       	ldd	r18, Y+60	; 0x3c
-     900:	3d ad       	ldd	r19, Y+61	; 0x3d
-     902:	4e ad       	ldd	r20, Y+62	; 0x3e
-     904:	5f ad       	ldd	r21, Y+63	; 0x3f
-     906:	21 97       	sbiw	r28, 0x01	; 1
-     908:	41 d5       	rcall	.+2690   	; 0x138c <__mulsf3>
-     90a:	9b 01       	movw	r18, r22
-     90c:	ac 01       	movw	r20, r24
-     90e:	8b d3       	rcall	.+1814   	; 0x1026 <__addsf3>
-     910:	9b 01       	movw	r18, r22
-     912:	ac 01       	movw	r20, r24
-     914:	c4 01       	movw	r24, r8
-     916:	b3 01       	movw	r22, r6
-     918:	86 d3       	rcall	.+1804   	; 0x1026 <__addsf3>
-     91a:	55 d4       	rcall	.+2218   	; 0x11c6 <__fixsfsi>
-     91c:	3b 01       	movw	r6, r22
-				//Runs the regulator with the integrated joystick signal as position reference.
-				regulator_increment(&regulator,joyPos);
-     91e:	ce 01       	movw	r24, r28
-     920:	01 96       	adiw	r24, 0x01	; 1
-     922:	9c d0       	rcall	.+312    	; 0xa5c <regulator_increment>
-				
-				//If button R is pressed, then the sollenoid is supposed to solenidPush.
-				solenidPush = msgInn.data[CANMSG_BTNR_BYTE] & (1<<CANMSG_BTNR_BIT);
-     924:	a0 96       	adiw	r28, 0x20	; 32
-     926:	8f ad       	ldd	r24, Y+63	; 0x3f
-     928:	a0 97       	sbiw	r28, 0x20	; 32
-     92a:	81 70       	andi	r24, 0x01	; 1
-     92c:	98 2e       	mov	r9, r24
-     92e:	1f c0       	rjmp	.+62     	; 0x96e <main+0x23c>
-			}
-			
-			else if(gameMode == GAMEMODE_SENS){
-     930:	22 e0       	ldi	r18, 0x02	; 2
-     932:	52 12       	cpse	r5, r18
-     934:	1c c0       	rjmp	.+56     	; 0x96e <main+0x23c>
-				//The echo sensor indicates the motor possition.
-				echo_update_ref(&S0_data,SENSOR0, ISC20);
-     936:	44 e0       	ldi	r20, 0x04	; 4
-     938:	60 e0       	ldi	r22, 0x00	; 0
-     93a:	ce 01       	movw	r24, r28
-     93c:	8f 5b       	subi	r24, 0xBF	; 191
-     93e:	9f 4f       	sbci	r25, 0xFF	; 255
-     940:	12 d3       	rcall	.+1572   	; 0xf66 <echo_update_ref>
-				//Echo sensor 1 is used to activated the solenoid
-				echo_update_ref(&S1_data,SENSOR1, ISC30);
-     942:	46 e0       	ldi	r20, 0x06	; 6
-     944:	64 2d       	mov	r22, r4
-     946:	ce 01       	movw	r24, r28
-     948:	82 5b       	subi	r24, 0xB2	; 178
-     94a:	9f 4f       	sbci	r25, 0xFF	; 255
-     94c:	0c d3       	rcall	.+1560   	; 0xf66 <echo_update_ref>
-				//Runs the regulator with echo sensor possition reference.
-				regulator_increment(&regulator, S0_data.pos_ref);
-     94e:	23 96       	adiw	r28, 0x03	; 3
-     950:	6e ad       	ldd	r22, Y+62	; 0x3e
-     952:	7f ad       	ldd	r23, Y+63	; 0x3f
-     954:	23 97       	sbiw	r28, 0x03	; 3
-     956:	ce 01       	movw	r24, r28
-     958:	01 96       	adiw	r24, 0x01	; 1
-     95a:	80 d0       	rcall	.+256    	; 0xa5c <regulator_increment>
-				
-				//Echo sensor 1 will measure the distance to the other side of the box most of the time
-				//If it measures a suffitently lower value, then the player is blocing it
-				if(S1_data.pos_ref < BOARD_SIZE/2 - S1_ACTIVATION_DISTANCE){
-     95c:	94 2c       	mov	r9, r4
-     95e:	60 96       	adiw	r28, 0x10	; 16
-     960:	8e ad       	ldd	r24, Y+62	; 0x3e
-     962:	9f ad       	ldd	r25, Y+63	; 0x3f
-     964:	60 97       	sbiw	r28, 0x10	; 16
-     966:	8c 33       	cpi	r24, 0x3C	; 60
-     968:	9f 40       	sbci	r25, 0x0F	; 15
-     96a:	0c f0       	brlt	.+2      	; 0x96e <main+0x23c>
-     96c:	91 2c       	mov	r9, r1
-				else solenidPush = 0;
-				
-			}
-			
-			//Set the motorpower acording to the regulator.
-			motorbox_set_percent(regulator.u);
-     96e:	8d 85       	ldd	r24, Y+13	; 0x0d
-     970:	9e 85       	ldd	r25, Y+14	; 0x0e
-     972:	34 de       	rcall	.-920    	; 0x5dc <motorbox_set_percent>
-			
-			//Activates or deactivates the solenoid
-			//If the solenoid was previously deactive and we want to activate it
-			if(solenidPush && read_bit(SOLENOID_PORT,SOLENOID_BIT)){				
-     974:	99 20       	and	r9, r9
-     976:	59 f0       	breq	.+22     	; 0x98e <main+0x25c>
-     978:	8a 9b       	sbis	0x11, 2	; 17
-     97a:	0b c0       	rjmp	.+22     	; 0x992 <main+0x260>
-				//Activates
-				clear_bit(SOLENOID_PORT,SOLENOID_BIT);
-     97c:	8a 98       	cbi	0x11, 2	; 17
-				//Sends a signal indicating that the player solenidPushed the solenoid
-				//This is going to start the game, if it has not allready started.
-				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_START;
-     97e:	ab 96       	adiw	r28, 0x2b	; 43
-     980:	1f ae       	std	Y+63, r1	; 0x3f
-     982:	ab 97       	sbiw	r28, 0x2b	; 43
-				CAN_message_send(&msgGameSignal);
-     984:	ce 01       	movw	r24, r28
-     986:	8a 59       	subi	r24, 0x9A	; 154
-     988:	9f 4f       	sbci	r25, 0xFF	; 255
-     98a:	94 dc       	rcall	.-1752   	; 0x2b4 <CAN_message_send>
-     98c:	02 c0       	rjmp	.+4      	; 0x992 <main+0x260>
-			}
-			//If the solenoid was previusly active and we want to deactivate it
-			else if(!solenidPush && !read_bit(SOLENOID_PORT,SOLENOID_BIT)){
-     98e:	8a 9b       	sbis	0x11, 2	; 17
-				set_bit(SOLENOID_PORT,SOLENOID_BIT);
-     990:	8a 9a       	sbi	0x11, 2	; 17
-			}
-			
-			//if there was a rising edge on the adcSignal, then the game is lost
-			if(adcSignal.edge){
-     992:	e6 96       	adiw	r28, 0x36	; 54
-     994:	8f ad       	ldd	r24, Y+63	; 0x3f
-     996:	e6 97       	sbiw	r28, 0x36	; 54
-     998:	88 23       	and	r24, r24
-     99a:	09 f4       	brne	.+2      	; 0x99e <main+0x26c>
-     99c:	3e cf       	rjmp	.-388    	; 0x81a <main+0xe8>
-				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_STOP;
-     99e:	ab 96       	adiw	r28, 0x2b	; 43
-     9a0:	4f ae       	std	Y+63, r4	; 0x3f
-     9a2:	ab 97       	sbiw	r28, 0x2b	; 43
-				CAN_message_send(&msgGameSignal);
-     9a4:	ce 01       	movw	r24, r28
-     9a6:	8a 59       	subi	r24, 0x9A	; 154
-     9a8:	9f 4f       	sbci	r25, 0xFF	; 255
-     9aa:	84 dc       	rcall	.-1784   	; 0x2b4 <CAN_message_send>
-     9ac:	36 cf       	rjmp	.-404    	; 0x81a <main+0xe8>
-			}
-		}
-		else{
-			if(gameModeChanged){
-				REGULATOR_TIMER_DEACTIVATE;
-     9ae:	f5 01       	movw	r30, r10
-     9b0:	80 81       	ld	r24, Z
-     9b2:	88 7f       	andi	r24, 0xF8	; 248
-     9b4:	80 83       	st	Z, r24
-				REGULATOR_TIMER_RESET;
-     9b6:	f1 01       	movw	r30, r2
-     9b8:	11 82       	std	Z+1, r1	; 0x01
-     9ba:	10 82       	st	Z, r1
-				//turnes of the motor
-				motorbox_set_percent(0);
-     9bc:	80 e0       	ldi	r24, 0x00	; 0
-     9be:	90 e0       	ldi	r25, 0x00	; 0
-     9c0:	0d de       	rcall	.-998    	; 0x5dc <motorbox_set_percent>
-				//retracts the solenoid
-				set_bit(SOLENOID_PORT,SOLENOID_BIT); 
-     9c2:	8a 9a       	sbi	0x11, 2	; 17
-				gameModeChanged = 0;
-				ETIMER_TRIGGER_DISABLE; 
-     9c4:	f6 01       	movw	r30, r12
-     9c6:	80 81       	ld	r24, Z
-     9c8:	88 7f       	andi	r24, 0xF8	; 248
-     9ca:	80 83       	st	Z, r24
-     9cc:	26 cf       	rjmp	.-436    	; 0x81a <main+0xe8>
-		
-		/*Game controll system*/
-		if(gameMode != GAMEMODE_OFF){
-			//if the gamemode changed to this state, then things need to be activated
-			if(gameModeChanged){
-				REGULATOR_TIMER_ACTIVATE;
-     9ce:	f5 01       	movw	r30, r10
-     9d0:	80 81       	ld	r24, Z
-     9d2:	83 60       	ori	r24, 0x03	; 3
-     9d4:	80 83       	st	Z, r24
-				motorbox_reset_encoder();
-     9d6:	23 de       	rcall	.-954    	; 0x61e <motorbox_reset_encoder>
-				ETIMER_TRIGGER_ENABLE;
-     9d8:	f6 01       	movw	r30, r12
-     9da:	80 81       	ld	r24, Z
-     9dc:	82 60       	ori	r24, 0x02	; 2
-     9de:	80 83       	st	Z, r24
-     9e0:	58 cf       	rjmp	.-336    	; 0x892 <main+0x160>
-
-000009e2 <__vector_default>:
-	}
-	return 0;
-}
-
-ISR(BADISR_vect, ISR_NAKED){
-	puts("Bad interrupt");
-     9e2:	8c ee       	ldi	r24, 0xEC	; 236
-     9e4:	92 e0       	ldi	r25, 0x02	; 2
-     9e6:	0c 94 74 0f 	jmp	0x1ee8	; 0x1ee8 <puts>
-	asm volatile ( "ret" );
-     9ea:	08 95       	ret
-
-000009ec <regulator_init>:
+0000069a <regulator_init>:
  * Created: 06.11.2015 11:02:05
  *  Author: sverrevr
  */ 
 #include "regulator.h"
 
 void regulator_init(Regulator* regulator){
-     9ec:	dc 01       	movw	r26, r24
+     69a:	dc 01       	movw	r26, r24
 	regulator->P = 20;
-     9ee:	40 e0       	ldi	r20, 0x00	; 0
-     9f0:	50 e0       	ldi	r21, 0x00	; 0
-     9f2:	60 ea       	ldi	r22, 0xA0	; 160
-     9f4:	71 e4       	ldi	r23, 0x41	; 65
-     9f6:	4d 93       	st	X+, r20
-     9f8:	5d 93       	st	X+, r21
-     9fa:	6d 93       	st	X+, r22
-     9fc:	7c 93       	st	X, r23
-     9fe:	13 97       	sbiw	r26, 0x03	; 3
+     69c:	40 e0       	ldi	r20, 0x00	; 0
+     69e:	50 e0       	ldi	r21, 0x00	; 0
+     6a0:	60 ea       	ldi	r22, 0xA0	; 160
+     6a2:	71 e4       	ldi	r23, 0x41	; 65
+     6a4:	4d 93       	st	X+, r20
+     6a6:	5d 93       	st	X+, r21
+     6a8:	6d 93       	st	X+, r22
+     6aa:	7c 93       	st	X, r23
+     6ac:	13 97       	sbiw	r26, 0x03	; 3
 	regulator->I = 10;
-     a00:	40 e0       	ldi	r20, 0x00	; 0
-     a02:	50 e0       	ldi	r21, 0x00	; 0
-     a04:	60 e2       	ldi	r22, 0x20	; 32
-     a06:	71 e4       	ldi	r23, 0x41	; 65
-     a08:	14 96       	adiw	r26, 0x04	; 4
-     a0a:	4d 93       	st	X+, r20
-     a0c:	5d 93       	st	X+, r21
-     a0e:	6d 93       	st	X+, r22
-     a10:	7c 93       	st	X, r23
-     a12:	17 97       	sbiw	r26, 0x07	; 7
+     6ae:	40 e0       	ldi	r20, 0x00	; 0
+     6b0:	50 e0       	ldi	r21, 0x00	; 0
+     6b2:	60 e2       	ldi	r22, 0x20	; 32
+     6b4:	71 e4       	ldi	r23, 0x41	; 65
+     6b6:	14 96       	adiw	r26, 0x04	; 4
+     6b8:	4d 93       	st	X+, r20
+     6ba:	5d 93       	st	X+, r21
+     6bc:	6d 93       	st	X+, r22
+     6be:	7c 93       	st	X, r23
+     6c0:	17 97       	sbiw	r26, 0x07	; 7
 	regulator->D = 0.7;
-     a14:	43 e3       	ldi	r20, 0x33	; 51
-     a16:	53 e3       	ldi	r21, 0x33	; 51
-     a18:	63 e3       	ldi	r22, 0x33	; 51
-     a1a:	7f e3       	ldi	r23, 0x3F	; 63
-     a1c:	18 96       	adiw	r26, 0x08	; 8
-     a1e:	4d 93       	st	X+, r20
-     a20:	5d 93       	st	X+, r21
-     a22:	6d 93       	st	X+, r22
-     a24:	7c 93       	st	X, r23
-     a26:	1b 97       	sbiw	r26, 0x0b	; 11
+     6c2:	43 e3       	ldi	r20, 0x33	; 51
+     6c4:	53 e3       	ldi	r21, 0x33	; 51
+     6c6:	63 e3       	ldi	r22, 0x33	; 51
+     6c8:	7f e3       	ldi	r23, 0x3F	; 63
+     6ca:	18 96       	adiw	r26, 0x08	; 8
+     6cc:	4d 93       	st	X+, r20
+     6ce:	5d 93       	st	X+, r21
+     6d0:	6d 93       	st	X+, r22
+     6d2:	7c 93       	st	X, r23
+     6d4:	1b 97       	sbiw	r26, 0x0b	; 11
 	regulator->u= 0;
-     a28:	1d 96       	adiw	r26, 0x0d	; 13
-     a2a:	1c 92       	st	X, r1
-     a2c:	1e 92       	st	-X, r1
-     a2e:	1c 97       	sbiw	r26, 0x0c	; 12
+     6d6:	1d 96       	adiw	r26, 0x0d	; 13
+     6d8:	1c 92       	st	X, r1
+     6da:	1e 92       	st	-X, r1
+     6dc:	1c 97       	sbiw	r26, 0x0c	; 12
 	regulator->integralValue = 0.0f;
-     a30:	1e 96       	adiw	r26, 0x0e	; 14
-     a32:	1d 92       	st	X+, r1
-     a34:	1d 92       	st	X+, r1
-     a36:	1d 92       	st	X+, r1
-     a38:	1c 92       	st	X, r1
-     a3a:	51 97       	sbiw	r26, 0x11	; 17
-     a3c:	fc 01       	movw	r30, r24
-     a3e:	72 96       	adiw	r30, 0x12	; 18
+     6de:	1e 96       	adiw	r26, 0x0e	; 14
+     6e0:	1d 92       	st	X+, r1
+     6e2:	1d 92       	st	X+, r1
+     6e4:	1d 92       	st	X+, r1
+     6e6:	1c 92       	st	X, r1
+     6e8:	51 97       	sbiw	r26, 0x11	; 17
+     6ea:	fc 01       	movw	r30, r24
+     6ec:	72 96       	adiw	r30, 0x12	; 18
 	for(uint8_t i=0;i<DERIVATIVE_SAMPLES;++i){
-     a40:	80 e0       	ldi	r24, 0x00	; 0
+     6ee:	80 e0       	ldi	r24, 0x00	; 0
 		regulator->derivativeHistory[i] = 0;
-     a42:	11 92       	st	Z+, r1
-     a44:	11 92       	st	Z+, r1
-     a46:	11 92       	st	Z+, r1
-     a48:	11 92       	st	Z+, r1
+     6f0:	11 92       	st	Z+, r1
+     6f2:	11 92       	st	Z+, r1
+     6f4:	11 92       	st	Z+, r1
+     6f6:	11 92       	st	Z+, r1
 	regulator->P = 20;
 	regulator->I = 10;
 	regulator->D = 0.7;
 	regulator->u= 0;
 	regulator->integralValue = 0.0f;
 	for(uint8_t i=0;i<DERIVATIVE_SAMPLES;++i){
-     a4a:	8f 5f       	subi	r24, 0xFF	; 255
-     a4c:	8a 30       	cpi	r24, 0x0A	; 10
-     a4e:	c9 f7       	brne	.-14     	; 0xa42 <regulator_init+0x56>
+     6f8:	8f 5f       	subi	r24, 0xFF	; 255
+     6fa:	8a 30       	cpi	r24, 0x0A	; 10
+     6fc:	c9 f7       	brne	.-14     	; 0x6f0 <regulator_init+0x56>
 		regulator->derivativeHistory[i] = 0;
 	}
 	regulator->derivativePointer = 0;
-     a50:	da 96       	adiw	r26, 0x3a	; 58
-     a52:	1c 92       	st	X, r1
-     a54:	da 97       	sbiw	r26, 0x3a	; 58
+     6fe:	da 96       	adiw	r26, 0x3a	; 58
+     700:	1c 92       	st	X, r1
+     702:	da 97       	sbiw	r26, 0x3a	; 58
 	//regulator->refPosValue = 0.0f;
 	regulator->prevVal = 0;
-     a56:	db 96       	adiw	r26, 0x3b	; 59
-     a58:	1c 92       	st	X, r1
-     a5a:	08 95       	ret
+     704:	db 96       	adiw	r26, 0x3b	; 59
+     706:	1c 92       	st	X, r1
+     708:	08 95       	ret
 
-00000a5c <regulator_increment>:
+0000070a <regulator_increment>:
 	float dt = 0;
 	/* Setter opp klokken som beregner tiden mellom hver incrementering*/
 	//Bruker timer/counter 3 med normal opperation
 }
 
 void regulator_increment(Regulator* regulator, int16_t pos_ref){
-     a5c:	2f 92       	push	r2
-     a5e:	3f 92       	push	r3
-     a60:	4f 92       	push	r4
-     a62:	5f 92       	push	r5
-     a64:	6f 92       	push	r6
-     a66:	7f 92       	push	r7
-     a68:	8f 92       	push	r8
-     a6a:	9f 92       	push	r9
-     a6c:	af 92       	push	r10
-     a6e:	bf 92       	push	r11
-     a70:	cf 92       	push	r12
-     a72:	df 92       	push	r13
-     a74:	ef 92       	push	r14
-     a76:	ff 92       	push	r15
-     a78:	0f 93       	push	r16
-     a7a:	1f 93       	push	r17
-     a7c:	cf 93       	push	r28
-     a7e:	df 93       	push	r29
-     a80:	00 d0       	rcall	.+0      	; 0xa82 <regulator_increment+0x26>
-     a82:	cd b7       	in	r28, 0x3d	; 61
-     a84:	de b7       	in	r29, 0x3e	; 62
-     a86:	8c 01       	movw	r16, r24
-     a88:	7b 01       	movw	r14, r22
+     70a:	2f 92       	push	r2
+     70c:	3f 92       	push	r3
+     70e:	4f 92       	push	r4
+     710:	5f 92       	push	r5
+     712:	6f 92       	push	r6
+     714:	7f 92       	push	r7
+     716:	8f 92       	push	r8
+     718:	9f 92       	push	r9
+     71a:	af 92       	push	r10
+     71c:	bf 92       	push	r11
+     71e:	cf 92       	push	r12
+     720:	df 92       	push	r13
+     722:	ef 92       	push	r14
+     724:	ff 92       	push	r15
+     726:	0f 93       	push	r16
+     728:	1f 93       	push	r17
+     72a:	cf 93       	push	r28
+     72c:	df 93       	push	r29
+     72e:	00 d0       	rcall	.+0      	; 0x730 <regulator_increment+0x26>
+     730:	cd b7       	in	r28, 0x3d	; 61
+     732:	de b7       	in	r29, 0x3e	; 62
+     734:	8c 01       	movw	r16, r24
+     736:	7b 01       	movw	r14, r22
 	int16_t encoderPos = motorbox_get_encoder();
-     a8a:	eb dd       	rcall	.-1066   	; 0x662 <motorbox_get_encoder>
+     738:	94 df       	rcall	.-216    	; 0x662 <motorbox_get_encoder>
 	int16_t avvik = (pos_ref-encoderPos)/(BOARD_SIZE/100); //I prosent, -100er motor helt til høyre, mens vi vil helt til venstre
-     a8c:	97 01       	movw	r18, r14
-     a8e:	28 1b       	sub	r18, r24
-     a90:	39 0b       	sbc	r19, r25
-     a92:	c9 01       	movw	r24, r18
-     a94:	68 e5       	ldi	r22, 0x58	; 88
-     a96:	70 e0       	ldi	r23, 0x00	; 0
-     a98:	0e 94 c4 0d 	call	0x1b88	; 0x1b88 <__divmodhi4>
-     a9c:	1b 01       	movw	r2, r22
+     73a:	97 01       	movw	r18, r14
+     73c:	28 1b       	sub	r18, r24
+     73e:	39 0b       	sbc	r19, r25
+     740:	c9 01       	movw	r24, r18
+     742:	68 e5       	ldi	r22, 0x58	; 88
+     744:	70 e0       	ldi	r23, 0x00	; 0
+     746:	0e 94 c4 0d 	call	0x1b88	; 0x1b88 <__divmodhi4>
+     74a:	1b 01       	movw	r2, r22
 	regulator->integralValue+=avvik*regulator->dt;
-     a9e:	88 27       	eor	r24, r24
-     aa0:	77 fd       	sbrc	r23, 7
-     aa2:	80 95       	com	r24
-     aa4:	98 2f       	mov	r25, r24
-     aa6:	c2 d3       	rcall	.+1924   	; 0x122c <__floatsisf>
-     aa8:	4b 01       	movw	r8, r22
-     aaa:	5c 01       	movw	r10, r24
-     aac:	f8 01       	movw	r30, r16
-     aae:	44 ac       	ldd	r4, Z+60	; 0x3c
-     ab0:	55 ac       	ldd	r5, Z+61	; 0x3d
-     ab2:	66 ac       	ldd	r6, Z+62	; 0x3e
-     ab4:	77 ac       	ldd	r7, Z+63	; 0x3f
-     ab6:	a3 01       	movw	r20, r6
-     ab8:	92 01       	movw	r18, r4
-     aba:	68 d4       	rcall	.+2256   	; 0x138c <__mulsf3>
-     abc:	f8 01       	movw	r30, r16
-     abe:	26 85       	ldd	r18, Z+14	; 0x0e
-     ac0:	37 85       	ldd	r19, Z+15	; 0x0f
-     ac2:	40 89       	ldd	r20, Z+16	; 0x10
-     ac4:	51 89       	ldd	r21, Z+17	; 0x11
-     ac6:	af d2       	rcall	.+1374   	; 0x1026 <__addsf3>
-     ac8:	6b 01       	movw	r12, r22
-     aca:	7c 01       	movw	r14, r24
-     acc:	f8 01       	movw	r30, r16
-     ace:	66 87       	std	Z+14, r22	; 0x0e
-     ad0:	77 87       	std	Z+15, r23	; 0x0f
-     ad2:	80 8b       	std	Z+16, r24	; 0x10
-     ad4:	91 8b       	std	Z+17, r25	; 0x11
+     74c:	88 27       	eor	r24, r24
+     74e:	77 fd       	sbrc	r23, 7
+     750:	80 95       	com	r24
+     752:	98 2f       	mov	r25, r24
+     754:	6b d5       	rcall	.+2774   	; 0x122c <__floatsisf>
+     756:	4b 01       	movw	r8, r22
+     758:	5c 01       	movw	r10, r24
+     75a:	f8 01       	movw	r30, r16
+     75c:	44 ac       	ldd	r4, Z+60	; 0x3c
+     75e:	55 ac       	ldd	r5, Z+61	; 0x3d
+     760:	66 ac       	ldd	r6, Z+62	; 0x3e
+     762:	77 ac       	ldd	r7, Z+63	; 0x3f
+     764:	a3 01       	movw	r20, r6
+     766:	92 01       	movw	r18, r4
+     768:	11 d6       	rcall	.+3106   	; 0x138c <__mulsf3>
+     76a:	f8 01       	movw	r30, r16
+     76c:	26 85       	ldd	r18, Z+14	; 0x0e
+     76e:	37 85       	ldd	r19, Z+15	; 0x0f
+     770:	40 89       	ldd	r20, Z+16	; 0x10
+     772:	51 89       	ldd	r21, Z+17	; 0x11
+     774:	58 d4       	rcall	.+2224   	; 0x1026 <__addsf3>
+     776:	6b 01       	movw	r12, r22
+     778:	7c 01       	movw	r14, r24
+     77a:	f8 01       	movw	r30, r16
+     77c:	66 87       	std	Z+14, r22	; 0x0e
+     77e:	77 87       	std	Z+15, r23	; 0x0f
+     780:	80 8b       	std	Z+16, r24	; 0x10
+     782:	91 8b       	std	Z+17, r25	; 0x11
 	float derivatLedd = 0;
 	float sum = 0;
 	if(regulator->dt != 0){
-     ad6:	20 e0       	ldi	r18, 0x00	; 0
-     ad8:	30 e0       	ldi	r19, 0x00	; 0
-     ada:	a9 01       	movw	r20, r18
-     adc:	c3 01       	movw	r24, r6
-     ade:	b2 01       	movw	r22, r4
-     ae0:	06 d3       	rcall	.+1548   	; 0x10ee <__cmpsf2>
-     ae2:	88 23       	and	r24, r24
-     ae4:	09 f4       	brne	.+2      	; 0xae8 <regulator_increment+0x8c>
-     ae6:	45 c0       	rjmp	.+138    	; 0xb72 <regulator_increment+0x116>
+     784:	20 e0       	ldi	r18, 0x00	; 0
+     786:	30 e0       	ldi	r19, 0x00	; 0
+     788:	a9 01       	movw	r20, r18
+     78a:	c3 01       	movw	r24, r6
+     78c:	b2 01       	movw	r22, r4
+     78e:	af d4       	rcall	.+2398   	; 0x10ee <__cmpsf2>
+     790:	88 23       	and	r24, r24
+     792:	09 f4       	brne	.+2      	; 0x796 <regulator_increment+0x8c>
+     794:	45 c0       	rjmp	.+138    	; 0x820 <regulator_increment+0x116>
 		regulator->derivativeHistory[regulator->derivativePointer] = (avvik-regulator->prevVal)/regulator->dt;
-     ae8:	f8 01       	movw	r30, r16
-     aea:	f2 ad       	ldd	r31, Z+58	; 0x3a
-     aec:	f9 83       	std	Y+1, r31	; 0x01
-     aee:	98 01       	movw	r18, r16
-     af0:	84 e0       	ldi	r24, 0x04	; 4
-     af2:	f8 9f       	mul	r31, r24
-     af4:	20 0d       	add	r18, r0
-     af6:	31 1d       	adc	r19, r1
-     af8:	11 24       	eor	r1, r1
-     afa:	3b 83       	std	Y+3, r19	; 0x03
-     afc:	2a 83       	std	Y+2, r18	; 0x02
-     afe:	f8 01       	movw	r30, r16
-     b00:	83 ad       	ldd	r24, Z+59	; 0x3b
-     b02:	b1 01       	movw	r22, r2
-     b04:	68 1b       	sub	r22, r24
-     b06:	71 09       	sbc	r23, r1
-     b08:	87 fd       	sbrc	r24, 7
-     b0a:	73 95       	inc	r23
-     b0c:	88 27       	eor	r24, r24
-     b0e:	77 fd       	sbrc	r23, 7
-     b10:	80 95       	com	r24
-     b12:	98 2f       	mov	r25, r24
-     b14:	8b d3       	rcall	.+1814   	; 0x122c <__floatsisf>
-     b16:	a3 01       	movw	r20, r6
-     b18:	92 01       	movw	r18, r4
-     b1a:	ed d2       	rcall	.+1498   	; 0x10f6 <__divsf3>
-     b1c:	ea 81       	ldd	r30, Y+2	; 0x02
-     b1e:	fb 81       	ldd	r31, Y+3	; 0x03
-     b20:	62 8b       	std	Z+18, r22	; 0x12
-     b22:	73 8b       	std	Z+19, r23	; 0x13
-     b24:	84 8b       	std	Z+20, r24	; 0x14
-     b26:	95 8b       	std	Z+21, r25	; 0x15
+     796:	f8 01       	movw	r30, r16
+     798:	f2 ad       	ldd	r31, Z+58	; 0x3a
+     79a:	f9 83       	std	Y+1, r31	; 0x01
+     79c:	98 01       	movw	r18, r16
+     79e:	84 e0       	ldi	r24, 0x04	; 4
+     7a0:	f8 9f       	mul	r31, r24
+     7a2:	20 0d       	add	r18, r0
+     7a4:	31 1d       	adc	r19, r1
+     7a6:	11 24       	eor	r1, r1
+     7a8:	3b 83       	std	Y+3, r19	; 0x03
+     7aa:	2a 83       	std	Y+2, r18	; 0x02
+     7ac:	f8 01       	movw	r30, r16
+     7ae:	83 ad       	ldd	r24, Z+59	; 0x3b
+     7b0:	b1 01       	movw	r22, r2
+     7b2:	68 1b       	sub	r22, r24
+     7b4:	71 09       	sbc	r23, r1
+     7b6:	87 fd       	sbrc	r24, 7
+     7b8:	73 95       	inc	r23
+     7ba:	88 27       	eor	r24, r24
+     7bc:	77 fd       	sbrc	r23, 7
+     7be:	80 95       	com	r24
+     7c0:	98 2f       	mov	r25, r24
+     7c2:	34 d5       	rcall	.+2664   	; 0x122c <__floatsisf>
+     7c4:	a3 01       	movw	r20, r6
+     7c6:	92 01       	movw	r18, r4
+     7c8:	96 d4       	rcall	.+2348   	; 0x10f6 <__divsf3>
+     7ca:	ea 81       	ldd	r30, Y+2	; 0x02
+     7cc:	fb 81       	ldd	r31, Y+3	; 0x03
+     7ce:	62 8b       	std	Z+18, r22	; 0x12
+     7d0:	73 8b       	std	Z+19, r23	; 0x13
+     7d2:	84 8b       	std	Z+20, r24	; 0x14
+     7d4:	95 8b       	std	Z+21, r25	; 0x15
 		regulator->derivativePointer ++;
-     b28:	89 81       	ldd	r24, Y+1	; 0x01
-     b2a:	8f 5f       	subi	r24, 0xFF	; 255
+     7d6:	89 81       	ldd	r24, Y+1	; 0x01
+     7d8:	8f 5f       	subi	r24, 0xFF	; 255
 		if(regulator->derivativePointer >= DERIVATIVE_SAMPLES){regulator->derivativePointer = 0; }
-     b2c:	8a 30       	cpi	r24, 0x0A	; 10
-     b2e:	18 f4       	brcc	.+6      	; 0xb36 <regulator_increment+0xda>
+     7da:	8a 30       	cpi	r24, 0x0A	; 10
+     7dc:	18 f4       	brcc	.+6      	; 0x7e4 <regulator_increment+0xda>
 	regulator->integralValue+=avvik*regulator->dt;
 	float derivatLedd = 0;
 	float sum = 0;
 	if(regulator->dt != 0){
 		regulator->derivativeHistory[regulator->derivativePointer] = (avvik-regulator->prevVal)/regulator->dt;
 		regulator->derivativePointer ++;
-     b30:	f8 01       	movw	r30, r16
-     b32:	82 af       	std	Z+58, r24	; 0x3a
-     b34:	02 c0       	rjmp	.+4      	; 0xb3a <regulator_increment+0xde>
+     7de:	f8 01       	movw	r30, r16
+     7e0:	82 af       	std	Z+58, r24	; 0x3a
+     7e2:	02 c0       	rjmp	.+4      	; 0x7e8 <regulator_increment+0xde>
 		if(regulator->derivativePointer >= DERIVATIVE_SAMPLES){regulator->derivativePointer = 0; }
-     b36:	f8 01       	movw	r30, r16
-     b38:	12 ae       	std	Z+58, r1	; 0x3a
-     b3a:	28 01       	movw	r4, r16
-     b3c:	f2 e1       	ldi	r31, 0x12	; 18
-     b3e:	4f 0e       	add	r4, r31
-     b40:	51 1c       	adc	r5, r1
+     7e4:	f8 01       	movw	r30, r16
+     7e6:	12 ae       	std	Z+58, r1	; 0x3a
+     7e8:	28 01       	movw	r4, r16
+     7ea:	f2 e1       	ldi	r31, 0x12	; 18
+     7ec:	4f 0e       	add	r4, r31
+     7ee:	51 1c       	adc	r5, r1
 	float dt = 0;
 	/* Setter opp klokken som beregner tiden mellom hver incrementering*/
 	//Bruker timer/counter 3 med normal opperation
 }
 
 void regulator_increment(Regulator* regulator, int16_t pos_ref){
-     b42:	0f 2e       	mov	r0, r31
-     b44:	fa e0       	ldi	r31, 0x0A	; 10
-     b46:	7f 2e       	mov	r7, r31
-     b48:	f0 2d       	mov	r31, r0
+     7f0:	0f 2e       	mov	r0, r31
+     7f2:	fa e0       	ldi	r31, 0x0A	; 10
+     7f4:	7f 2e       	mov	r7, r31
+     7f6:	f0 2d       	mov	r31, r0
 	int16_t encoderPos = motorbox_get_encoder();
 	int16_t avvik = (pos_ref-encoderPos)/(BOARD_SIZE/100); //I prosent, -100er motor helt til høyre, mens vi vil helt til venstre
 	regulator->integralValue+=avvik*regulator->dt;
 	float derivatLedd = 0;
 	float sum = 0;
-     b4a:	60 e0       	ldi	r22, 0x00	; 0
-     b4c:	70 e0       	ldi	r23, 0x00	; 0
-     b4e:	cb 01       	movw	r24, r22
+     7f8:	60 e0       	ldi	r22, 0x00	; 0
+     7fa:	70 e0       	ldi	r23, 0x00	; 0
+     7fc:	cb 01       	movw	r24, r22
 	if(regulator->dt != 0){
 		regulator->derivativeHistory[regulator->derivativePointer] = (avvik-regulator->prevVal)/regulator->dt;
 		regulator->derivativePointer ++;
 		if(regulator->derivativePointer >= DERIVATIVE_SAMPLES){regulator->derivativePointer = 0; }
 		for(uint8_t i = 0; i < DERIVATIVE_SAMPLES; ++i){
 			sum += regulator->derivativeHistory[i];
-     b50:	f2 01       	movw	r30, r4
-     b52:	21 91       	ld	r18, Z+
-     b54:	31 91       	ld	r19, Z+
-     b56:	41 91       	ld	r20, Z+
-     b58:	51 91       	ld	r21, Z+
-     b5a:	2f 01       	movw	r4, r30
-     b5c:	64 d2       	rcall	.+1224   	; 0x1026 <__addsf3>
-     b5e:	7a 94       	dec	r7
+     7fe:	f2 01       	movw	r30, r4
+     800:	21 91       	ld	r18, Z+
+     802:	31 91       	ld	r19, Z+
+     804:	41 91       	ld	r20, Z+
+     806:	51 91       	ld	r21, Z+
+     808:	2f 01       	movw	r4, r30
+     80a:	0d d4       	rcall	.+2074   	; 0x1026 <__addsf3>
+     80c:	7a 94       	dec	r7
 	float sum = 0;
 	if(regulator->dt != 0){
 		regulator->derivativeHistory[regulator->derivativePointer] = (avvik-regulator->prevVal)/regulator->dt;
 		regulator->derivativePointer ++;
 		if(regulator->derivativePointer >= DERIVATIVE_SAMPLES){regulator->derivativePointer = 0; }
 		for(uint8_t i = 0; i < DERIVATIVE_SAMPLES; ++i){
-     b60:	b9 f7       	brne	.-18     	; 0xb50 <regulator_increment+0xf4>
+     80e:	b9 f7       	brne	.-18     	; 0x7fe <regulator_increment+0xf4>
 			sum += regulator->derivativeHistory[i];
 		}
 		derivatLedd = sum/DERIVATIVE_SAMPLES;
-     b62:	20 e0       	ldi	r18, 0x00	; 0
-     b64:	30 e0       	ldi	r19, 0x00	; 0
-     b66:	40 e2       	ldi	r20, 0x20	; 32
-     b68:	51 e4       	ldi	r21, 0x41	; 65
-     b6a:	c5 d2       	rcall	.+1418   	; 0x10f6 <__divsf3>
-     b6c:	2b 01       	movw	r4, r22
-     b6e:	3c 01       	movw	r6, r24
-     b70:	03 c0       	rjmp	.+6      	; 0xb78 <regulator_increment+0x11c>
+     810:	20 e0       	ldi	r18, 0x00	; 0
+     812:	30 e0       	ldi	r19, 0x00	; 0
+     814:	40 e2       	ldi	r20, 0x20	; 32
+     816:	51 e4       	ldi	r21, 0x41	; 65
+     818:	6e d4       	rcall	.+2268   	; 0x10f6 <__divsf3>
+     81a:	2b 01       	movw	r4, r22
+     81c:	3c 01       	movw	r6, r24
+     81e:	03 c0       	rjmp	.+6      	; 0x826 <regulator_increment+0x11c>
 
 void regulator_increment(Regulator* regulator, int16_t pos_ref){
 	int16_t encoderPos = motorbox_get_encoder();
 	int16_t avvik = (pos_ref-encoderPos)/(BOARD_SIZE/100); //I prosent, -100er motor helt til høyre, mens vi vil helt til venstre
 	regulator->integralValue+=avvik*regulator->dt;
 	float derivatLedd = 0;
-     b72:	41 2c       	mov	r4, r1
-     b74:	51 2c       	mov	r5, r1
-     b76:	32 01       	movw	r6, r4
+     820:	41 2c       	mov	r4, r1
+     822:	51 2c       	mov	r5, r1
+     824:	32 01       	movw	r6, r4
 		}
 		derivatLedd = sum/DERIVATIVE_SAMPLES;
 	}
 	//printf("%f\r", derivatLedd);
 	
 	regulator->u =  avvik * regulator->P + regulator->integralValue * regulator->I + derivatLedd * regulator->D;
-     b78:	f8 01       	movw	r30, r16
-     b7a:	20 81       	ld	r18, Z
-     b7c:	31 81       	ldd	r19, Z+1	; 0x01
-     b7e:	42 81       	ldd	r20, Z+2	; 0x02
-     b80:	53 81       	ldd	r21, Z+3	; 0x03
-     b82:	c5 01       	movw	r24, r10
-     b84:	b4 01       	movw	r22, r8
-     b86:	02 d4       	rcall	.+2052   	; 0x138c <__mulsf3>
-     b88:	4b 01       	movw	r8, r22
-     b8a:	5c 01       	movw	r10, r24
-     b8c:	f8 01       	movw	r30, r16
-     b8e:	24 81       	ldd	r18, Z+4	; 0x04
-     b90:	35 81       	ldd	r19, Z+5	; 0x05
-     b92:	46 81       	ldd	r20, Z+6	; 0x06
-     b94:	57 81       	ldd	r21, Z+7	; 0x07
-     b96:	c7 01       	movw	r24, r14
-     b98:	b6 01       	movw	r22, r12
-     b9a:	f8 d3       	rcall	.+2032   	; 0x138c <__mulsf3>
-     b9c:	9b 01       	movw	r18, r22
-     b9e:	ac 01       	movw	r20, r24
-     ba0:	c5 01       	movw	r24, r10
-     ba2:	b4 01       	movw	r22, r8
-     ba4:	40 d2       	rcall	.+1152   	; 0x1026 <__addsf3>
-     ba6:	6b 01       	movw	r12, r22
-     ba8:	7c 01       	movw	r14, r24
-     baa:	f8 01       	movw	r30, r16
-     bac:	20 85       	ldd	r18, Z+8	; 0x08
-     bae:	31 85       	ldd	r19, Z+9	; 0x09
-     bb0:	42 85       	ldd	r20, Z+10	; 0x0a
-     bb2:	53 85       	ldd	r21, Z+11	; 0x0b
-     bb4:	c3 01       	movw	r24, r6
-     bb6:	b2 01       	movw	r22, r4
-     bb8:	e9 d3       	rcall	.+2002   	; 0x138c <__mulsf3>
-     bba:	9b 01       	movw	r18, r22
-     bbc:	ac 01       	movw	r20, r24
-     bbe:	c7 01       	movw	r24, r14
-     bc0:	b6 01       	movw	r22, r12
-     bc2:	31 d2       	rcall	.+1122   	; 0x1026 <__addsf3>
-     bc4:	00 d3       	rcall	.+1536   	; 0x11c6 <__fixsfsi>
-     bc6:	f8 01       	movw	r30, r16
-     bc8:	75 87       	std	Z+13, r23	; 0x0d
-     bca:	64 87       	std	Z+12, r22	; 0x0c
+     826:	f8 01       	movw	r30, r16
+     828:	20 81       	ld	r18, Z
+     82a:	31 81       	ldd	r19, Z+1	; 0x01
+     82c:	42 81       	ldd	r20, Z+2	; 0x02
+     82e:	53 81       	ldd	r21, Z+3	; 0x03
+     830:	c5 01       	movw	r24, r10
+     832:	b4 01       	movw	r22, r8
+     834:	ab d5       	rcall	.+2902   	; 0x138c <__mulsf3>
+     836:	4b 01       	movw	r8, r22
+     838:	5c 01       	movw	r10, r24
+     83a:	f8 01       	movw	r30, r16
+     83c:	24 81       	ldd	r18, Z+4	; 0x04
+     83e:	35 81       	ldd	r19, Z+5	; 0x05
+     840:	46 81       	ldd	r20, Z+6	; 0x06
+     842:	57 81       	ldd	r21, Z+7	; 0x07
+     844:	c7 01       	movw	r24, r14
+     846:	b6 01       	movw	r22, r12
+     848:	a1 d5       	rcall	.+2882   	; 0x138c <__mulsf3>
+     84a:	9b 01       	movw	r18, r22
+     84c:	ac 01       	movw	r20, r24
+     84e:	c5 01       	movw	r24, r10
+     850:	b4 01       	movw	r22, r8
+     852:	e9 d3       	rcall	.+2002   	; 0x1026 <__addsf3>
+     854:	6b 01       	movw	r12, r22
+     856:	7c 01       	movw	r14, r24
+     858:	f8 01       	movw	r30, r16
+     85a:	20 85       	ldd	r18, Z+8	; 0x08
+     85c:	31 85       	ldd	r19, Z+9	; 0x09
+     85e:	42 85       	ldd	r20, Z+10	; 0x0a
+     860:	53 85       	ldd	r21, Z+11	; 0x0b
+     862:	c3 01       	movw	r24, r6
+     864:	b2 01       	movw	r22, r4
+     866:	92 d5       	rcall	.+2852   	; 0x138c <__mulsf3>
+     868:	9b 01       	movw	r18, r22
+     86a:	ac 01       	movw	r20, r24
+     86c:	c7 01       	movw	r24, r14
+     86e:	b6 01       	movw	r22, r12
+     870:	da d3       	rcall	.+1972   	; 0x1026 <__addsf3>
+     872:	a9 d4       	rcall	.+2386   	; 0x11c6 <__fixsfsi>
+     874:	f8 01       	movw	r30, r16
+     876:	75 87       	std	Z+13, r23	; 0x0d
+     878:	64 87       	std	Z+12, r22	; 0x0c
 	regulator->prevVal = avvik;
-     bcc:	23 ae       	std	Z+59, r2	; 0x3b
+     87a:	23 ae       	std	Z+59, r2	; 0x3b
 }
-     bce:	0f 90       	pop	r0
-     bd0:	0f 90       	pop	r0
-     bd2:	0f 90       	pop	r0
-     bd4:	df 91       	pop	r29
-     bd6:	cf 91       	pop	r28
-     bd8:	1f 91       	pop	r17
-     bda:	0f 91       	pop	r16
-     bdc:	ff 90       	pop	r15
-     bde:	ef 90       	pop	r14
-     be0:	df 90       	pop	r13
-     be2:	cf 90       	pop	r12
-     be4:	bf 90       	pop	r11
-     be6:	af 90       	pop	r10
-     be8:	9f 90       	pop	r9
-     bea:	8f 90       	pop	r8
-     bec:	7f 90       	pop	r7
-     bee:	6f 90       	pop	r6
-     bf0:	5f 90       	pop	r5
-     bf2:	4f 90       	pop	r4
-     bf4:	3f 90       	pop	r3
-     bf6:	2f 90       	pop	r2
-     bf8:	08 95       	ret
+     87c:	0f 90       	pop	r0
+     87e:	0f 90       	pop	r0
+     880:	0f 90       	pop	r0
+     882:	df 91       	pop	r29
+     884:	cf 91       	pop	r28
+     886:	1f 91       	pop	r17
+     888:	0f 91       	pop	r16
+     88a:	ff 90       	pop	r15
+     88c:	ef 90       	pop	r14
+     88e:	df 90       	pop	r13
+     890:	cf 90       	pop	r12
+     892:	bf 90       	pop	r11
+     894:	af 90       	pop	r10
+     896:	9f 90       	pop	r9
+     898:	8f 90       	pop	r8
+     89a:	7f 90       	pop	r7
+     89c:	6f 90       	pop	r6
+     89e:	5f 90       	pop	r5
+     8a0:	4f 90       	pop	r4
+     8a2:	3f 90       	pop	r3
+     8a4:	2f 90       	pop	r2
+     8a6:	08 95       	ret
 
-00000bfa <get_pos_from_percent>:
+000008a8 <get_pos_from_percent>:
 int16_t get_pos_from_percent(int8_t percent){
 	return (BOARD_SIZE/200) * percent;
-     bfa:	2c e2       	ldi	r18, 0x2C	; 44
-     bfc:	82 02       	muls	r24, r18
-     bfe:	c0 01       	movw	r24, r0
-     c00:	11 24       	eor	r1, r1
+     8a8:	2c e2       	ldi	r18, 0x2C	; 44
+     8aa:	82 02       	muls	r24, r18
+     8ac:	c0 01       	movw	r24, r0
+     8ae:	11 24       	eor	r1, r1
+     8b0:	08 95       	ret
+
+000008b2 <servo_init>:
+ */ 
+#include "servo.h"
+#include "../MainInclude.h"
+
+void servo_init(){
+	set_bit(PWM_DDR, PWM_bit);
+     8b2:	25 9a       	sbi	0x04, 5	; 4
+	
+	//Activating fast PWM
+	TCCR1A |= (1<<WGM11);
+     8b4:	a0 e8       	ldi	r26, 0x80	; 128
+     8b6:	b0 e0       	ldi	r27, 0x00	; 0
+     8b8:	8c 91       	ld	r24, X
+     8ba:	82 60       	ori	r24, 0x02	; 2
+     8bc:	8c 93       	st	X, r24
+	TCCR1B |= (1<<WGM12)|(1<<WGM13);
+     8be:	e1 e8       	ldi	r30, 0x81	; 129
+     8c0:	f0 e0       	ldi	r31, 0x00	; 0
+     8c2:	80 81       	ld	r24, Z
+     8c4:	88 61       	ori	r24, 0x18	; 24
+     8c6:	80 83       	st	Z, r24
+	
+	//Clear OC1A on compare match, set OC1A at BOTTOM
+	TCCR1A |= (1<<COM1A1);
+     8c8:	8c 91       	ld	r24, X
+     8ca:	80 68       	ori	r24, 0x80	; 128
+     8cc:	8c 93       	st	X, r24
+	
+	//Clock prescaler
+	TCCR1B |= (clock_scaler << CS10);
+     8ce:	80 81       	ld	r24, Z
+     8d0:	82 60       	ori	r24, 0x02	; 2
+     8d2:	80 83       	st	Z, r24
+	
+	//TOP signalet
+	ICR1 = duty_cycle_ms * F_CPU / clock_scaler_val;
+     8d4:	80 e4       	ldi	r24, 0x40	; 64
+     8d6:	9c e9       	ldi	r25, 0x9C	; 156
+     8d8:	90 93 87 00 	sts	0x0087, r25
+     8dc:	80 93 86 00 	sts	0x0086, r24
+	
+	//Timer is compared to this value
+	OCR1A = pulse_width_min * F_CPU / clock_scaler_val;
+     8e0:	88 e0       	ldi	r24, 0x08	; 8
+     8e2:	97 e0       	ldi	r25, 0x07	; 7
+     8e4:	90 93 89 00 	sts	0x0089, r25
+     8e8:	80 93 88 00 	sts	0x0088, r24
+     8ec:	08 95       	ret
+
+000008ee <servo_set>:
+}
+
+void servo_set(int percent){
+     8ee:	8c 39       	cpi	r24, 0x9C	; 156
+     8f0:	2f ef       	ldi	r18, 0xFF	; 255
+     8f2:	92 07       	cpc	r25, r18
+     8f4:	14 f4       	brge	.+4      	; 0x8fa <servo_set+0xc>
+     8f6:	8c e9       	ldi	r24, 0x9C	; 156
+     8f8:	9f ef       	ldi	r25, 0xFF	; 255
+     8fa:	85 36       	cpi	r24, 0x65	; 101
+     8fc:	91 05       	cpc	r25, r1
+     8fe:	14 f0       	brlt	.+4      	; 0x904 <servo_set+0x16>
+     900:	84 e6       	ldi	r24, 0x64	; 100
+     902:	90 e0       	ldi	r25, 0x00	; 0
+		percent = 100;
+	}
+	else if(percent < -100){
+		percent = -100;		
+	}
+	OCR1A = (pulse_width_neutral + ((pulse_width_max-pulse_width_min)/200)*(-percent))* F_CPU / clock_scaler_val;
+     904:	66 27       	eor	r22, r22
+     906:	77 27       	eor	r23, r23
+     908:	68 1b       	sub	r22, r24
+     90a:	79 0b       	sbc	r23, r25
+     90c:	88 27       	eor	r24, r24
+     90e:	77 fd       	sbrc	r23, 7
+     910:	80 95       	com	r24
+     912:	98 2f       	mov	r25, r24
+     914:	8b d4       	rcall	.+2326   	; 0x122c <__floatsisf>
+     916:	2b e9       	ldi	r18, 0x9B	; 155
+     918:	33 e5       	ldi	r19, 0x53	; 83
+     91a:	49 ec       	ldi	r20, 0xC9	; 201
+     91c:	56 e3       	ldi	r21, 0x36	; 54
+     91e:	36 d5       	rcall	.+2668   	; 0x138c <__mulsf3>
+     920:	26 ea       	ldi	r18, 0xA6	; 166
+     922:	3b e9       	ldi	r19, 0x9B	; 155
+     924:	44 ec       	ldi	r20, 0xC4	; 196
+     926:	5a e3       	ldi	r21, 0x3A	; 58
+     928:	7e d3       	rcall	.+1788   	; 0x1026 <__addsf3>
+     92a:	20 e0       	ldi	r18, 0x00	; 0
+     92c:	34 e2       	ldi	r19, 0x24	; 36
+     92e:	44 e7       	ldi	r20, 0x74	; 116
+     930:	5b e4       	ldi	r21, 0x4B	; 75
+     932:	2c d5       	rcall	.+2648   	; 0x138c <__mulsf3>
+     934:	20 e0       	ldi	r18, 0x00	; 0
+     936:	30 e0       	ldi	r19, 0x00	; 0
+     938:	40 e0       	ldi	r20, 0x00	; 0
+     93a:	5e e3       	ldi	r21, 0x3E	; 62
+     93c:	27 d5       	rcall	.+2638   	; 0x138c <__mulsf3>
+     93e:	48 d4       	rcall	.+2192   	; 0x11d0 <__fixunssfsi>
+     940:	70 93 89 00 	sts	0x0089, r23
+     944:	60 93 88 00 	sts	0x0088, r22
+     948:	08 95       	ret
+
+0000094a <main>:
+#include "MotorDrivers/Solenoid.h"
+#include "SensorDrivers/HC-SR04.h"
+
+#include <avr/interrupt.h>
+
+int main(){
+     94a:	cf 93       	push	r28
+     94c:	df 93       	push	r29
+     94e:	cd b7       	in	r28, 0x3d	; 61
+     950:	de b7       	in	r29, 0x3e	; 62
+     952:	c6 57       	subi	r28, 0x76	; 118
+     954:	d1 09       	sbc	r29, r1
+     956:	0f b6       	in	r0, 0x3f	; 63
+     958:	f8 94       	cli
+     95a:	de bf       	out	0x3e, r29	; 62
+     95c:	0f be       	out	0x3f, r0	; 63
+     95e:	cd bf       	out	0x3d, r28	; 61
+	sei(); // Global interrupt enable
+     960:	78 94       	sei
+	//cli(); // Global interrupt disable
+	
+	/*INITIALISATION*/
+	USART_init();
+     962:	20 de       	rcall	.-960    	; 0x5a4 <USART_init>
+	puts("Usart init done");
+     964:	8a e3       	ldi	r24, 0x3A	; 58
+     966:	92 e0       	ldi	r25, 0x02	; 2
+     968:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
+	CAN_init();
+     96c:	10 dd       	rcall	.-1504   	; 0x38e <CAN_init>
+	puts("Can init done");
+     96e:	8a e4       	ldi	r24, 0x4A	; 74
+     970:	92 e0       	ldi	r25, 0x02	; 2
+     972:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
+	servo_init();
+     976:	9d df       	rcall	.-198    	; 0x8b2 <servo_init>
+	puts("Servo init done");
+     978:	88 e5       	ldi	r24, 0x58	; 88
+     97a:	92 e0       	ldi	r25, 0x02	; 2
+     97c:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
+	adc_init();
+     980:	41 d1       	rcall	.+642    	; 0xc04 <adc_init>
+	puts("ADC init done");
+     982:	88 e6       	ldi	r24, 0x68	; 104
+     984:	92 e0       	ldi	r25, 0x02	; 2
+     986:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
+	I2C_init();
+     98a:	70 dd       	rcall	.-1312   	; 0x46c <I2C_init>
+	puts("I2C init done");
+     98c:	86 e7       	ldi	r24, 0x76	; 118
+     98e:	92 e0       	ldi	r25, 0x02	; 2
+     990:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
+	motorbox_init();
+     994:	4b de       	rcall	.-874    	; 0x62c <motorbox_init>
+	puts("Motor init done");
+     996:	84 e8       	ldi	r24, 0x84	; 132
+     998:	92 e0       	ldi	r25, 0x02	; 2
+     99a:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
+	SOLENOID_INIT;
+     99e:	82 9a       	sbi	0x10, 2	; 16
+	SOLENOID_DEACTIVATE;
+     9a0:	8a 9a       	sbi	0x11, 2	; 17
+	puts("Solenoid init done");
+     9a2:	84 e9       	ldi	r24, 0x94	; 148
+     9a4:	92 e0       	ldi	r25, 0x02	; 2
+     9a6:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
+	
+	Regulator regulator;
+	regulator_init(&regulator);
+     9aa:	ce 01       	movw	r24, r28
+     9ac:	01 96       	adiw	r24, 0x01	; 1
+     9ae:	75 de       	rcall	.-790    	; 0x69a <regulator_init>
+	puts("Regulator init done");
+     9b0:	87 ea       	ldi	r24, 0xA7	; 167
+     9b2:	92 e0       	ldi	r25, 0x02	; 2
+     9b4:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
+	
+	echo_init();
+     9b8:	79 d2       	rcall	.+1266   	; 0xeac <echo_init>
+	ECHO_data S0_data;
+	ECHO_data S1_data;
+	echo_data_init(&S0_data);
+     9ba:	ce 01       	movw	r24, r28
+     9bc:	8f 5b       	subi	r24, 0xBF	; 191
+     9be:	9f 4f       	sbci	r25, 0xFF	; 255
+     9c0:	99 d2       	rcall	.+1330   	; 0xef4 <echo_data_init>
+	echo_data_init(&S1_data);
+     9c2:	ce 01       	movw	r24, r28
+     9c4:	82 5b       	subi	r24, 0xB2	; 178
+     9c6:	9f 4f       	sbci	r25, 0xFF	; 255
+     9c8:	95 d2       	rcall	.+1322   	; 0xef4 <echo_data_init>
+	puts("Distance sensor init done");
+     9ca:	8b eb       	ldi	r24, 0xBB	; 187
+     9cc:	92 e0       	ldi	r25, 0x02	; 2
+     9ce:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
+	/*CAN message variables*/
+	interrupt CAN_interrupt;
+	
+	//Message holding the recieved message.
+	CAN_message msgInn;
+	msgInn.length = 0;
+     9d2:	6e 96       	adiw	r28, 0x1e	; 30
+     9d4:	1f ae       	std	Y+63, r1	; 0x3f
+     9d6:	6e 97       	sbiw	r28, 0x1e	; 30
+	
+	//Holds a blueprint for gamesignal messages
+	//msgPoint.data[GAMESIGNAL_SIGNAL_BYTE] should be updated with 
+	//the correct information before sending
+	CAN_message msgGameSignal;
+	msgGameSignal.length = GAMESIGNAL_MSGLEN;
+     9d8:	22 e0       	ldi	r18, 0x02	; 2
+     9da:	a9 96       	adiw	r28, 0x29	; 41
+     9dc:	2f af       	std	Y+63, r18	; 0x3f
+     9de:	a9 97       	sbiw	r28, 0x29	; 41
+	msgGameSignal.id = NODE1_CANID_0;
+     9e0:	80 e0       	ldi	r24, 0x00	; 0
+     9e2:	96 e0       	ldi	r25, 0x06	; 6
+     9e4:	a8 96       	adiw	r28, 0x28	; 40
+     9e6:	9f af       	std	Y+63, r25	; 0x3f
+     9e8:	8e af       	std	Y+62, r24	; 0x3e
+     9ea:	a8 97       	sbiw	r28, 0x28	; 40
+	msgGameSignal.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_GAMESIGNAL;
+     9ec:	aa 96       	adiw	r28, 0x2a	; 42
+     9ee:	2f af       	std	Y+63, r18	; 0x3f
+     9f0:	aa 97       	sbiw	r28, 0x2a	; 42
+	int16_t joySpeed = 0;
+	int16_t joyPos = 0;
+	
+	bool solenidPush = 0; //0=don't extend, 1=extend
+	
+	puts("All init done");
+     9f2:	85 ed       	ldi	r24, 0xD5	; 213
+     9f4:	92 e0       	ldi	r25, 0x02	; 2
+     9f6:	0e 94 74 0f 	call	0x1ee8	; 0x1ee8 <puts>
+	ADC_signal adcSignal;
+	
+	int16_t joySpeed = 0;
+	int16_t joyPos = 0;
+	
+	bool solenidPush = 0; //0=don't extend, 1=extend
+     9fa:	91 2c       	mov	r9, r1
+	bool gameModeChanged = false;
+	
+	ADC_signal adcSignal;
+	
+	int16_t joySpeed = 0;
+	int16_t joyPos = 0;
+     9fc:	61 2c       	mov	r6, r1
+     9fe:	71 2c       	mov	r7, r1
+	msgGameSignal.length = GAMESIGNAL_MSGLEN;
+	msgGameSignal.id = NODE1_CANID_0;
+	msgGameSignal.data[CANMSG_PACKAGESPECIFIER] = PACKAGESPECIFIER_GAMESIGNAL;
+	
+	
+	uint8_t gameMode = GAMEMODE_OFF;
+     a00:	51 2c       	mov	r5, r1
+		CAN_interrupt = CAN_int();
+		switch(CAN_interrupt){
+			case noInt:
+				break;
+			case err:
+				printf("CAN ERROR");
+     a02:	0f 2e       	mov	r0, r31
+     a04:	f3 ee       	ldi	r31, 0xE3	; 227
+     a06:	ef 2e       	mov	r14, r31
+     a08:	f2 e0       	ldi	r31, 0x02	; 2
+     a0a:	ff 2e       	mov	r15, r31
+     a0c:	f0 2d       	mov	r31, r0
+			//Measures if the led i blocked
+			adc_measure(&adcSignal);
+			
+			//Writes down the time interval since last round.
+			//Used in the regulator, and other integral action
+			regulator.dt = TCNT3*1.0/((F_CPU/64)*1.0);
+     a0e:	0f 2e       	mov	r0, r31
+     a10:	f4 e9       	ldi	r31, 0x94	; 148
+     a12:	2f 2e       	mov	r2, r31
+     a14:	31 2c       	mov	r3, r1
+     a16:	f0 2d       	mov	r31, r0
+				set_bit(SOLENOID_PORT,SOLENOID_BIT);
+			}
+			
+			//if there was a rising edge on the adcSignal, then the game is lost
+			if(adcSignal.edge){
+				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_STOP;
+     a18:	44 24       	eor	r4, r4
+     a1a:	43 94       	inc	r4
+		
+		/*Game controll system*/
+		if(gameMode != GAMEMODE_OFF){
+			//if the gamemode changed to this state, then things need to be activated
+			if(gameModeChanged){
+				REGULATOR_TIMER_ACTIVATE;
+     a1c:	0f 2e       	mov	r0, r31
+     a1e:	f1 e9       	ldi	r31, 0x91	; 145
+     a20:	af 2e       	mov	r10, r31
+     a22:	b1 2c       	mov	r11, r1
+     a24:	f0 2d       	mov	r31, r0
+				motorbox_reset_encoder();
+				ETIMER_TRIGGER_ENABLE;
+     a26:	0f 2e       	mov	r0, r31
+     a28:	f1 e2       	ldi	r31, 0x21	; 33
+     a2a:	cf 2e       	mov	r12, r31
+     a2c:	dd 24       	eor	r13, r13
+     a2e:	d3 94       	inc	r13
+     a30:	f0 2d       	mov	r31, r0
+	
+	puts("All init done");
+	
+	while(1){
+		/*Can message handeler*/
+		CAN_interrupt = CAN_int();
+     a32:	a0 dc       	rcall	.-1728   	; 0x374 <CAN_int>
+     a34:	18 2f       	mov	r17, r24
+		switch(CAN_interrupt){
+     a36:	86 30       	cpi	r24, 0x06	; 6
+     a38:	59 f0       	breq	.+22     	; 0xa50 <main+0x106>
+     a3a:	87 30       	cpi	r24, 0x07	; 7
+     a3c:	79 f0       	breq	.+30     	; 0xa5c <main+0x112>
+     a3e:	81 30       	cpi	r24, 0x01	; 1
+     a40:	99 f4       	brne	.+38     	; 0xa68 <main+0x11e>
+			case noInt:
+				break;
+			case err:
+				printf("CAN ERROR");
+     a42:	ff 92       	push	r15
+     a44:	ef 92       	push	r14
+     a46:	0e 94 63 0f 	call	0x1ec6	; 0x1ec6 <printf>
+				break;
+     a4a:	0f 90       	pop	r0
+     a4c:	0f 90       	pop	r0
+     a4e:	0e c0       	rjmp	.+28     	; 0xa6c <main+0x122>
+			case rx0:
+				CAN_data_receive(&msgInn, MCP_RXB0CTRL);
+     a50:	60 e6       	ldi	r22, 0x60	; 96
+     a52:	ce 01       	movw	r24, r28
+     a54:	85 5a       	subi	r24, 0xA5	; 165
+     a56:	9f 4f       	sbci	r25, 0xFF	; 255
+     a58:	38 dc       	rcall	.-1936   	; 0x2ca <CAN_data_receive>
+				break;
+     a5a:	08 c0       	rjmp	.+16     	; 0xa6c <main+0x122>
+			case rx1:
+				CAN_data_receive(&msgInn, MCP_RXB1CTRL);
+     a5c:	60 e7       	ldi	r22, 0x70	; 112
+     a5e:	ce 01       	movw	r24, r28
+     a60:	85 5a       	subi	r24, 0xA5	; 165
+     a62:	9f 4f       	sbci	r25, 0xFF	; 255
+     a64:	32 dc       	rcall	.-1948   	; 0x2ca <CAN_data_receive>
+				break;
+     a66:	02 c0       	rjmp	.+4      	; 0xa6c <main+0x122>
+			default:
+				break;
+		}
+		//Resets the interrupt if there was one
+		if(CAN_interrupt != noInt) CAN_int_clear(CAN_interrupt);
+     a68:	88 23       	and	r24, r24
+     a6a:	11 f0       	breq	.+4      	; 0xa70 <main+0x126>
+     a6c:	81 2f       	mov	r24, r17
+     a6e:	f6 dc       	rcall	.-1556   	; 0x45c <CAN_int_clear>
+		
+		//if we got a message, then the length would be non 0
+		if(msgInn.length){
+     a70:	6e 96       	adiw	r28, 0x1e	; 30
+     a72:	8f ad       	ldd	r24, Y+63	; 0x3f
+     a74:	6e 97       	sbiw	r28, 0x1e	; 30
+     a76:	88 23       	and	r24, r24
+     a78:	a9 f0       	breq	.+42     	; 0xaa4 <main+0x15a>
+			switch(msgInn.data[CANMSG_PACKAGESPECIFIER]){
+     a7a:	6f 96       	adiw	r28, 0x1f	; 31
+     a7c:	8f ad       	ldd	r24, Y+63	; 0x3f
+     a7e:	6f 97       	sbiw	r28, 0x1f	; 31
+     a80:	88 23       	and	r24, r24
+     a82:	19 f0       	breq	.+6      	; 0xa8a <main+0x140>
+     a84:	81 30       	cpi	r24, 0x01	; 1
+     a86:	29 f0       	breq	.+10     	; 0xa92 <main+0x148>
+     a88:	0d c0       	rjmp	.+26     	; 0xaa4 <main+0x15a>
+				case PACKAGESPECIFIER_MOTORSIGNALS:
+					msgInn.length = 0; //Indicates that the message is read
+     a8a:	6e 96       	adiw	r28, 0x1e	; 30
+     a8c:	1f ae       	std	Y+63, r1	; 0x3f
+     a8e:	6e 97       	sbiw	r28, 0x1e	; 30
+				break;
+     a90:	09 c0       	rjmp	.+18     	; 0xaa4 <main+0x15a>
+				case PACKAGESPECIFIER_GAMEMODE:
+					gameMode = msgInn.data[GAMEMODE_MODE_BYTE];
+     a92:	a0 96       	adiw	r28, 0x20	; 32
+     a94:	5f ac       	ldd	r5, Y+63	; 0x3f
+     a96:	a0 97       	sbiw	r28, 0x20	; 32
+					gameModeChanged = 1;
+					msgInn.length = 0; //Indicates that the message is read
+     a98:	6e 96       	adiw	r28, 0x1e	; 30
+     a9a:	1f ae       	std	Y+63, r1	; 0x3f
+     a9c:	6e 97       	sbiw	r28, 0x1e	; 30
+			
+		}
+		
+		
+		/*Game controll system*/
+		if(gameMode != GAMEMODE_OFF){
+     a9e:	51 10       	cpse	r5, r1
+     aa0:	a2 c0       	rjmp	.+324    	; 0xbe6 <main+0x29c>
+     aa2:	91 c0       	rjmp	.+290    	; 0xbc6 <main+0x27c>
+     aa4:	55 20       	and	r5, r5
+     aa6:	09 f4       	brne	.+2      	; 0xaaa <main+0x160>
+     aa8:	c4 cf       	rjmp	.-120    	; 0xa32 <main+0xe8>
+				gameModeChanged = 0;
+			}
+			
+						
+			//Measures if the led i blocked
+			adc_measure(&adcSignal);
+     aaa:	ce 01       	movw	r24, r28
+     aac:	8f 58       	subi	r24, 0x8F	; 143
+     aae:	9f 4f       	sbci	r25, 0xFF	; 255
+     ab0:	d5 d0       	rcall	.+426    	; 0xc5c <adc_measure>
+			
+			//Writes down the time interval since last round.
+			//Used in the regulator, and other integral action
+			regulator.dt = TCNT3*1.0/((F_CPU/64)*1.0);
+     ab2:	f1 01       	movw	r30, r2
+     ab4:	60 81       	ld	r22, Z
+     ab6:	71 81       	ldd	r23, Z+1	; 0x01
+     ab8:	80 e0       	ldi	r24, 0x00	; 0
+     aba:	90 e0       	ldi	r25, 0x00	; 0
+     abc:	b5 d3       	rcall	.+1898   	; 0x1228 <__floatunsisf>
+     abe:	20 e0       	ldi	r18, 0x00	; 0
+     ac0:	34 e2       	ldi	r19, 0x24	; 36
+     ac2:	44 e7       	ldi	r20, 0x74	; 116
+     ac4:	58 e4       	ldi	r21, 0x48	; 72
+     ac6:	17 d3       	rcall	.+1582   	; 0x10f6 <__divsf3>
+     ac8:	21 96       	adiw	r28, 0x01	; 1
+     aca:	6c af       	std	Y+60, r22	; 0x3c
+     acc:	7d af       	std	Y+61, r23	; 0x3d
+     ace:	8e af       	std	Y+62, r24	; 0x3e
+     ad0:	9f af       	std	Y+63, r25	; 0x3f
+     ad2:	21 97       	sbiw	r28, 0x01	; 1
+			TCNT3 = 0;	//Resets the timer.
+     ad4:	f1 01       	movw	r30, r2
+     ad6:	11 82       	std	Z+1, r1	; 0x01
+     ad8:	10 82       	st	Z, r1
+			
+			//Sets the servo accorging to the slider from node1
+			servo_set(msgInn.data[CANMSG_SLIDERR_BYTE]);
+     ada:	a1 96       	adiw	r28, 0x21	; 33
+     adc:	8f ad       	ldd	r24, Y+63	; 0x3f
+     ade:	a1 97       	sbiw	r28, 0x21	; 33
+     ae0:	99 27       	eor	r25, r25
+     ae2:	87 fd       	sbrc	r24, 7
+     ae4:	90 95       	com	r25
+     ae6:	03 df       	rcall	.-506    	; 0x8ee <servo_set>
+			
+			if(gameMode == GAMEMODE_JS){
+     ae8:	f1 e0       	ldi	r31, 0x01	; 1
+     aea:	5f 12       	cpse	r5, r31
+     aec:	2d c0       	rjmp	.+90     	; 0xb48 <main+0x1fe>
+				//The joystick indicates the movement speed of the motor
+				joySpeed = msgInn.data[CANMSG_JSX_BYTE];
+				//We integrate up the joystick signal to get a position reference. 
+				joyPos += get_pos_from_percent(joySpeed)* regulator.dt * CONTROLLER_GAIN;
+     aee:	a2 96       	adiw	r28, 0x22	; 34
+     af0:	8f ad       	ldd	r24, Y+63	; 0x3f
+     af2:	a2 97       	sbiw	r28, 0x22	; 34
+     af4:	d9 de       	rcall	.-590    	; 0x8a8 <get_pos_from_percent>
+     af6:	8c 01       	movw	r16, r24
+     af8:	b3 01       	movw	r22, r6
+     afa:	88 27       	eor	r24, r24
+     afc:	77 fd       	sbrc	r23, 7
+     afe:	80 95       	com	r24
+     b00:	98 2f       	mov	r25, r24
+     b02:	94 d3       	rcall	.+1832   	; 0x122c <__floatsisf>
+     b04:	3b 01       	movw	r6, r22
+     b06:	4c 01       	movw	r8, r24
+     b08:	b8 01       	movw	r22, r16
+     b0a:	88 27       	eor	r24, r24
+     b0c:	77 fd       	sbrc	r23, 7
+     b0e:	80 95       	com	r24
+     b10:	98 2f       	mov	r25, r24
+     b12:	8c d3       	rcall	.+1816   	; 0x122c <__floatsisf>
+     b14:	21 96       	adiw	r28, 0x01	; 1
+     b16:	2c ad       	ldd	r18, Y+60	; 0x3c
+     b18:	3d ad       	ldd	r19, Y+61	; 0x3d
+     b1a:	4e ad       	ldd	r20, Y+62	; 0x3e
+     b1c:	5f ad       	ldd	r21, Y+63	; 0x3f
+     b1e:	21 97       	sbiw	r28, 0x01	; 1
+     b20:	35 d4       	rcall	.+2154   	; 0x138c <__mulsf3>
+     b22:	9b 01       	movw	r18, r22
+     b24:	ac 01       	movw	r20, r24
+     b26:	7f d2       	rcall	.+1278   	; 0x1026 <__addsf3>
+     b28:	9b 01       	movw	r18, r22
+     b2a:	ac 01       	movw	r20, r24
+     b2c:	c4 01       	movw	r24, r8
+     b2e:	b3 01       	movw	r22, r6
+     b30:	7a d2       	rcall	.+1268   	; 0x1026 <__addsf3>
+     b32:	49 d3       	rcall	.+1682   	; 0x11c6 <__fixsfsi>
+     b34:	3b 01       	movw	r6, r22
+				//Runs the regulator with the integrated joystick signal as position reference.
+				regulator_increment(&regulator,joyPos);
+     b36:	ce 01       	movw	r24, r28
+     b38:	01 96       	adiw	r24, 0x01	; 1
+     b3a:	e7 dd       	rcall	.-1074   	; 0x70a <regulator_increment>
+				
+				//If button R is pressed, then the sollenoid is supposed to solenidPush.
+				solenidPush = msgInn.data[CANMSG_BTNR_BYTE] & (1<<CANMSG_BTNR_BIT);
+     b3c:	a0 96       	adiw	r28, 0x20	; 32
+     b3e:	8f ad       	ldd	r24, Y+63	; 0x3f
+     b40:	a0 97       	sbiw	r28, 0x20	; 32
+     b42:	81 70       	andi	r24, 0x01	; 1
+     b44:	98 2e       	mov	r9, r24
+     b46:	1f c0       	rjmp	.+62     	; 0xb86 <main+0x23c>
+			}
+			
+			else if(gameMode == GAMEMODE_SENS){
+     b48:	22 e0       	ldi	r18, 0x02	; 2
+     b4a:	52 12       	cpse	r5, r18
+     b4c:	1c c0       	rjmp	.+56     	; 0xb86 <main+0x23c>
+				//The echo sensor indicates the motor possition.
+				echo_update_ref(&S0_data,SENSOR0, ISC20);
+     b4e:	44 e0       	ldi	r20, 0x04	; 4
+     b50:	60 e0       	ldi	r22, 0x00	; 0
+     b52:	ce 01       	movw	r24, r28
+     b54:	8f 5b       	subi	r24, 0xBF	; 191
+     b56:	9f 4f       	sbci	r25, 0xFF	; 255
+     b58:	06 d2       	rcall	.+1036   	; 0xf66 <echo_update_ref>
+				//Echo sensor 1 is used to activated the solenoid
+				echo_update_ref(&S1_data,SENSOR1, ISC30);
+     b5a:	46 e0       	ldi	r20, 0x06	; 6
+     b5c:	64 2d       	mov	r22, r4
+     b5e:	ce 01       	movw	r24, r28
+     b60:	82 5b       	subi	r24, 0xB2	; 178
+     b62:	9f 4f       	sbci	r25, 0xFF	; 255
+     b64:	00 d2       	rcall	.+1024   	; 0xf66 <echo_update_ref>
+				//Runs the regulator with echo sensor possition reference.
+				regulator_increment(&regulator, S0_data.pos_ref);
+     b66:	23 96       	adiw	r28, 0x03	; 3
+     b68:	6e ad       	ldd	r22, Y+62	; 0x3e
+     b6a:	7f ad       	ldd	r23, Y+63	; 0x3f
+     b6c:	23 97       	sbiw	r28, 0x03	; 3
+     b6e:	ce 01       	movw	r24, r28
+     b70:	01 96       	adiw	r24, 0x01	; 1
+     b72:	cb dd       	rcall	.-1130   	; 0x70a <regulator_increment>
+				
+				//Echo sensor 1 will measure the distance to the other side of the box most of the time
+				//If it measures a suffitently lower value, then the player is blocing it
+				if(S1_data.pos_ref < BOARD_SIZE/2 - S1_ACTIVATION_DISTANCE){
+     b74:	94 2c       	mov	r9, r4
+     b76:	60 96       	adiw	r28, 0x10	; 16
+     b78:	8e ad       	ldd	r24, Y+62	; 0x3e
+     b7a:	9f ad       	ldd	r25, Y+63	; 0x3f
+     b7c:	60 97       	sbiw	r28, 0x10	; 16
+     b7e:	8c 33       	cpi	r24, 0x3C	; 60
+     b80:	9f 40       	sbci	r25, 0x0F	; 15
+     b82:	0c f0       	brlt	.+2      	; 0xb86 <main+0x23c>
+     b84:	91 2c       	mov	r9, r1
+				else solenidPush = 0;
+				
+			}
+			
+			//Set the motorpower acording to the regulator.
+			motorbox_set_percent(regulator.u);
+     b86:	8d 85       	ldd	r24, Y+13	; 0x0d
+     b88:	9e 85       	ldd	r25, Y+14	; 0x0e
+     b8a:	28 dd       	rcall	.-1456   	; 0x5dc <motorbox_set_percent>
+			
+			//Activates or deactivates the solenoid
+			//If the solenoid was previously deactive and we want to activate it
+			if(solenidPush && read_bit(SOLENOID_PORT,SOLENOID_BIT)){				
+     b8c:	99 20       	and	r9, r9
+     b8e:	59 f0       	breq	.+22     	; 0xba6 <main+0x25c>
+     b90:	8a 9b       	sbis	0x11, 2	; 17
+     b92:	0b c0       	rjmp	.+22     	; 0xbaa <main+0x260>
+				//Activates
+				clear_bit(SOLENOID_PORT,SOLENOID_BIT);
+     b94:	8a 98       	cbi	0x11, 2	; 17
+				//Sends a signal indicating that the player solenidPushed the solenoid
+				//This is going to start the game, if it has not allready started.
+				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_START;
+     b96:	ab 96       	adiw	r28, 0x2b	; 43
+     b98:	1f ae       	std	Y+63, r1	; 0x3f
+     b9a:	ab 97       	sbiw	r28, 0x2b	; 43
+				CAN_message_send(&msgGameSignal);
+     b9c:	ce 01       	movw	r24, r28
+     b9e:	8a 59       	subi	r24, 0x9A	; 154
+     ba0:	9f 4f       	sbci	r25, 0xFF	; 255
+     ba2:	88 db       	rcall	.-2288   	; 0x2b4 <CAN_message_send>
+     ba4:	02 c0       	rjmp	.+4      	; 0xbaa <main+0x260>
+			}
+			//If the solenoid was previusly active and we want to deactivate it
+			else if(!solenidPush && !read_bit(SOLENOID_PORT,SOLENOID_BIT)){
+     ba6:	8a 9b       	sbis	0x11, 2	; 17
+				set_bit(SOLENOID_PORT,SOLENOID_BIT);
+     ba8:	8a 9a       	sbi	0x11, 2	; 17
+			}
+			
+			//if there was a rising edge on the adcSignal, then the game is lost
+			if(adcSignal.edge){
+     baa:	e6 96       	adiw	r28, 0x36	; 54
+     bac:	8f ad       	ldd	r24, Y+63	; 0x3f
+     bae:	e6 97       	sbiw	r28, 0x36	; 54
+     bb0:	88 23       	and	r24, r24
+     bb2:	09 f4       	brne	.+2      	; 0xbb6 <main+0x26c>
+     bb4:	3e cf       	rjmp	.-388    	; 0xa32 <main+0xe8>
+				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = GAMESIGNAL_STOP;
+     bb6:	ab 96       	adiw	r28, 0x2b	; 43
+     bb8:	4f ae       	std	Y+63, r4	; 0x3f
+     bba:	ab 97       	sbiw	r28, 0x2b	; 43
+				CAN_message_send(&msgGameSignal);
+     bbc:	ce 01       	movw	r24, r28
+     bbe:	8a 59       	subi	r24, 0x9A	; 154
+     bc0:	9f 4f       	sbci	r25, 0xFF	; 255
+     bc2:	78 db       	rcall	.-2320   	; 0x2b4 <CAN_message_send>
+     bc4:	36 cf       	rjmp	.-404    	; 0xa32 <main+0xe8>
+			}
+		}
+		else{
+			if(gameModeChanged){
+				REGULATOR_TIMER_DEACTIVATE;
+     bc6:	f5 01       	movw	r30, r10
+     bc8:	80 81       	ld	r24, Z
+     bca:	88 7f       	andi	r24, 0xF8	; 248
+     bcc:	80 83       	st	Z, r24
+				REGULATOR_TIMER_RESET;
+     bce:	f1 01       	movw	r30, r2
+     bd0:	11 82       	std	Z+1, r1	; 0x01
+     bd2:	10 82       	st	Z, r1
+				//turnes of the motor
+				motorbox_set_percent(0);
+     bd4:	80 e0       	ldi	r24, 0x00	; 0
+     bd6:	90 e0       	ldi	r25, 0x00	; 0
+     bd8:	01 dd       	rcall	.-1534   	; 0x5dc <motorbox_set_percent>
+				//retracts the solenoid
+				set_bit(SOLENOID_PORT,SOLENOID_BIT); 
+     bda:	8a 9a       	sbi	0x11, 2	; 17
+				gameModeChanged = 0;
+				ETIMER_TRIGGER_DISABLE; 
+     bdc:	f6 01       	movw	r30, r12
+     bde:	80 81       	ld	r24, Z
+     be0:	88 7f       	andi	r24, 0xF8	; 248
+     be2:	80 83       	st	Z, r24
+     be4:	26 cf       	rjmp	.-436    	; 0xa32 <main+0xe8>
+		
+		/*Game controll system*/
+		if(gameMode != GAMEMODE_OFF){
+			//if the gamemode changed to this state, then things need to be activated
+			if(gameModeChanged){
+				REGULATOR_TIMER_ACTIVATE;
+     be6:	f5 01       	movw	r30, r10
+     be8:	80 81       	ld	r24, Z
+     bea:	83 60       	ori	r24, 0x03	; 3
+     bec:	80 83       	st	Z, r24
+				motorbox_reset_encoder();
+     bee:	17 dd       	rcall	.-1490   	; 0x61e <motorbox_reset_encoder>
+				ETIMER_TRIGGER_ENABLE;
+     bf0:	f6 01       	movw	r30, r12
+     bf2:	80 81       	ld	r24, Z
+     bf4:	82 60       	ori	r24, 0x02	; 2
+     bf6:	80 83       	st	Z, r24
+     bf8:	58 cf       	rjmp	.-336    	; 0xaaa <main+0x160>
+
+00000bfa <__vector_default>:
+	}
+	return 0;
+}
+
+ISR(BADISR_vect, ISR_NAKED){
+	puts("Bad interrupt");
+     bfa:	8d ee       	ldi	r24, 0xED	; 237
+     bfc:	92 e0       	ldi	r25, 0x02	; 2
+     bfe:	0c 94 74 0f 	jmp	0x1ee8	; 0x1ee8 <puts>
+	asm volatile ( "ret" );
      c02:	08 95       	ret
 
 00000c04 <adc_init>:
@@ -2512,7 +2512,7 @@ uint16_t adc_measure(ADC_signal* signal){
      ce2:	bf 93       	push	r27
      ce4:	ef 93       	push	r30
      ce6:	ff 93       	push	r31
-     ce8:	8a ef       	ldi	r24, 0xFA	; 250
+     ce8:	8b ef       	ldi	r24, 0xFB	; 251
      cea:	92 e0       	ldi	r25, 0x02	; 2
      cec:	9f 93       	push	r25
      cee:	8f 93       	push	r24

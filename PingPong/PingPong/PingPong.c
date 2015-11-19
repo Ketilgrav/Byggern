@@ -17,7 +17,7 @@
 #include "Game/Game.h"
 #include "UI/HighScore.h"
 #include "CommunicationDrivers/can.h"
-#include "EEPROM.h"
+#include "Game/EEPROM.h"
 #include "main.h"
 
 int main(void){		

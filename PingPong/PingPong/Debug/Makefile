@@ -50,8 +50,8 @@ C_SRCS +=  \
 ../Drivers/Controllers.c \
 ../Drivers/external_SRAM.c \
 ../Drivers/OLED.c \
-../EEPROM.c \
 ../Etc/font.c \
+../Game/EEPROM.c \
 ../Game/Game.c \
 ../PingPong.c \
 ../UI/HighScore.c \
@@ -73,8 +73,8 @@ Drivers/ADC_Driver.o \
 Drivers/Controllers.o \
 Drivers/external_SRAM.o \
 Drivers/OLED.o \
-EEPROM.o \
 Etc/font.o \
+Game/EEPROM.o \
 Game/Game.o \
 PingPong.o \
 UI/HighScore.o \
@@ -89,8 +89,8 @@ Drivers/ADC_Driver.o \
 Drivers/Controllers.o \
 Drivers/external_SRAM.o \
 Drivers/OLED.o \
-EEPROM.o \
 Etc/font.o \
+Game/EEPROM.o \
 Game/Game.o \
 PingPong.o \
 UI/HighScore.o \
@@ -105,8 +105,8 @@ Drivers/ADC_Driver.d \
 Drivers/Controllers.d \
 Drivers/external_SRAM.d \
 Drivers/OLED.d \
-EEPROM.d \
 Etc/font.d \
+Game/EEPROM.d \
 Game/Game.d \
 PingPong.d \
 UI/HighScore.d \
@@ -121,8 +121,8 @@ Drivers/ADC_Driver.d \
 Drivers/Controllers.d \
 Drivers/external_SRAM.d \
 Drivers/OLED.d \
-EEPROM.d \
 Etc/font.d \
+Game/EEPROM.d \
 Game/Game.d \
 PingPong.d \
 UI/HighScore.d \
@@ -185,13 +185,6 @@ Drivers/%.o: ../Drivers/%.c
 	@echo Finished building: $<
 	
 
-./%.o: .././%.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 4.8.1
-	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
 Etc/%.o: ../Etc/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.8.1
@@ -200,6 +193,13 @@ Etc/%.o: ../Etc/%.c
 	
 
 Game/%.o: ../Game/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.8.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./%.o: .././%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.8.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Atmel Toolchain\AVR8 GCC\Native\3.4.1061\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega162 -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

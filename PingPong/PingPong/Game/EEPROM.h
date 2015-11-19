@@ -9,8 +9,8 @@
 #ifndef EEPROM_H_
 #define EEPROM_H_
 
-#include "MainInclude.h"
-#include "Game/Game.h"
+#include "../MainInclude.h"
+#include "Game.h"
 void EEPROM_read_gamestate(GameState* gameState);
 
 

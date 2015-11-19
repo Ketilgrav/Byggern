@@ -8,8 +8,8 @@
 
 #ifndef REGULATOR_H_
 #define REGULATOR_H_
-#include "MotorDrivers/MotorBox.h"
-#include "MainInclude.h"
+#include "MotorBox.h"
+#include "../MainInclude.h"
 
 #define CONTROLLER_GAIN 2
 #define DERIVATIVE_SAMPLES 10

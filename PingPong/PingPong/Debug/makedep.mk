@@ -18,9 +18,9 @@ Drivers\external_SRAM.c
 
 Drivers\OLED.c
 
-EEPROM.c
-
 Etc\font.c
+
+Game\EEPROM.c
 
 Game\Game.c
 

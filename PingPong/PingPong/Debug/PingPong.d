@@ -37,8 +37,8 @@ PingPong.d PingPong.o: .././PingPong.c .././MainInclude.h \
  .././Game/../CommunicationDrivers/../MainInclude.h \
  .././Game/../CommunicationDrivers/spi.h \
  .././Game/../CommunicationDrivers/MCP2515_register.h .././UI/HighScore.h \
- .././UI/../Game/Game.h .././CommunicationDrivers/can.h .././EEPROM.h \
- .././main.h
+ .././UI/../Game/Game.h .././CommunicationDrivers/can.h \
+ .././Game/EEPROM.h .././Game/Game.h .././main.h
 
 .././MainInclude.h:
 
@@ -136,6 +136,8 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-g
 
 .././CommunicationDrivers/can.h:
 
-.././EEPROM.h:
+.././Game/EEPROM.h:
+
+.././Game/Game.h:
 
 .././main.h:

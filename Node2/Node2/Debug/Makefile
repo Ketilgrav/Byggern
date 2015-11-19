@@ -46,9 +46,9 @@ C_SRCS +=  \
 ../CommunicationDrivers/spi.c \
 ../CommunicationDrivers/UsartDriver.c \
 ../MotorDrivers/MotorBox.c \
+../MotorDrivers/regulator.c \
 ../MotorDrivers/servo.c \
 ../Node2.c \
-../regulator.c \
 ../SensorDrivers/adc.c \
 ../SensorDrivers/HC-SR04.c
 
@@ -66,9 +66,9 @@ CommunicationDrivers/mcp2515.o \
 CommunicationDrivers/spi.o \
 CommunicationDrivers/UsartDriver.o \
 MotorDrivers/MotorBox.o \
+MotorDrivers/regulator.o \
 MotorDrivers/servo.o \
 Node2.o \
-regulator.o \
 SensorDrivers/adc.o \
 SensorDrivers/HC-SR04.o
 
@@ -79,9 +79,9 @@ CommunicationDrivers/mcp2515.o \
 CommunicationDrivers/spi.o \
 CommunicationDrivers/UsartDriver.o \
 MotorDrivers/MotorBox.o \
+MotorDrivers/regulator.o \
 MotorDrivers/servo.o \
 Node2.o \
-regulator.o \
 SensorDrivers/adc.o \
 SensorDrivers/HC-SR04.o
 
@@ -92,9 +92,9 @@ CommunicationDrivers/mcp2515.d \
 CommunicationDrivers/spi.d \
 CommunicationDrivers/UsartDriver.d \
 MotorDrivers/MotorBox.d \
+MotorDrivers/regulator.d \
 MotorDrivers/servo.d \
 Node2.d \
-regulator.d \
 SensorDrivers/adc.d \
 SensorDrivers/HC-SR04.d
 
@@ -105,9 +105,9 @@ CommunicationDrivers/mcp2515.d \
 CommunicationDrivers/spi.d \
 CommunicationDrivers/UsartDriver.d \
 MotorDrivers/MotorBox.d \
+MotorDrivers/regulator.d \
 MotorDrivers/servo.d \
 Node2.d \
-regulator.d \
 SensorDrivers/adc.d \
 SensorDrivers/HC-SR04.d
 

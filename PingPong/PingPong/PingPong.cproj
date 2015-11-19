@@ -160,16 +160,16 @@
     <Compile Include="Drivers\OLED.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="EEPROM.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="EEPROM.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="Etc\font.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Etc\Font.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Game\EEPROM.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Game\EEPROM.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Game\Game.c">

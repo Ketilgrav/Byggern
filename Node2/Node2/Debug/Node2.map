@@ -5,13 +5,13 @@ c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-t
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(addsf3x.o)
                               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(addsf3.o) (__addsf3x)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(cmpsf2.o)
-                              regulator.o (__nesf2)
+                              MotorDrivers/regulator.o (__nesf2)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(divsf3.o)
-                              Node2.o (__divsf3)
+                              MotorDrivers/regulator.o (__divsf3)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(divsf3x.o)
                               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(divsf3.o) (__divsf3x)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fixsfsi.o)
-                              Node2.o (__fixsfsi)
+                              MotorDrivers/regulator.o (__fixsfsi)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fixunssfsi.o)
                               MotorDrivers/servo.o (__fixunssfsi)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(floatsisf.o)
@@ -33,7 +33,7 @@ c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-t
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_zero.o)
                               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(addsf3x.o) (__fp_zero)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(mulsf3.o)
-                              MotorDrivers/servo.o (__mulsf3)
+                              MotorDrivers/regulator.o (__mulsf3)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(mulsf3x.o)
                               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(mulsf3.o) (__mulsf3x)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libprintf_flt.a(vfprintf_flt.o)
@@ -41,7 +41,7 @@ c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-t
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_udivmodhi4.o)
                               SensorDrivers/adc.o (__udivmodhi4)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_divmodhi4.o)
-                              regulator.o (__divmodhi4)
+                              MotorDrivers/regulator.o (__divmodhi4)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_udivmodsi4.o)
                               SensorDrivers/HC-SR04.o (__udivmodsi4)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_exit.o)
@@ -110,15 +110,15 @@ Discarded input sections
  .text          0x00000000        0x0 MotorDrivers/MotorBox.o
  .data          0x00000000        0x0 MotorDrivers/MotorBox.o
  .bss           0x00000000        0x0 MotorDrivers/MotorBox.o
+ .text          0x00000000        0x0 MotorDrivers/regulator.o
+ .data          0x00000000        0x0 MotorDrivers/regulator.o
+ .bss           0x00000000        0x0 MotorDrivers/regulator.o
  .text          0x00000000        0x0 MotorDrivers/servo.o
  .data          0x00000000        0x0 MotorDrivers/servo.o
  .bss           0x00000000        0x0 MotorDrivers/servo.o
  .text          0x00000000        0x0 Node2.o
  .data          0x00000000        0x0 Node2.o
  .bss           0x00000000        0x0 Node2.o
- .text          0x00000000        0x0 regulator.o
- .data          0x00000000        0x0 regulator.o
- .bss           0x00000000        0x0 regulator.o
  .text          0x00000000        0x0 SensorDrivers/adc.o
  .data          0x00000000        0x0 SensorDrivers/adc.o
  .bss           0x00000000        0x0 SensorDrivers/adc.o
@@ -334,9 +334,9 @@ LOAD CommunicationDrivers/mcp2515.o
 LOAD CommunicationDrivers/spi.o
 LOAD CommunicationDrivers/UsartDriver.o
 LOAD MotorDrivers/MotorBox.o
+LOAD MotorDrivers/regulator.o
 LOAD MotorDrivers/servo.o
 LOAD Node2.o
-LOAD regulator.o
 LOAD SensorDrivers/adc.o
 LOAD SensorDrivers/HC-SR04.o
 START GROUP
@@ -633,26 +633,26 @@ END GROUP
  .text.motorbox_get_encoder
                 0x00000662       0x38 MotorDrivers/MotorBox.o
                 0x00000662                motorbox_get_encoder
- .text.servo_init
-                0x0000069a       0x3c MotorDrivers/servo.o
-                0x0000069a                servo_init
- .text.servo_set
-                0x000006d6       0x5c MotorDrivers/servo.o
-                0x000006d6                servo_set
- .text.main     0x00000732      0x2b0 Node2.o
-                0x00000732                main
- .text.__vector_default
-                0x000009e2        0xa Node2.o
-                0x000009e2                __vector_default
  .text.regulator_init
-                0x000009ec       0x70 regulator.o
-                0x000009ec                regulator_init
+                0x0000069a       0x70 MotorDrivers/regulator.o
+                0x0000069a                regulator_init
  .text.regulator_increment
-                0x00000a5c      0x19e regulator.o
-                0x00000a5c                regulator_increment
+                0x0000070a      0x19e MotorDrivers/regulator.o
+                0x0000070a                regulator_increment
  .text.get_pos_from_percent
-                0x00000bfa        0xa regulator.o
-                0x00000bfa                get_pos_from_percent
+                0x000008a8        0xa MotorDrivers/regulator.o
+                0x000008a8                get_pos_from_percent
+ .text.servo_init
+                0x000008b2       0x3c MotorDrivers/servo.o
+                0x000008b2                servo_init
+ .text.servo_set
+                0x000008ee       0x5c MotorDrivers/servo.o
+                0x000008ee                servo_set
+ .text.main     0x0000094a      0x2b0 Node2.o
+                0x0000094a                main
+ .text.__vector_default
+                0x00000bfa        0xa Node2.o
+                0x00000bfa                __vector_default
  .text.adc_init
                 0x00000c04       0x26 SensorDrivers/adc.o
                 0x00000c04                adc_init
@@ -840,12 +840,11 @@ END GROUP
  .rodata.str1.1
                 0x00800207       0x33 CommunicationDrivers/can.o
  .rodata.str1.1
-                0x0080023a       0xc0 Node2.o
+                0x0080023a       0xc1 Node2.o
  .rodata.str1.1
-                0x008002fa        0x9 SensorDrivers/HC-SR04.o
+                0x008002fb        0x9 SensorDrivers/HC-SR04.o
  *(.gnu.linkonce.d*)
                 0x00800304                . = ALIGN (0x2)
- *fill*         0x00800303        0x1 
                 0x00800304                _edata = .
                 0x00800304                PROVIDE (__data_end, .)
 
@@ -926,9 +925,9 @@ END GROUP
  .comment       0x00000000       0x31 CommunicationDrivers/spi.o
  .comment       0x00000000       0x31 CommunicationDrivers/UsartDriver.o
  .comment       0x00000000       0x31 MotorDrivers/MotorBox.o
+ .comment       0x00000000       0x31 MotorDrivers/regulator.o
  .comment       0x00000000       0x31 MotorDrivers/servo.o
  .comment       0x00000000       0x31 Node2.o
- .comment       0x00000000       0x31 regulator.o
  .comment       0x00000000       0x31 SensorDrivers/adc.o
  .comment       0x00000000       0x31 SensorDrivers/HC-SR04.o
  .comment       0x00000030       0x2c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libprintf_flt.a(vfprintf_flt.o)
@@ -971,11 +970,11 @@ END GROUP
  .debug_aranges
                 0x00000138       0x48 MotorDrivers/MotorBox.o
  .debug_aranges
-                0x00000180       0x28 MotorDrivers/servo.o
+                0x00000180       0x30 MotorDrivers/regulator.o
  .debug_aranges
-                0x000001a8       0x28 Node2.o
+                0x000001b0       0x28 MotorDrivers/servo.o
  .debug_aranges
-                0x000001d0       0x30 regulator.o
+                0x000001d8       0x28 Node2.o
  .debug_aranges
                 0x00000200       0x30 SensorDrivers/adc.o
  .debug_aranges
@@ -992,9 +991,9 @@ END GROUP
  .debug_info    0x00000bc7       0xb4 CommunicationDrivers/spi.o
  .debug_info    0x00000c7b      0x1f4 CommunicationDrivers/UsartDriver.o
  .debug_info    0x00000e6f      0x2ed MotorDrivers/MotorBox.o
- .debug_info    0x0000115c       0xba MotorDrivers/servo.o
- .debug_info    0x00001216      0x8ad Node2.o
- .debug_info    0x00001ac3      0x261 regulator.o
+ .debug_info    0x0000115c      0x261 MotorDrivers/regulator.o
+ .debug_info    0x000013bd       0xba MotorDrivers/servo.o
+ .debug_info    0x00001477      0x8ad Node2.o
  .debug_info    0x00001d24      0x16a SensorDrivers/adc.o
  .debug_info    0x00001e8e      0x44a SensorDrivers/HC-SR04.o
 
@@ -1006,13 +1005,13 @@ END GROUP
  .debug_abbrev  0x00000446       0x7a CommunicationDrivers/spi.o
  .debug_abbrev  0x000004c0      0x149 CommunicationDrivers/UsartDriver.o
  .debug_abbrev  0x00000609      0x195 MotorDrivers/MotorBox.o
- .debug_abbrev  0x0000079e       0x76 MotorDrivers/servo.o
- .debug_abbrev  0x00000814      0x1b3 Node2.o
- .debug_abbrev  0x000009c7      0x142 regulator.o
+ .debug_abbrev  0x0000079e      0x142 MotorDrivers/regulator.o
+ .debug_abbrev  0x000008e0       0x76 MotorDrivers/servo.o
+ .debug_abbrev  0x00000956      0x1b3 Node2.o
  .debug_abbrev  0x00000b09       0xd1 SensorDrivers/adc.o
  .debug_abbrev  0x00000bda      0x218 SensorDrivers/HC-SR04.o
 
-.debug_line     0x00000000     0x1725
+.debug_line     0x00000000     0x171e
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x353 CommunicationDrivers/can.o
  .debug_line    0x00000353      0x1db CommunicationDrivers/I2C.o
@@ -1020,11 +1019,11 @@ END GROUP
  .debug_line    0x000006fb      0x106 CommunicationDrivers/spi.o
  .debug_line    0x00000801      0x143 CommunicationDrivers/UsartDriver.o
  .debug_line    0x00000944      0x264 MotorDrivers/MotorBox.o
- .debug_line    0x00000ba8       0xf6 MotorDrivers/servo.o
- .debug_line    0x00000c9e      0x3bf Node2.o
- .debug_line    0x0000105d      0x1be regulator.o
- .debug_line    0x0000121b      0x174 SensorDrivers/adc.o
- .debug_line    0x0000138f      0x396 SensorDrivers/HC-SR04.o
+ .debug_line    0x00000ba8      0x1b7 MotorDrivers/regulator.o
+ .debug_line    0x00000d5f       0xf6 MotorDrivers/servo.o
+ .debug_line    0x00000e55      0x3bf Node2.o
+ .debug_line    0x00001214      0x174 SensorDrivers/adc.o
+ .debug_line    0x00001388      0x396 SensorDrivers/HC-SR04.o
 
 .debug_frame    0x00000000      0x5f0
  *(.debug_frame)
@@ -1034,13 +1033,13 @@ END GROUP
  .debug_frame   0x000001d8       0x34 CommunicationDrivers/spi.o
  .debug_frame   0x0000020c       0x44 CommunicationDrivers/UsartDriver.o
  .debug_frame   0x00000250       0x80 MotorDrivers/MotorBox.o
- .debug_frame   0x000002d0       0x34 MotorDrivers/servo.o
- .debug_frame   0x00000304       0x44 Node2.o
- .debug_frame   0x00000348       0xa4 regulator.o
+ .debug_frame   0x000002d0       0xa4 MotorDrivers/regulator.o
+ .debug_frame   0x00000374       0x34 MotorDrivers/servo.o
+ .debug_frame   0x000003a8       0x44 Node2.o
  .debug_frame   0x000003ec       0x58 SensorDrivers/adc.o
  .debug_frame   0x00000444      0x1ac SensorDrivers/HC-SR04.o
 
-.debug_str      0x00000000      0x7ea
+.debug_str      0x00000000      0x7f5
  *(.debug_str)
  .debug_str     0x00000000      0x27e CommunicationDrivers/can.o
                                 0x2d4 (size before relaxing)
@@ -1054,15 +1053,15 @@ END GROUP
                                 0x1d8 (size before relaxing)
  .debug_str     0x000003be       0xe2 MotorDrivers/MotorBox.o
                                 0x257 (size before relaxing)
- .debug_str     0x000004a0       0x2d MotorDrivers/servo.o
+ .debug_str     0x000004a0       0xcd MotorDrivers/regulator.o
+                                0x24b (size before relaxing)
+ .debug_str     0x0000056d       0x2d MotorDrivers/servo.o
                                 0x187 (size before relaxing)
- .debug_str     0x000004cd      0x1bb Node2.o
+ .debug_str     0x0000059a      0x127 Node2.o
                                 0x41d (size before relaxing)
- .debug_str     0x00000688       0x2e regulator.o
-                                0x240 (size before relaxing)
- .debug_str     0x000006b6       0x36 SensorDrivers/adc.o
+ .debug_str     0x000006c1       0x36 SensorDrivers/adc.o
                                 0x1dc (size before relaxing)
- .debug_str     0x000006ec       0xfe SensorDrivers/HC-SR04.o
+ .debug_str     0x000006f7       0xfe SensorDrivers/HC-SR04.o
                                 0x31a (size before relaxing)
 
 .debug_loc      0x00000000     0x11d7
@@ -1072,9 +1071,9 @@ END GROUP
  .debug_loc     0x000003c7      0x1b6 CommunicationDrivers/mcp2515.o
  .debug_loc     0x0000057d       0x1f CommunicationDrivers/spi.o
  .debug_loc     0x0000059c      0x1c4 MotorDrivers/MotorBox.o
- .debug_loc     0x00000760       0x34 MotorDrivers/servo.o
- .debug_loc     0x00000794      0x158 Node2.o
- .debug_loc     0x000008ec      0x307 regulator.o
+ .debug_loc     0x00000760      0x307 MotorDrivers/regulator.o
+ .debug_loc     0x00000a67       0x34 MotorDrivers/servo.o
+ .debug_loc     0x00000a9b      0x158 Node2.o
  .debug_loc     0x00000bf3       0x7f SensorDrivers/adc.o
  .debug_loc     0x00000c72      0x565 SensorDrivers/HC-SR04.o
 
@@ -1104,9 +1103,9 @@ END GROUP
  .debug_ranges  0x000000b0       0x18 CommunicationDrivers/spi.o
  .debug_ranges  0x000000c8       0x20 CommunicationDrivers/UsartDriver.o
  .debug_ranges  0x000000e8       0x38 MotorDrivers/MotorBox.o
- .debug_ranges  0x00000120       0x18 MotorDrivers/servo.o
- .debug_ranges  0x00000138       0x18 Node2.o
- .debug_ranges  0x00000150       0x20 regulator.o
+ .debug_ranges  0x00000120       0x20 MotorDrivers/regulator.o
+ .debug_ranges  0x00000140       0x18 MotorDrivers/servo.o
+ .debug_ranges  0x00000158       0x18 Node2.o
  .debug_ranges  0x00000170       0x20 SensorDrivers/adc.o
  .debug_ranges  0x00000190       0x50 SensorDrivers/HC-SR04.o
 
