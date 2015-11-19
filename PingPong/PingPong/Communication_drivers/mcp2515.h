@@ -9,11 +9,6 @@
 #ifndef MCP2515_H_
 #define MCP2515_H_
 
-#define CAN_CS_BIT
-#define CAN_CS_REG 
-
-#define USART_
-
 #include "../MainInclude.h"
 #include "spi.h"
 
@@ -24,10 +19,6 @@ void mcp2515_request_to_send(uint8_t reg);
 void mcp2515_bit_modify(uint8_t addr, uint8_t mask, uint8_t data);
 void mcp2515_reset();
 uint8_t mcp2515_read_status();
-
-
-
-
 
 
 #endif /* MCP2515_H_ */
