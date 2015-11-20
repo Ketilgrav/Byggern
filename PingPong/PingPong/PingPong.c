@@ -59,7 +59,7 @@ int main(void){
 	GameState gameState;
 	gameState.useJSnotSENS = 1;
 	gameState.points = 0;
-	gameState.currentStatus = pause;
+	gameState.currentStatus = prePause;
 	EEPROM_read_gamestate(&gameState);
 	
 	
@@ -131,10 +131,12 @@ int main(void){
 			case runGame:
 				//Reqests to send a gameMode update if it has happned.
 				if(gameState.useJSnotSENS == 1 && canMsgGameMode.data[GAMEMODE_MODE_BYTE] != GAMEMODE_JS){
+					gameState.currentStatus = prePause;
 					canMsgGameMode.length = GAMEMODE_MSGLEN;
 					canMsgGameMode.data[GAMEMODE_MODE_BYTE] = GAMEMODE_JS;
 				}
 				else if(gameState.useJSnotSENS == 0 && canMsgGameMode.data[GAMEMODE_MODE_BYTE] != GAMEMODE_SENS){
+					gameState.currentStatus = prePause;
 					canMsgGameMode.length = GAMEMODE_MSGLEN;
 					canMsgGameMode.data[GAMEMODE_MODE_BYTE] = GAMEMODE_SENS;
 				}
@@ -164,16 +166,16 @@ int main(void){
 			case deleteHS:
 				//Resets eeprom
 				eeprom_write_byte(EEPROM_HIGHSCOREBYTE,0);
-				if(NAME_LEN > 3){
-					eeprom_write_byte(EEPROM_HIGHSCORENAME+0,'N'-asciiOffset);
-					eeprom_write_byte(EEPROM_HIGHSCORENAME+1,'A'-asciiOffset);
-					eeprom_write_byte(EEPROM_HIGHSCORENAME+2,'N'-asciiOffset);
+				if(NAME_LEN >= 3){
+					eeprom_write_byte(EEPROM_HIGHSCORENAME+0,'N');
+					eeprom_write_byte(EEPROM_HIGHSCORENAME+1,'A');
+					eeprom_write_byte(EEPROM_HIGHSCORENAME+2,'N');
 					for(uint8_t i=3;i<NAME_LEN;++i){
 						eeprom_write_byte(EEPROM_HIGHSCORENAME+i,0);
 					}
 				}
 				else{
-					for(uint8_t i=3;i<NAME_LEN;++i){
+					for(uint8_t i=0;i<NAME_LEN;++i){
 						eeprom_write_byte(EEPROM_HIGHSCORENAME+i,0);
 					}
 				}

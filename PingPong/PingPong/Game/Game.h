@@ -13,7 +13,7 @@
 #include "../CommunicationDrivers/can.h"
 #include "../Drivers/OLED.h"
 
-typedef enum state { play = 0, gameOver = 1, pause = 2 } status;
+typedef enum state { play = 0, gameOver = 1, pause = 2, prePause = 3 } status;
 
 #define NAME_LEN 3
 typedef struct GameState{

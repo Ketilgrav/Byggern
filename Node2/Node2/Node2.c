@@ -80,7 +80,7 @@ int main(){
 	//Solenoid can only retract after the timer has overflown
 	//Meaning that 0.016s has passed with a 1/1024 prescaler
 	
-	TIMSK0 |= OCIE0A; //Activates overflow interrupt 
+	TIMSK0 |= 1<<OCIE0A; //Activates overflow interrupt 
 	TCCR0A |= 0b10 <<WGM00;
 	OCR0A = 0xFF;
 	puts("All init done");
@@ -117,6 +117,9 @@ int main(){
 					gameMode = msgInn.data[GAMEMODE_MODE_BYTE];
 					gameModeChanged = 1;
 					msgInn.length = 0; //Indicates that the message is read
+					msgInn.data[CANMSG_BTNR_BYTE] = 0;
+					msgInn.data[CANMSG_SLIDERR_BYTE] = 0;
+					msgInn.data[CANMSG_JSX_BYTE] = 0;
 				break;
 			}
 			
@@ -153,6 +156,7 @@ int main(){
 				
 				//If button R is pressed, then the sollenoid is supposed to solenidPush.
 				solenidPush = msgInn.data[CANMSG_BTNR_BYTE] & (1<<CANMSG_BTNR_BIT);
+				
 			}
 			
 			else if(gameMode == GAMEMODE_SENS){
@@ -200,7 +204,8 @@ int main(){
 				//puts("TA");
 			}
 			//If the solenoid was previusly active and we want to deactivate it
-			else if(canRetractSolenoid>5 && !solenidPush){
+			else if(canRetractSolenoid>10 && !solenidPush){
+				msgGameSignal.data[GAMESIGNAL_SIGNAL_BYTE] = 0xFF;
 				SOLENOID_DEACTIVATE;
 				STIMER_OVERFLOW_RESET;
 				STIMER_DEACTIVATE;
@@ -225,6 +230,8 @@ int main(){
 				set_bit(SOLENOID_PORT,SOLENOID_BIT); 
 				gameModeChanged = 0;
 				ETIMER_TRIGGER_DISABLE; 
+				solenidPush=0;
+				msgInn.data[CANMSG_BTNR_BYTE] &= ~(1<<CANMSG_BTNR_BIT);
 			}
 		}		
 	}

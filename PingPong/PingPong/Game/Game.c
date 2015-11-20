@@ -23,6 +23,7 @@ uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor,
 	msgMtor->length = CANMSG_MOTORSIGNAL_LEN;
 
 	//RECIEVEING
+	
 	if (msgGame->length && msgGame->data[CANMSG_PACKAGESPECIFIER] == PACKAGESPECIFIER_GAMESIGNAL){
 		if (msgGame->data[GAMESIGNAL_SIGNAL_BYTE] == GAMESIGNAL_STOP){
 			gameState->currentStatus = gameOver;
@@ -37,6 +38,12 @@ uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor,
  	OLED_clear();
 	switch (gameState->currentStatus){
 		//Waiting to start game
+		case prePause:
+			_delay_ms(100);
+			msgGame->length=0;
+			msgMtor->length=0;
+			gameState->currentStatus = pause;
+			break;
 		case pause:
 			OLED_print("NYTT SPILL", 1, 0);
 			OLED_print("DIN KONTROLLER:", 3, 0);
@@ -70,6 +77,9 @@ uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor,
 			if (gameState->points > gameState->record){
 				gameState->record = gameState->points;
 				OLED_print("GRARER!", 4, 0);
+				gameState->name[0] = 'a';
+				gameState->name[1] = 'a';
+				gameState->name[2] = 'a';
 			}
 			if (gameState->points >= gameState->record){
  				OLED_print("NY REKORD!", 0, 0);
@@ -103,7 +113,7 @@ uint8_t run_game(GameState* gameState, Controls* controls, CAN_message* msgMtor,
 						eeprom_write_byte(EEPROM_HIGHSCORENAME+i,gameState->name[i]);
 	 				}
 	 			}
-				gameState->currentStatus= pause;
+				gameState->currentStatus= prePause;
 			}
 			break;
 		default:
@@ -124,7 +134,7 @@ void update_name(GameState* gameState, Controls* controls){
 	
 	//IF we moved past the last character
 	if(gameState->namePointer == NAME_LEN){
-		gameState->namePointer = 0;
+		gameState->namePointer = asciiOffset;
 	}
 	//If we moved previous to the first, so that an overflow occurred
 	else if(gameState->namePointer > NAME_LEN){
@@ -139,11 +149,11 @@ void update_name(GameState* gameState, Controls* controls){
 		gameState->name[gameState->namePointer]--;
 	}
 	//If we moved past font length
-	if(gameState->name[gameState->namePointer] == FONT_SIZE){
-		gameState->name[gameState->namePointer] = 0;
+	if(gameState->name[gameState->namePointer] >= FONT_SIZE+asciiOffset){
+		gameState->name[gameState->namePointer] = asciiOffset+1;
 	}
-	//If we moved previous to the first font sign, so that an overflow occurred
-	else if(gameState->name[gameState->namePointer] > FONT_SIZE){
-		gameState->name[gameState->namePointer] = FONT_SIZE-1;
+	//If we moved previous to the first font sign
+	else if(gameState->name[gameState->namePointer] <= asciiOffset){
+		gameState->name[gameState->namePointer] = FONT_SIZE+asciiOffset-1;
 	}
 }

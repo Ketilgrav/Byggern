@@ -15,7 +15,7 @@ void adc_init();
 #define ADC_BIT PF1
 
 #define ADC_AVERAGING_PERIOD 50
-#define ADC_BOOL_BORDER_VAL 50
+#define ADC_BOOL_BORDER_VAL 10
 
 //Prescaler can be up to 7
 #define ADC_PRESCALER 1
